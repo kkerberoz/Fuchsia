@@ -1,0 +1,23 @@
+@import "./variables.scss";
+// Import buefy and bulma styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+// Import your other app styles
+
+@import url("https://fonts.googleapis.com/css2?family=Kanit&display=swap");
+
+$kanit-font: "kanit", sans-serif;
+
+body {
+  font-family: $kanit-font;
+  font-weight: normal;
+  background-color: #2b2b2b;
+}
+
+.vcentered {
+  margin-top: 10%;
+}
+
+#login {
+  padding: 1rem 2rem 1rem 2rem;
+}
