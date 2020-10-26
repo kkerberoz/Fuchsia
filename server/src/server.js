@@ -5,9 +5,9 @@ require("dotenv").config();
 
 const { NODE_ENV, PORT, ATLAS_URI } = process.env;
 const port = PORT || 5000;
-
+const mongoUri = ATLAS_URI || "mongodb://localhost:27017/fuchsia";
 // Set up Mongoose
-mongoose.connect(ATLAS_URI, {
+mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
