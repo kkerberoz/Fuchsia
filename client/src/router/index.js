@@ -1,13 +1,26 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-
+import store from "../store/index";
 Vue.use(VueRouter);
+
+//guard router
+function guardMyroute(to, from, next) {
+  var isAuthenticated = false;
+  if (store.state.auth.status.loggedIn === true) isAuthenticated = true;
+  else isAuthenticated = false;
+  if (isAuthenticated) {
+    next();
+  } else {
+    next("/login");
+  }
+}
 
 const routes = [
   {
     path: "/",
     name: "Home",
+    beforeEnter: guardMyroute,
     component: Home,
   },
   {
@@ -21,9 +34,6 @@ const routes = [
   {
     path: "/register",
     name: "Register",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import("../views/Register.vue"),
   },
 ];

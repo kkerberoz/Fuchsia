@@ -14,7 +14,7 @@
               type="email"
               placeholder="e.g. plutoz@gmail.com"
               class="input"
-              v-model="email"
+              v-model="formInput.email"
               required
             />
           </div>
@@ -25,7 +25,7 @@
               type="password"
               placeholder="*********"
               class="input"
-              v-model="password"
+              v-model="formInput.password"
               required
             />
           </div>
@@ -53,25 +53,36 @@
   export default {
     data() {
       return {
-        email: "",
-        password: "",
+        formInput: {
+          email: "",
+          password: "",
+        },
         errMessage: "",
+        dialog: false,
       };
     },
+    watch: {
+      dialog(val) {
+        if (!val) {
+          this.formInput.email = "";
+          this.formInput.password = "";
+          this.errMessage = "";
+        }
+      },
+    },
     methods: {
+      //Need to add validation !!!!!!!
       loginSubmit() {
-        if (this.email && this.password) {
-          const { email, password } = this;
+        if (this.formInput.email && this.formInput.password) {
+          const { email, password } = this.formInput;
           this.$store
             .dispatch("auth/login", { email, password })
             .then(() => {
-              this.errMessage = "";
-              this.email = "";
-              this.password = "";
+              this.dialog = true;
             })
             .catch((err) => {
               this.errMessage = err.message;
-              console.log("Error",this.errMessage)
+              console.log("Error", this.errMessage);
             });
         }
       },

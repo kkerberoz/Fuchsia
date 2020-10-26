@@ -98,13 +98,18 @@
 
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons" @click="showNav = !showNav">
+            <div class="buttons" v-if="!loggedIn">
               <router-link to="/Register" class="navbar-item button is-primary">
                 Register
               </router-link>
               <router-link to="/Login" class="navbar-item button is-light">
                 Login
               </router-link>
+            </div>
+            <div class="buttons" v-if="loggedIn">
+              <a class="navbar-item button is-primary" @click="logout">
+                Logout
+              </a>
             </div>
           </div>
         </div>
@@ -119,6 +124,16 @@
       return {
         showNav: false,
       };
+    },
+    methods: {
+      logout() {
+        this.$store.dispatch("auth/logout");
+      },
+    },
+    computed: {
+      loggedIn() {
+        return this.$store.state.auth.status.loggedIn;
+      },
     },
   };
 </script>
