@@ -3,11 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import Buefy from "buefy";
-import VueCompositionAPI from "@vue/composition-api";
+
 Vue.config.productionTip = false;
 
 Vue.use(Buefy);
-Vue.use(VueCompositionAPI);
 
 new Vue({
   router,
