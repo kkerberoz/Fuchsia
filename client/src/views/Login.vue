@@ -79,6 +79,7 @@
             .dispatch("auth/login", { email, password })
             .then(() => {
               this.dialog = true;
+              this.$router.push({name: "Home"});
             })
             .catch((err) => {
               this.errMessage = err.message;
