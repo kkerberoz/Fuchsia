@@ -116,6 +116,7 @@
           dob: null,
         },
         dialog: false,
+        errors: []
       };
     },
     watch: {
@@ -141,42 +142,26 @@
     methods: {
       registerSubmit() {
         //Need to add validation !!!!!!!
-        if(this.formInput.password.length < 6 || this.formInput.password.toLowerCase() === this.formInput.password || this.formInput.password.toUpperCase() === this.formInput.password || this.formInput.password != this.formInput.conPassword )
+        this.errors = [];
+        if (this.formInput.password.length < 6 )
         {
-          if (this.formInput.password.length < 6 )
-          {
-            console.log ("password length < 6 ")
-          }
-          if (this.formInput.password.toLowerCase() === this.formInput.password )
-          {
-            console.log ("password is lowerCase")
-          }
-          if (this.formInput.password.toUpperCase() === this.formInput.password )
-          {
-            console.log ("password is UpperCase")
-          }
-          if (this.formInput.password != this.formInput.conPassword )
-          {
-            console.log ("password doesn't match")
-          }
+          this.errors.push("password length < 6");
+          console.log ("password length < 6 ")
         }
-        // if (this.formInput.password.length < 6 )
-        // {
-        //  console.log ("password length < 6 ")
-        // }
-        // if (this.formInput.password.toLowerCase() === this.formInput.password )
-        // {
-        //  console.log ("password is lowerCase")
-        // }
-        // if (this.formInput.password.toUpperCase() === this.formInput.password )
-        // {
-        //  console.log ("password is UpperCase")
-        // }
-        // if (this.formInput.password != this.formInput.conPassword )
-        // {
-        //  console.log ("password doesn't match")
-        // }
-        else if (this.formInput.password === this.formInput.conPassword ) {
+        if (this.formInput.password.toLowerCase() === this.formInput.password )
+        {
+          console.log ("password is lowerCase")
+        }
+        if (this.formInput.password.toUpperCase() === this.formInput.password )
+        {
+          console.log ("password is UpperCase")
+        }
+        if (this.formInput.password !== this.formInput.conPassword )
+        {
+          console.log ("password doesn't match")
+        }
+        
+        if (this.errors.length === 0) {
           let data = {
             firstName: this.formInput.firstName,
             lastName: this.formInput.lastName,

@@ -18,13 +18,13 @@
           <br/>
           <div class="columns bottom-card">
               <div class="column">
-                  <span 
+                <span 
                     v-for="category in reviewItem.category" 
                     :key="category"
                     style="margin-right: 2%;"
                 >
                     {{category}}
-                    </span>
+                </span>
               </div>
               <div class="column">
                   <time datetime="2016-1-1">{{reviewItem.reviewDateTime}}</time>
