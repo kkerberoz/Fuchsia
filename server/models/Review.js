@@ -3,15 +3,19 @@ const mongoose = require("mongoose");
 
 const ReviewSchema = new mongoose.Schema(
   {
-    user_id: {
+    userId: {
       type: String,
       required: true,
     },
-    review_content: {
+    reviewTitle:{
       type: String,
       required: true,
     },
-    review_datetime: {
+    reviewContent: {
+      type: String,
+      required: true,
+    },
+    reviewDatetime: {
       type: Date,
       required: true,
     },
@@ -29,6 +33,10 @@ const ReviewSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    imageLink: {
+      type: String,
+      required: false,
+    }
   },
   {
     timestamps: true,
