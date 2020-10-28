@@ -5,31 +5,31 @@
       <div v-if="hasImage" class="card-image">
         <figure class="image is-4by3">
           <img
-            src="https://bulma.io/images/placeholders/1280x960.png"
+            :src="reviewItem.imageLink"
             alt="Placeholder image"
           />
         </figure>
       </div>
       <div class="card-content">
-        <!-- <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48">
-              <img
-                src="https://bulma.io/images/placeholders/96x96.png"
-                alt="Placeholder image"
-              />
-            </figure>
-          </div>
-          <div class="media-content">
-            <p class="title is-4">John Smith</p>
-            <p class="subtitle is-6">@johnsmith</p>
-          </div>
-        </div> -->
+        <p class="title is-4">{{reviewItem.reviewTitle}}</p>
+        <hr class="pink-line">
         <div class="content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-          iaculis mauris. 
-          <br />
-          <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+          {{reviewItem.reviewContent}}
+          <br/>
+          <div class="columns bottom-card">
+              <div class="column">
+                <span 
+                    v-for="category in reviewItem.category" 
+                    :key="category"
+                    style="margin-right: 2%;"
+                >
+                    {{category}}
+                </span>
+              </div>
+              <div class="column">
+                  <time datetime="2016-1-1">{{reviewItem.reviewDateTime}}</time>
+              </div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,14 +41,30 @@ export default {
     computed: {
         hasImage() {
             return true;
+        },
+        reviewItem() {
+            return {
+                reviewTitle: "this is title",
+                reviewContent: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus neciaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus neciaculis mauris.",
+                imageLink: "https://bulma.io/images/placeholders/1280x960.png",
+                reviewDateTime: "11:09 PM - 1 Jan 2016",
+                category: ["travel", "camera"]
+            }
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .card-container {
   margin-top: 3%;
   width: 360px;
+}
+.pink-line {
+    border-top: 1px solid $secondary;
+}
+.bottom-card {
+    margin-top: 5%;
+    color: $dark-primary;
 }
 </style>
