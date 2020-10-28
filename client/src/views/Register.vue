@@ -154,6 +154,7 @@
             .dispatch("auth/register", data)
             .then(() => {
               this.dialog = true;
+              this.$router.push({name: "Home"});
             })
             .catch((err) => {
               this.errMessage = err.message;
@@ -162,6 +163,9 @@
         }
       },
     },
+    mounted() {
+      console.log(this.$route.path);
+    }
   };
 </script>
 

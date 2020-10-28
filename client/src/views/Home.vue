@@ -1,10 +1,7 @@
 <template>
-  <section class="hero is-white is-fullheight">
+  <section class="hero is-fullheight">
     <div class="hero-body">
       <div class="container">
-        <h1 class="title">
-          Fullheight title
-        </h1>
       </div>
     </div>
   </section>

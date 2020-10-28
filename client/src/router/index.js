@@ -36,6 +36,10 @@ const routes = [
     name: "Register",
     component: () => import("../views/Register.vue"),
   },
+  {
+    path: "*",
+    component: () => import("../views/Error.vue"),
+  }
 ];
 
 const router = new VueRouter({
