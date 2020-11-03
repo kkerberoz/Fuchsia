@@ -1,6 +1,6 @@
 <template>
   <div class="card-container">
-    <div class="card">
+    <div class="card" @click="goToReview">
 
       <div v-if="hasImage" class="card-image">
         <figure class="image is-4by3">
@@ -51,6 +51,11 @@ export default {
                 category: ["travel", "camera"]
             }
         }
+    },
+    methods: {
+      goToReview() {
+        this.$router.push({name: "Review", params: {reviewId : "Sdsd"}});
+      }
     }
 }
 </script>
