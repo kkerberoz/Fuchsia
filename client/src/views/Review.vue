@@ -29,6 +29,7 @@
     padding: 20px;
     background-image: url(../assets/svg/postBlog.svg);
     background-size: cover;
-    height: 100rem;
+    height: 1457px;
+    width: 100%;
   }
 </style>
