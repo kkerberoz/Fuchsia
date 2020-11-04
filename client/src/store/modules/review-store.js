@@ -1,9 +1,7 @@
 const review = {
     namespaced: true,
     state: {
-        reviewInfo: {
-
-        },
+        reviewInfo: {},
         comments: [],
         reviewList: [],
         searchKeyword: ""

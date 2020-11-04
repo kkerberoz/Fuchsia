@@ -80,7 +80,6 @@
             <a class="navbar-link">
               More
             </a>
-
             <div class="navbar-dropdown">
               <a class="navbar-item">
                 Jobs
