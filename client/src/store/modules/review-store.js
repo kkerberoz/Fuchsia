@@ -1,7 +1,17 @@
+const BASE_API_URL = "";
+import axios from "axios";
+
 const review = {
     namespaced: true,
     state: {
-        reviewInfo: {},
+        reviewInfo: {
+            user_id: "",
+            review_content: "",
+            review_datetime: "",
+            category: "",
+            status: "",
+            view: 0
+        },
         comments: [],
         reviewList: [],
         searchKeyword: ""
@@ -18,7 +28,10 @@ const review = {
         }
     },
     actions: {
-
+        async setReviewInfo(context) {
+            const response = await axios.get(`${BASE_API_URL}`);
+            context.commit("SET_REVIEW_INFO", response.data);
+        }
     },
     getters: {
         getReviewInfo: (state) => state.reviewInfo,

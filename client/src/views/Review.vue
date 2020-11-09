@@ -2,7 +2,7 @@
   <div class="container" id="postBlog">
     <div class="container">
       <div class="columns">
-        <div class="column">Hellooo</div>
+        <div class="column">{{reviewId}}</div>
         <div class="column">Worlldddd</div>
       </div>
     </div>
