@@ -1,8 +1,8 @@
 <template>
   <div class="card-container">
-    <div class="card" @click="goToReview">
+    <div class="card">
 
-      <div v-if="hasImage" class="card-image">
+      <div v-if="hasImage" @click="goToReview" class="card-image" style="cursor: pointer;">
         <figure class="image is-4by3">
           <img
             :src="reviewItem.imageLink"
@@ -11,7 +11,7 @@
         </figure>
       </div>
       <div class="card-content">
-        <p class="title is-4">{{reviewItem.reviewTitle}}</p>
+        <p @click="goToReview" class="title is-4 title-effect" >{{reviewItem.reviewTitle}}</p>
         <hr class="pink-line">
         <div class="content">
           {{reviewItem.reviewContent}}
@@ -71,5 +71,11 @@ export default {
 .bottom-card {
     margin-top: 5%;
     color: $dark-primary;
+}
+.title-effect {
+  cursor: pointer;
+}
+.title-effect:hover {
+  color: $secondary;
 }
 </style>
