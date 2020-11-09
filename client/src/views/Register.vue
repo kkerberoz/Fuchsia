@@ -116,7 +116,7 @@
           dob: null,
         },
         dialog: false,
-        errors: []
+        errors: [],
       };
     },
     watch: {
@@ -143,29 +143,25 @@
       registerSubmit() {
         //Need to add validation !!!!!!!
         this.errors = [];
-        if (this.formInput.password.length < 6 )
-        {
+        if (this.formInput.password.length < 6) {
           this.errors.push("password length < 6");
-          console.log ("password length < 6 ")
+          console.log("password length < 6 ");
         }
-        if (this.formInput.password.toLowerCase() === this.formInput.password )
-        {
-          console.log ("password is lowerCase")
+        if (this.formInput.password.toLowerCase() === this.formInput.password) {
+          console.log("password is lowerCase");
         }
-        if (this.formInput.password.toUpperCase() === this.formInput.password )
-        {
-          console.log ("password is UpperCase")
+        if (this.formInput.password.toUpperCase() === this.formInput.password) {
+          console.log("password is UpperCase");
         }
-        if (this.formInput.password !== this.formInput.conPassword )
-        {
-          console.log ("password doesn't match")
+        if (this.formInput.password !== this.formInput.conPassword) {
+          console.log("password doesn't match");
         }
-        
+
         if (this.errors.length === 0) {
           let data = {
             firstName: this.formInput.firstName,
             lastName: this.formInput.lastName,
-            email: this.formInput.email,  
+            email: this.formInput.email,
             password: this.formInput.password,
             dob: this.dateFormated,
             tel: this.formInput.tel,
@@ -174,7 +170,7 @@
             .dispatch("auth/register", data)
             .then(() => {
               this.dialog = true;
-              this.$router.push({name: "Home"});
+              this.$router.push({ name: "Home" });
             })
             .catch((err) => {
               this.errMessage = err.message;
@@ -185,7 +181,7 @@
     },
     mounted() {
       console.log(this.$route.path);
-    }
+    },
   };
 </script>
 
