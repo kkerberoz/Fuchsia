@@ -14,7 +14,7 @@ const decodeToken = (token) => {
 };
 
 const validEmail = (email) => {
-  const emailRegex = /[^@]+@[^\.]+\..+/;
+  const emailRegex = /[^@]+@[^\.]+\..+/; // eslint-disable-line
   return emailRegex.test(email);
 };
 

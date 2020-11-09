@@ -1,0 +1,27 @@
+name: Automate Testing Front-end
+
+on:
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: client
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12-latest
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache node_modules
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install packages
+        run: npm install
+      - run: npm run lint
