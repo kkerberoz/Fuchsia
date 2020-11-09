@@ -1,4 +1,4 @@
-name: Automate Build and Testing Front-end
+name: Automate Testing Front-end
 
 on:
   pull_request:
