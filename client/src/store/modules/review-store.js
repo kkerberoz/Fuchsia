@@ -5,12 +5,13 @@ const review = {
     namespaced: true,
     state: {
         reviewInfo: {
-            user_id: "",
-            review_content: "",
-            review_datetime: "",
+            userId: "",
+            reviewTitle: "",
+            reviewContent: "",
+            reviewDatetime: "",
             category: "",
             status: "",
-            image_link: "",
+            imageLink: "",
             view: 0
         },
         comments: [],
