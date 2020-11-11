@@ -35,15 +35,6 @@ const review = {
             context.commit("SET_REVIEW_INFO", response.data);
         },
         async postReview(reviewData) {
-            // let reviewData = {
-            //     userId: "",
-            //     reviewContent: "",
-            //     reviewDatetime: "",
-            //     category: "",
-            //     status: "",
-            //     imageLink: "",
-            //     view: 0
-            // }
             const response = await axios.post(`${BASE_API_URL}/review`,reviewData);
             console.log("POST review object:",response.status);
         }

@@ -117,7 +117,6 @@
         </div>
       </div>
     </div>
-    <comment-list></comment-list>
   </div>
 </template>
 
@@ -172,9 +171,9 @@ export default {
     next() {
       if (this.tabStage === 3) {
         //Go post
-        const data = {
+        const testObj = {
           userId: "12345",
-          reviewTitle: "test1",
+          reviewTitle: "test1sd",
           reviewContent: "this is content",
           reviewDatetime: "wednesday",
           category: "Sport",
@@ -182,7 +181,7 @@ export default {
           imageLink: "https://test.png",
           view: 0
         }
-        this.$store.dispatch("review/postReview",data);
+        this.$store.dispatch("review/postReview", testObj);
       } else {
         this.tabStage += 1;
         //next step

@@ -5,7 +5,6 @@ const Review = require("../../models/Review");
 
 router.post("/", (req, res) => {
     const {reviewTitle, reviewContent, category, imageLink} = req.body;
-    console.log(req);
     if(!reviewTitle){
         return ResHelper.fail(res, "review title is required!");
     }
