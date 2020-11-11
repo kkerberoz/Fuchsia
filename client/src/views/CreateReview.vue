@@ -173,7 +173,14 @@ export default {
       if (this.tabStage === 3) {
         //Go post
         const data = {
-          userId: "ss"
+          userId: "12345",
+          reviewTitle: "test1",
+          reviewContent: "this is content",
+          reviewDatetime: "wednesday",
+          category: "Sport",
+          status: "Ban",
+          imageLink: "https://test.png",
+          view: 0
         }
         this.$store.dispatch("review/postReview",data);
       } else {
