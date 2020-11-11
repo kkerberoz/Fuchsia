@@ -37,10 +37,16 @@ const routes = [
     component: () => import("../views/Register.vue"),
   },
   {
-    path: "/:reviewId",
+    path: "/review",
     name: "Review",
     props: true,
     component: () => import("../views/Review.vue"),
+  },
+  {
+    path: "/createReview",
+    name: "CreateReview",
+    beforeEnter: guardMyroute,
+    component: () => import("../views/CreateReview.vue"),
   },
   {
     path: "*",

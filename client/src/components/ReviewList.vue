@@ -10,7 +10,7 @@
 import ReviewItem from "./ReviewItem";
 export default {
   components: {
-    ReviewItem,
+    ReviewItem
   },
   computed: {
     hasReview() {

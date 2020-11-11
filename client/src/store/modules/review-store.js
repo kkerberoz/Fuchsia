@@ -10,6 +10,7 @@ const review = {
             review_datetime: "",
             category: "",
             status: "",
+            image_link: "",
             view: 0
         },
         comments: [],
