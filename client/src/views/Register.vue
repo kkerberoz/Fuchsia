@@ -107,6 +107,10 @@
   export default {
     data() {
       return {
+        count: 0,
+        LowerCheck: 0,
+        UpperCheck: 0,
+        NumberCheck: 0,
         formInput: {
           email: "",
           password: "",
@@ -148,20 +152,56 @@
           this.errors.push("password length < 6");
           console.log ("password length < 6 ")
         }
+        if (!isNaN(this.formInput.password))
+        {
+          this.errors.push("password is a number only");
+          console.log ("password is a number only")
+        }
         if (this.formInput.password.toLowerCase() === this.formInput.password )
         {
+          this.errors.push("password is lowerCase");
           console.log ("password is lowerCase")
         }
         if (this.formInput.password.toUpperCase() === this.formInput.password )
         {
+          this.errors.push("password is UpperCase");
           console.log ("password is UpperCase")
         }
         if (this.formInput.password !== this.formInput.conPassword )
         {
+          this.errors.push("password doesn't match");
           console.log ("password doesn't match")
         }
-        
-        if (this.errors.length === 0) {
+        this.count = 0;
+        this.LowerCheck = 0 ;
+        this.UpperCheck = 0 ;
+        this.NumberCheck = 0 ;
+        for (var i = 0 ; i < this.formInput.password.length ; i++)
+        {
+          if((this.formInput.password.charAt(i) === this.formInput.password.toLowerCase().charAt(i)) && this.LowerCheck==0 && isNaN(this.formInput.password.charAt(i)))
+          {
+            console.log(this.formInput.password.charAt(i))
+            this.count ++ ;
+            this.LowerCheck = 1;
+          }
+          if((this.formInput.password.charAt(i) === this.formInput.password.toUpperCase().charAt(i)) && this.UpperCheck==0 && isNaN(this.formInput.password.charAt(i)))
+          {
+            console.log(this.formInput.password.charAt(i))
+            this.count ++ ;
+            this.UpperCheck = 1;
+          }
+          if((!isNaN(this.formInput.password.charAt(i))) && this.NumberCheck==0 )
+          {
+            console.log(this.formInput.password.charAt(i))
+            this.count ++ ;
+            this.NumberCheck = 1;
+          }
+        }
+        // console.log(this.count)
+        // console.log("All char")
+        // console.log(this.formInput.password)
+        // console.log("--------")
+        if (this.errors.length === 0 && this.count == 3) {
           let data = {
             firstName: this.formInput.firstName,
             lastName: this.formInput.lastName,
