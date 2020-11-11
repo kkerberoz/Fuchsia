@@ -110,6 +110,11 @@
                 Logout
               </a>
             </div>
+            <div class="buttons" v-if="loggedIn">
+              <a class="navbar-item button is-primary" @click="createReview">
+                Create review
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -125,6 +130,9 @@
       };
     },
     methods: {
+      createReview() {
+        this.$router.push({name: "CreateReview"});
+      },
       logout() {
         this.$store.dispatch("auth/logout");
         this.$router.push({name: "Login"});
