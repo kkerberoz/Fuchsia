@@ -1,4 +1,4 @@
-const BASE_API_URL = "";
+const BASE_API_URL = "http://localhost:5000/api";
 import axios from "axios";
 
 const review = {
@@ -32,6 +32,19 @@ const review = {
         async setReviewInfo(context) {
             const response = await axios.get(`${BASE_API_URL}`);
             context.commit("SET_REVIEW_INFO", response.data);
+        },
+        async postReview(reviewData) {
+            // let reviewData = {
+            //     userId: "",
+            //     reviewContent: "",
+            //     reviewDatetime: "",
+            //     category: "",
+            //     status: "",
+            //     imageLink: "",
+            //     view: 0
+            // }
+            const response = await axios.post(`${BASE_API_URL}/review`,reviewData);
+            console.log("POST review object:",response.status);
         }
     },
     getters: {

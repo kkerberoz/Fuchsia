@@ -27,7 +27,52 @@
       <div class="columns">
         <div id="reviewContent" class="column">
           <div v-if="isSelectCategoryState">
-            
+            <div class="columns">
+              <div class="column is-3">
+                <label class="checkbox">
+                <input v-model="Camera" value="Camera" type="checkbox">
+                Camera
+              </label>
+              </div>
+              <div class="column is-3">
+                <label class="checkbox">
+                  <input v-model="Natural" type="checkbox">
+                  Natural
+                </label>
+              </div>
+              <div class="column is-3">
+                <label class="checkbox">
+                  <input v-model="Shopping" type="checkbox">
+                  Shopping
+                </label>
+              </div>
+              <div class="column is-3">
+                <label class="checkbox">
+                    <input v-model="Food" type="checkbox">
+                    Food
+                </label>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-3">
+                <label class="checkbox">
+                    <input v-model="Drink" type="checkbox">
+                    Drink
+                </label>
+              </div>
+              <div class="column is-3">
+                <label class="checkbox">
+                  <input v-model="Restaurant" type="checkbox">
+                  Restaurant
+                </label>
+              </div>
+              <div class="column is-3">
+                <label class="checkbox">
+                  <input v-model="Sports" type="checkbox">
+                  Sports
+                </label>
+              </div>
+            </div>
           </div>
           <div v-if="isCreateReviewState">
             
@@ -77,22 +122,24 @@
 </template>
 
 <script>
-// import ReviewContent from "../components/ReviewContent";
-import CommentList from "../components/CommentList";
 export default {
-  components: {
-    // ReviewContent,
-    CommentList,
-  },
-  props: {
-    reviewId: {
-      type: String,
-      required: true,
-    },
-  },
+  // props: {
+  //   reviewId: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
   data() {
     return {
       tabStage: 1,
+      category: [],
+      Camera: false,
+      Natural: false,
+      Shopping: false,
+      Food: false,
+      Drink: false,
+      Restaurant: false,
+      Sports: false,
     };
   },
   computed: {
@@ -125,6 +172,10 @@ export default {
     next() {
       if (this.tabStage === 3) {
         //Go post
+        const data = {
+          userId: "ss"
+        }
+        this.$store.dispatch("review/postReview",data);
       } else {
         this.tabStage += 1;
         //next step
@@ -138,6 +189,27 @@ export default {
     console.log(this.reviewId);
   },
   watch: {
+    Camera() {
+      this.Camera ? this.category.push("Camera") : this.category.splice(this.category.indexOf("Camera"),1);
+    },
+    Natural() {
+      this.Natural ? this.category.push("Natural") : this.category.splice(this.category.indexOf("Natural"),1);
+    },
+    Shopping() {
+      this.Shopping ? this.category.push("Shopping") : this.category.splice(this.category.indexOf("Shopping"),1);
+    },
+    Food() {
+      this.Food ? this.category.push("Food") : this.category.splice(this.category.indexOf("Food"),1);
+    },
+    Drink() {
+      this.Drink ? this.category.push("Drink") : this.category.splice(this.category.indexOf("Drink"),1);
+    },
+    Restaurant() {
+      this.Restaurant ? this.category.push("Restaurant") : this.category.splice(this.category.indexOf("Restaurant"),1);
+    },
+    Sports() {
+      this.Sports ? this.category.push("Sports") : this.category.splice(this.category.indexOf("Sports"),1);
+    },
     tabStage() {
       if (this.tabStage === 1) {
         document.getElementById("categoryTab").style.backgroundColor =
