@@ -106,13 +106,11 @@
               </router-link>
             </div>
             <div class="buttons" v-if="loggedIn">
-              <a class="navbar-item button is-primary" @click="logout">
-                Logout
-              </a>
-            </div>
-            <div class="buttons" v-if="loggedIn">
               <a class="navbar-item button is-primary" @click="createReview">
                 Create review
+              </a>
+              <a class="navbar-item button is-primary" @click="logout">
+                Logout
               </a>
             </div>
           </div>

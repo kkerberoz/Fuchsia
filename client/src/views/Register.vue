@@ -156,7 +156,6 @@
         if (this.formInput.password !== this.formInput.conPassword) {
           console.log("password doesn't match");
         }
-
         if (this.errors.length === 0) {
           let data = {
             firstName: this.formInput.firstName,
