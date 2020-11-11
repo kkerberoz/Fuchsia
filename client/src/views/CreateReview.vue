@@ -171,17 +171,17 @@ export default {
     next() {
       if (this.tabStage === 3) {
         //Go post
-        const data = {
-          userId: "12345",
-          reviewTitle: "test1",
+        const testObj = {
+          userId: "abcdefg",
+          reviewTitle: "Hmeee",
           reviewContent: "this is content",
           reviewDatetime: "wednesday",
-          category: "Sport",
+          category: "game",
           status: "Ban",
           imageLink: "https://test.png",
           view: 0
         }
-        this.$store.dispatch("review/postReview",data);
+        this.$store.dispatch("review/postReview", testObj);
       } else {
         this.tabStage += 1;
         //next step
