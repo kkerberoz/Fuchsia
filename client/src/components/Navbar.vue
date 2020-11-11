@@ -80,7 +80,6 @@
             <a class="navbar-link">
               More
             </a>
-
             <div class="navbar-dropdown">
               <a class="navbar-item">
                 Jobs
@@ -107,6 +106,9 @@
               </router-link>
             </div>
             <div class="buttons" v-if="loggedIn">
+              <a class="navbar-item button is-primary" @click="createReview">
+                Create review
+              </a>
               <a class="navbar-item button is-primary" @click="logout">
                 Logout
               </a>
@@ -126,6 +128,9 @@
       };
     },
     methods: {
+      createReview() {
+        this.$router.push({name: "CreateReview"});
+      },
       logout() {
         this.$store.dispatch("auth/logout");
         this.$router.push({name: "Login"});

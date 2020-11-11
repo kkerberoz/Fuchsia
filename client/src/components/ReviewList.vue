@@ -7,11 +7,10 @@
 </template>
 
 <script>
-// <review-item :review="review"></review-item>
-import ReviewList from "./ReviewItem";
+import ReviewItem from "./ReviewItem";
 export default {
   components: {
-    "review-item": ReviewList,
+    ReviewItem
   },
   computed: {
     hasReview() {
