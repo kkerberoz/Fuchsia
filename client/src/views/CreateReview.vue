@@ -117,7 +117,6 @@
         </div>
       </div>
     </div>
-    <comment-list></comment-list>
   </div>
 </template>
 
