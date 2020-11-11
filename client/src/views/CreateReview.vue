@@ -171,9 +171,9 @@ export default {
     next() {
       if (this.tabStage === 3) {
         //Go post
-        const testObj = {
-          userId: "abcdefg",
-          reviewTitle: "Hmeee",
+        let testObj = {
+          userId: "12345",
+          reviewTitle: "test1sd",
           reviewContent: "this is content",
           reviewDatetime: "wednesday",
           category: "game",
