@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const ReviewSchema = new mongoose.Schema(
   {
     userId: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     reviewTitle:{
       type: String,
@@ -27,11 +27,10 @@ const ReviewSchema = new mongoose.Schema(
       type: String,
       enum: ["NORMAL", "BAN"],
       default: "NORMAL",
-      required: true,
     },
     view: {
       type: Number,
-      required: true,
+      default: 0,
     },
     imageLink: {
       type: String,
@@ -43,13 +42,5 @@ const ReviewSchema = new mongoose.Schema(
   }
 );
 
-// UserSchema.pre("save", function (next) {
-//   this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(12));
-//   next();
-// });
-
-// UserSchema.methods.isValidPassword = function (newPassword) {
-//   return bcrypt.compareSync(newPassword, this.password);
-// };
 
 module.exports = mongoose.model("Review", ReviewSchema);

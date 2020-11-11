@@ -1,4 +1,4 @@
-const BASE_API_URL = "";
+const BASE_API_URL = "http://localhost:5000/api/";
 import axios from "axios";
 
 const review = {

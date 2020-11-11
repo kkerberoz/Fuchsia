@@ -30,11 +30,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/login", require("../routes/api/login"));
 app.use("/api/register", require("../routes/api/register"));
-<<<<<<< HEAD
-app.use("/api/postReview", require("../routes/api/postReview"));
-=======
-// app.use("/api/test", require("../routes/api/test"));
->>>>>>> 96f109bd7cd8258df19b80fb6b5e2ab97d079b23
+app.use("/api/review", require("../routes/api/postReview"));
 
 app.listen(port, () => {
   console.log(
