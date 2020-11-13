@@ -37,7 +37,7 @@ const routes = [
     component: () => import("../views/Register.vue"),
   },
   {
-    path: "/review",
+    path: "/:reviewId",
     name: "Review",
     props: true,
     component: () => import("../views/Review.vue"),
