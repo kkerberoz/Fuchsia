@@ -28,53 +28,53 @@
         <div id="reviewContent" class="column">
           <div v-if="isSelectCategoryState">
             <div v-if="isSelectCategoryState">
-            <div class="columns">
-              <div class="column is-3">
-                <label class="checkbox">
-                <input v-model="Camera" value="Camera" type="checkbox">
-                Camera
-              </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Natural" type="checkbox">
-                  Natural
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Shopping" type="checkbox">
-                  Shopping
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                    <input v-model="Food" type="checkbox">
+              <div class="columns">
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Camera" value="Camera" type="checkbox" />
+                    Camera
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Natural" type="checkbox" />
+                    Natural
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Shopping" type="checkbox" />
+                    Shopping
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Food" type="checkbox" />
                     Food
-                </label>
+                  </label>
+                </div>
               </div>
-            </div>
-            <div class="columns">
-              <div class="column is-3">
-                <label class="checkbox">
-                    <input v-model="Drink" type="checkbox">
+              <div class="columns">
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Drink" type="checkbox" />
                     Drink
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Restaurant" type="checkbox">
-                  Restaurant
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Sports" type="checkbox">
-                  Sports
-                </label>
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Restaurant" type="checkbox" />
+                    Restaurant
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Sports" type="checkbox" />
+                    Sports
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
           </div>
           <div v-if="isCreateReviewState">
             <div class="editor">
@@ -201,7 +201,10 @@
                 </div>
               </editor-menu-bar>
 
-              <editor-content class="editor__content editor-area" :editor="editor" />
+              <editor-content
+                class="editor__content editor-area"
+                :editor="editor"
+              />
             </div>
           </div>
           <div v-if="isPreviewState">
@@ -249,116 +252,117 @@
 </template>
 
 <script>
-  // import ReviewContent from "../components/ReviewContent";
-  import Icon from "../components/Icon";
-  import { Editor, EditorContent, EditorMenuBar } from "tiptap";
-  import {
-    Blockquote,
-    CodeBlock,
-    HardBreak,
-    Heading,
-    HorizontalRule,
-    OrderedList,
-    BulletList,
-    ListItem,
-    TodoItem,
-    TodoList,
-    Bold,
-    Code,
-    Italic,
-    Link,
-    Strike,
-    Underline,
-    History,
-  } from "tiptap-extensions";
+// import ReviewContent from "../components/ReviewContent";
+import Icon from "../components/Icon";
+import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from "tiptap-extensions";
 
-  export default {
-    components: {
-      // ReviewContent,
-      EditorContent,
-      EditorMenuBar,
-      Icon,
-    },
-    data() {
-      return {
-        tabStage: 1,
-        category: [],
-        Camera: false,
-        Natural: false,
-        Shopping: false,
-        Food: false,
-        Drink: false,
-        Restaurant: false,
-        Sports: false,
-        html: "",
-        content: "",
+export default {
+  name: "CreateReview",
+  components: {
+    // ReviewContent,
+    EditorContent,
+    EditorMenuBar,
+    Icon,
+  },
+  data() {
+    return {
+      tabStage: 1,
+      category: [],
+      Camera: false,
+      Natural: false,
+      Shopping: false,
+      Food: false,
+      Drink: false,
+      Restaurant: false,
+      Sports: false,
+      html: "",
+      content: "",
 
-        editor: new Editor({
-          extensions: [
-            new Blockquote(),
-            new BulletList(),
-            new CodeBlock(),
-            new HardBreak(),
-            new Heading({ levels: [1, 2, 3] }),
-            new HorizontalRule(),
-            new ListItem(),
-            new OrderedList(),
-            new TodoItem(),
-            new TodoList(),
-            new Link(),
-            new Bold(),
-            new Code(),
-            new Italic(),
-            new Strike(),
-            new Underline(),
-            new History(),
-          ],
-          onUpdate: ({ getHTML }) => {
-            this.html = getHTML();
-            if (this.html === "<p></p>") this.content = "";
-            else this.content = this.html;
-          },
-        }),
-      };
+      editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        onUpdate: ({ getHTML }) => {
+          this.html = getHTML();
+          if (this.html === "<p></p>") this.content = "";
+          else this.content = this.html;
+        },
+      }),
+    };
+  },
+  computed: {
+    isSelectCategoryState() {
+      return this.tabStage === 1;
     },
-    computed: {
-      isSelectCategoryState() {
-        return this.tabStage === 1;
-      },
-      isCreateReviewState() {
-        return this.tabStage === 2;
-      },
-      isPreviewState() {
-        return this.tabStage === 3;
-      },
-      goButton() {
-        return this.tabStage === 3 ? "Submit" : "Next";
-      },
-      isFirstStep() {
-        return this.tabStage === 1;
-      },
+    isCreateReviewState() {
+      return this.tabStage === 2;
     },
+    isPreviewState() {
+      return this.tabStage === 3;
+    },
+    goButton() {
+      return this.tabStage === 3 ? "Submit" : "Next";
+    },
+    isFirstStep() {
+      return this.tabStage === 1;
+    },
+  },
 
-    beforeDestroy() {
-      this.editor.destroy();
+  beforeDestroy() {
+    this.editor.destroy();
+  },
+  methods: {
+    showImagePrompt(command) {
+      const src = prompt("Enter the url of your image here");
+      if (src !== null) {
+        command({ src });
+      }
     },
-    methods: {
-      showImagePrompt(command) {
-        const src = prompt("Enter the url of your image here");
-        if (src !== null) {
-          command({ src });
-        }
-      },
-      selectCategory() {
-        this.tabStage = 1;
-      },
-      createReview() {
-        this.tabStage = 2;
-      },
-      preview() {
-        this.tabStage = 3;
-      },
-      next() {
+    selectCategory() {
+      this.tabStage = 1;
+    },
+    createReview() {
+      this.tabStage = 2;
+    },
+    preview() {
+      this.tabStage = 3;
+    },
+    next() {
       if (this.tabStage === 3) {
         //Go post
         const data = {
@@ -369,9 +373,9 @@
           category: "Sport",
           status: "Ban",
           imageLink: "https://test.png",
-          view: 0
-        }
-        this.$store.dispatch("review/postReview",data);
+          view: 0,
+        };
+        this.$store.dispatch("review/postReview", data);
       } else {
         this.tabStage += 1;
         //next step
@@ -380,31 +384,45 @@
     back() {
       this.tabStage -= 1;
     },
-    },
-    mounted() {
-      console.log(this.reviewId);
-    },
-    watch: {
-       Camera() {
-      this.Camera ? this.category.push("Camera") : this.category.splice(this.category.indexOf("Camera"),1);
+  },
+  mounted() {
+    console.log(this.reviewId);
+  },
+  watch: {
+    Camera() {
+      this.Camera
+        ? this.category.push("Camera")
+        : this.category.splice(this.category.indexOf("Camera"), 1);
     },
     Natural() {
-      this.Natural ? this.category.push("Natural") : this.category.splice(this.category.indexOf("Natural"),1);
+      this.Natural
+        ? this.category.push("Natural")
+        : this.category.splice(this.category.indexOf("Natural"), 1);
     },
     Shopping() {
-      this.Shopping ? this.category.push("Shopping") : this.category.splice(this.category.indexOf("Shopping"),1);
+      this.Shopping
+        ? this.category.push("Shopping")
+        : this.category.splice(this.category.indexOf("Shopping"), 1);
     },
     Food() {
-      this.Food ? this.category.push("Food") : this.category.splice(this.category.indexOf("Food"),1);
+      this.Food
+        ? this.category.push("Food")
+        : this.category.splice(this.category.indexOf("Food"), 1);
     },
     Drink() {
-      this.Drink ? this.category.push("Drink") : this.category.splice(this.category.indexOf("Drink"),1);
+      this.Drink
+        ? this.category.push("Drink")
+        : this.category.splice(this.category.indexOf("Drink"), 1);
     },
     Restaurant() {
-      this.Restaurant ? this.category.push("Restaurant") : this.category.splice(this.category.indexOf("Restaurant"),1);
+      this.Restaurant
+        ? this.category.push("Restaurant")
+        : this.category.splice(this.category.indexOf("Restaurant"), 1);
     },
-    mounted() {
-      console.log(this.reviewId);
+    Sports() {
+      this.Sports
+        ? this.category.push("Sports")
+        : this.category.splice(this.category.indexOf("Sports"), 1);
     },
     tabStage() {
       if (this.tabStage === 1) {
@@ -412,93 +430,89 @@
           "#c6007e";
         document.getElementById("createReviewTab").style.backgroundColor =
           "#f277c6";
-        document.getElementById("previewTab").style.backgroundColor =
-          "#f277c6";
+        document.getElementById("previewTab").style.backgroundColor = "#f277c6";
       } else if (this.tabStage === 2) {
         document.getElementById("categoryTab").style.backgroundColor =
           "#f277c6";
         document.getElementById("createReviewTab").style.backgroundColor =
           "#c6007e";
-        document.getElementById("previewTab").style.backgroundColor =
-          "#f277c6";
+        document.getElementById("previewTab").style.backgroundColor = "#f277c6";
       } else {
         document.getElementById("categoryTab").style.backgroundColor =
           "#f277c6";
         document.getElementById("createReviewTab").style.backgroundColor =
           "#f277c6";
-        document.getElementById("previewTab").style.backgroundColor =
-          "#c6007e";
+        document.getElementById("previewTab").style.backgroundColor = "#c6007e";
       }
     },
-    },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
+.editor-area {
+  margin-top: 1%;
+  border: 2px solid $primary;
+}
 
-  .editor-area {
-    margin-top: 1%;
-    border: 2px solid $primary;
-  }
+.buttonGroup {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
 
-  .buttonGroup {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-  }
+.buttonControl {
+  text-align: center;
+  background-color: $primary;
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  margin-right: 1%;
+}
 
-  .buttonControl {
-    text-align: center;
-    background-color: $primary;
-    border-radius: 50px;
-    color: white;
-    cursor: pointer;
-    margin-right: 1%;
-  }
+#reviewContent {
+  margin: 3%;
+}
 
-  #reviewContent {
-    margin: 3%;
-  }
+#tabGroup {
+  margin-bottom: 0;
+  margin-left: 5%;
+}
 
-  #tabGroup {
-    margin-bottom: 0;
-    margin-left: 5%;
-  }
+#categoryTab {
+  background-color: $primary;
+}
 
-  #categoryTab {
-    background-color: $primary;
-  }
+.tabStage {
+  text-align: center;
+  color: white;
+  margin-top: 5%;
+  border-color: white;
+  height: 6vh;
+  margin-left: -5%;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 30px;
+  background-color: $secondary;
+  cursor: pointer;
+}
 
-  .tabStage {
-    text-align: center;
-    color: white;
-    margin-top: 5%;
-    border-color: white;
-    height: 6vh;
-    margin-left: -5%;
-    border-top-left-radius: 50px;
-    border-top-right-radius: 30px;
-    background-color: $secondary;
-    cursor: pointer;
-  }
+#postBlog {
+  padding: 40px;
+  background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
+  background-size: cover;
+  width: 100%;
+  height: auto;
+}
 
+@media screen and (max-width: 1024px) {
   #postBlog {
-    padding: 40px;
-    background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
-    background-size: cover;
+    padding: 20px;
+    margin: 5px;
+    border-radius: 50px;
     width: 100%;
     height: auto;
+    background-image: none;
+    background-color: white;
   }
-
-  @media screen and (max-width: 1024px) {
-    #postBlog {
-      padding: 20px;
-      margin: 5px;
-      border-radius: 50px;
-      width: 100%;
-      height: auto;
-      background-image: none;
-      background-color: white;
-    }
-  }
+}
 </style>
