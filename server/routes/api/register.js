@@ -19,7 +19,7 @@ router.post("/", (req, res) => {
     return ResHelper.fail(res, "Valid email is required");
   }
   if (!password || !AuthHelper.validPassword(password)) {
-    return ResHelper.fail(res, "Passowrd must be at least 6 characters");
+    return ResHelper.fail(res, "Password must be at least 6 characters");
   }
   if (!dob) {
     return ResHelper.fail(res, "Date of birth is required");
