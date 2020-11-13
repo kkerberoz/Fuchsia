@@ -1,3 +1,11 @@
 <template>
-    <div>sddsdsd</div>
+    <div>
+        sd
+    </div>
 </template>
+
+<script>
+export default {
+    
+}
+</script>
