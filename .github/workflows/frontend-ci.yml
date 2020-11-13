@@ -19,9 +19,9 @@ jobs:
         with:
           node-version: "12.x"
       - name: Cache node_modules
+        uses: actions/cache@v1
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install packages
-        run: npm install
+          path: node_modules
+          key: yarn-${{ hashFiles('package-lock.json') }}
+      - run: npm install
       - run: npm run lint
