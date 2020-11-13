@@ -27,6 +27,7 @@
       <div class="columns">
         <div id="reviewContent" class="column">
           <div v-if="isSelectCategoryState">
+            <div v-if="isSelectCategoryState">
             <div class="columns">
               <div class="column is-3">
                 <label class="checkbox">
@@ -73,6 +74,7 @@
                 </label>
               </div>
             </div>
+          </div>
           </div>
           <div v-if="isCreateReviewState">
             <div class="editor">
@@ -401,33 +403,33 @@
     Restaurant() {
       this.Restaurant ? this.category.push("Restaurant") : this.category.splice(this.category.indexOf("Restaurant"),1);
     },
-    Sports() {
-      this.Sports ? this.category.push("Sports") : this.category.splice(this.category.indexOf("Sports"),1);
+    mounted() {
+      console.log(this.reviewId);
     },
-      tabStage() {
-        if (this.tabStage === 1) {
-          document.getElementById("categoryTab").style.backgroundColor =
-            "#c6007e";
-          document.getElementById("createReviewTab").style.backgroundColor =
-            "#f277c6";
-          document.getElementById("previewTab").style.backgroundColor =
-            "#f277c6";
-        } else if (this.tabStage === 2) {
-          document.getElementById("categoryTab").style.backgroundColor =
-            "#f277c6";
-          document.getElementById("createReviewTab").style.backgroundColor =
-            "#c6007e";
-          document.getElementById("previewTab").style.backgroundColor =
-            "#f277c6";
-        } else {
-          document.getElementById("categoryTab").style.backgroundColor =
-            "#f277c6";
-          document.getElementById("createReviewTab").style.backgroundColor =
-            "#f277c6";
-          document.getElementById("previewTab").style.backgroundColor =
-            "#c6007e";
-        }
-      },
+    tabStage() {
+      if (this.tabStage === 1) {
+        document.getElementById("categoryTab").style.backgroundColor =
+          "#c6007e";
+        document.getElementById("createReviewTab").style.backgroundColor =
+          "#f277c6";
+        document.getElementById("previewTab").style.backgroundColor =
+          "#f277c6";
+      } else if (this.tabStage === 2) {
+        document.getElementById("categoryTab").style.backgroundColor =
+          "#f277c6";
+        document.getElementById("createReviewTab").style.backgroundColor =
+          "#c6007e";
+        document.getElementById("previewTab").style.backgroundColor =
+          "#f277c6";
+      } else {
+        document.getElementById("categoryTab").style.backgroundColor =
+          "#f277c6";
+        document.getElementById("createReviewTab").style.backgroundColor =
+          "#f277c6";
+        document.getElementById("previewTab").style.backgroundColor =
+          "#c6007e";
+      }
+    },
     },
   };
 </script>
