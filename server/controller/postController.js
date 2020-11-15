@@ -12,7 +12,8 @@ module.exports = {
     if (!category) {
       return ResHelper.fail(res, "category is required!");
     }
-    
+
+    console.log(req.user);
     const newReview = Review({
       userId: req.user._id,
       reviewTitle,

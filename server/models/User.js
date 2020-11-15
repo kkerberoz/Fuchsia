@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = process.env;
 const jwt = require("jsonwebtoken");
+// const { ObjectId } = require("mongodb");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -57,18 +58,19 @@ UserSchema.methods.isValidPassword = function (newPassword) {
 
 UserSchema.statics.findByToken = function (token, cb) {
   var user = this;
-
+  // console.log("HERE",token);
   jwt.verify(token, JWT_SECRET, function (err, decode) {
-    console.log(token);
-    user.find({ _id: decode }, function (err, user) {
+    // console.log(decode);
+    user.findOne({ _id: decode.userId }, function (err, user) {
       if (err) {
         return cb(err);
       } else {
-        console.log("!!",user);
+        // console.log("!!",user);
         cb(null, user);
       }
     });
   });
+  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 };
 
 module.exports = mongoose.model("User", UserSchema);
