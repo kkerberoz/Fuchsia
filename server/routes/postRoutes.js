@@ -8,9 +8,9 @@ const PostController = require("../controller/postController");
 router.post("/postreview", auth, PostController.postReview);
 router.get("/getreview", PostController.getReviews);
 // router.post("/postcomment", auth, PostController.postComment);
-// router.post("/getcomment", PostController.getComments);
-// router.post("/getfollowed", PostController.getFolloweds);
-// router.post("/getfavorite", PostController.getFavorite);
+// router.get("/getcomment", PostController.getComments);
+// router.get("/getfollowed", PostController.getFolloweds);
+// router.get("/getfavorite", PostController.getFavorite);
 
 
 module.exports = router;

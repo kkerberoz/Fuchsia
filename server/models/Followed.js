@@ -1,4 +1,4 @@
-const { Double } = require("mongodb");
+// const { Double } = require("mongodb");
 const mongoose = require("mongoose");
 // const bcrypt = require("bcrypt");
 
@@ -9,7 +9,7 @@ const FollowedSchema = new mongoose.Schema(
       ref: "User",
     },
     followedId:{
-      type: Double,
+      type: String,
       required: true,
     },
     followedDatetime: {
