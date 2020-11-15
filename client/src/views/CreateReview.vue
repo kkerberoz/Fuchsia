@@ -27,77 +27,208 @@
       <div class="columns">
         <div id="reviewContent" class="column">
           <div v-if="isSelectCategoryState">
-            <div class="columns">
-              <div class="column is-3">
-                <label class="checkbox">
-                <input v-model="Camera" value="Camera" type="checkbox">
-                Camera
-              </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Natural" type="checkbox">
-                  Natural
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Shopping" type="checkbox">
-                  Shopping
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                    <input v-model="Food" type="checkbox">
+            <div v-if="isSelectCategoryState">
+              <div class="columns">
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Camera" value="Camera" type="checkbox" />
+                    Camera
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Natural" type="checkbox" />
+                    Natural
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Shopping" type="checkbox" />
+                    Shopping
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Food" type="checkbox" />
                     Food
-                </label>
+                  </label>
+                </div>
               </div>
-            </div>
-            <div class="columns">
-              <div class="column is-3">
-                <label class="checkbox">
-                    <input v-model="Drink" type="checkbox">
+              <div class="columns">
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Drink" type="checkbox" />
                     Drink
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Restaurant" type="checkbox">
-                  Restaurant
-                </label>
-              </div>
-              <div class="column is-3">
-                <label class="checkbox">
-                  <input v-model="Sports" type="checkbox">
-                  Sports
-                </label>
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Restaurant" type="checkbox" />
+                    Restaurant
+                  </label>
+                </div>
+                <div class="column is-3">
+                  <label class="checkbox">
+                    <input v-model="Sports" type="checkbox" />
+                    Sports
+                  </label>
+                </div>
               </div>
             </div>
           </div>
           <div v-if="isCreateReviewState">
-            
+            <div class="editor">
+              <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+                <div class="menubar">
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.bold() }"
+                    @click="commands.bold"
+                  >
+                    <icon name="bold" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.italic() }"
+                    @click="commands.italic"
+                  >
+                    <icon name="italic" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.strike() }"
+                    @click="commands.strike"
+                  >
+                    <icon name="strike" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.underline() }"
+                    @click="commands.underline"
+                  >
+                    <icon name="underline" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.code() }"
+                    @click="commands.code"
+                  >
+                    <icon name="code" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.paragraph() }"
+                    @click="commands.paragraph"
+                  >
+                    <icon name="paragraph" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                    @click="commands.heading({ level: 1 })"
+                  >
+                    H1
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                    @click="commands.heading({ level: 2 })"
+                  >
+                    H2
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                    @click="commands.heading({ level: 3 })"
+                  >
+                    H3
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.bullet_list() }"
+                    @click="commands.bullet_list"
+                  >
+                    <icon name="ul" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.ordered_list() }"
+                    @click="commands.ordered_list"
+                  >
+                    <icon name="ol" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.blockquote() }"
+                    @click="commands.blockquote"
+                  >
+                    <icon name="quote" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.code_block() }"
+                    @click="commands.code_block"
+                  >
+                    <icon name="code" />
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    @click="commands.horizontal_rule"
+                  >
+                    <icon name="hr" />
+                  </button>
+
+                  <button class="menubar__button" @click="commands.undo">
+                    <icon name="undo" />
+                  </button>
+
+                  <button class="menubar__button" @click="commands.redo">
+                    <icon name="redo" />
+                  </button>
+                </div>
+              </editor-menu-bar>
+
+              <editor-content
+                class="editor__content editor-area"
+                :editor="editor"
+              />
+            </div>
           </div>
           <div v-if="isPreviewState">
             Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text ever
-            since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book. It has survived not only
-            five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s with
-            the release of Letraset sheets containing Lorem Ipsum passages, and
-            more recently with desktop publishing software like Aldus PageMaker
-            including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of
-            the printing and typesetting industry. Lorem Ipsum has been the
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s
+            with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply
+            dummy text of the printing and typesetting industry. Lorem Ipsum has
+            been the industry's standard dummy text ever since the 1500s, when
+            an unknown printer took a galley of type and scrambled it to make a
+            type specimen book. It has survived not only five centuries, but
+            also the leap into electronic typesetting, remaining essentially
+            unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently
+            with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the
+            printing and typesetting industry. Lorem Ipsum has been the
             industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type specimen
-            book. It has survived not only five centuries, but also the leap into
-            electronic typesetting, remaining essentially unchanged. It was
-            popularised in the 1960s with the release of Letraset sheets
-            containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text ever
-            since the 1500s, when an unknown printer took a galley of type and
+            printer took a galley of type and
           </div>
         </div>
       </div>
@@ -121,13 +252,37 @@
 </template>
 
 <script>
+// import ReviewContent from "../components/ReviewContent";
+import Icon from "../components/Icon";
+import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from "tiptap-extensions";
+
 export default {
-  // props: {
-  //   reviewId: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
+  name: "CreateReview",
+  components: {
+    // ReviewContent,
+    EditorContent,
+    EditorMenuBar,
+    Icon,
+  },
   data() {
     return {
       tabStage: 1,
@@ -139,6 +294,35 @@ export default {
       Drink: false,
       Restaurant: false,
       Sports: false,
+      html: "",
+      content: "",
+
+      editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        onUpdate: ({ getHTML }) => {
+          this.html = getHTML();
+          if (this.html === "<p></p>") this.content = "";
+          else this.content = this.html;
+        },
+      }),
     };
   },
   computed: {
@@ -158,7 +342,17 @@ export default {
       return this.tabStage === 1;
     },
   },
+
+  beforeDestroy() {
+    this.editor.destroy();
+  },
   methods: {
+    showImagePrompt(command) {
+      const src = prompt("Enter the url of your image here");
+      if (src !== null) {
+        command({ src });
+      }
+    },
     selectCategory() {
       this.tabStage = 1;
     },
@@ -171,17 +365,17 @@ export default {
     next() {
       if (this.tabStage === 3) {
         //Go post
-        let testObj = {
+        const data = {
           userId: "12345",
-          reviewTitle: "test1sd",
+          reviewTitle: "Really?",
           reviewContent: "this is content",
           reviewDatetime: "wednesday",
-          category: "game",
+          category: "Sport",
           status: "Ban",
           imageLink: "https://test.png",
-          view: 0
-        }
-        this.$store.dispatch("review/postReview", testObj);
+          view: 0,
+        };
+        this.$store.dispatch("review/postReview", data);
       } else {
         this.tabStage += 1;
         //next step
@@ -196,25 +390,39 @@ export default {
   },
   watch: {
     Camera() {
-      this.Camera ? this.category.push("Camera") : this.category.splice(this.category.indexOf("Camera"),1);
+      this.Camera
+        ? this.category.push("Camera")
+        : this.category.splice(this.category.indexOf("Camera"), 1);
     },
     Natural() {
-      this.Natural ? this.category.push("Natural") : this.category.splice(this.category.indexOf("Natural"),1);
+      this.Natural
+        ? this.category.push("Natural")
+        : this.category.splice(this.category.indexOf("Natural"), 1);
     },
     Shopping() {
-      this.Shopping ? this.category.push("Shopping") : this.category.splice(this.category.indexOf("Shopping"),1);
+      this.Shopping
+        ? this.category.push("Shopping")
+        : this.category.splice(this.category.indexOf("Shopping"), 1);
     },
     Food() {
-      this.Food ? this.category.push("Food") : this.category.splice(this.category.indexOf("Food"),1);
+      this.Food
+        ? this.category.push("Food")
+        : this.category.splice(this.category.indexOf("Food"), 1);
     },
     Drink() {
-      this.Drink ? this.category.push("Drink") : this.category.splice(this.category.indexOf("Drink"),1);
+      this.Drink
+        ? this.category.push("Drink")
+        : this.category.splice(this.category.indexOf("Drink"), 1);
     },
     Restaurant() {
-      this.Restaurant ? this.category.push("Restaurant") : this.category.splice(this.category.indexOf("Restaurant"),1);
+      this.Restaurant
+        ? this.category.push("Restaurant")
+        : this.category.splice(this.category.indexOf("Restaurant"), 1);
     },
     Sports() {
-      this.Sports ? this.category.push("Sports") : this.category.splice(this.category.indexOf("Sports"),1);
+      this.Sports
+        ? this.category.push("Sports")
+        : this.category.splice(this.category.indexOf("Sports"), 1);
     },
     tabStage() {
       if (this.tabStage === 1) {
@@ -242,6 +450,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.editor-area {
+  margin-top: 1%;
+  border: 2px solid $primary;
+}
+
 .buttonGroup {
   display: flex;
   width: 100%;
