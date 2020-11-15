@@ -5,7 +5,7 @@ const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
 module.exports = {
   postReview: (req, res) => {
-    const { reviewTitle, reviewContent, category, imageLink } = req.body;
+    const { reviewTitle, reviewDescription, reviewContent, category, imageLink } = req.body;
     if (!reviewTitle) {
       return ResHelper.fail(res, "review title is required!");
     }
@@ -20,6 +20,7 @@ module.exports = {
     const newReview = Review({
       userId: req.user._id,
       reviewTitle,
+      reviewDescription,
       reviewContent,
       category,
       imageLink,
@@ -35,9 +36,9 @@ module.exports = {
       .catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
-    const { filter, word, sortBy, direction, offset } = req.body;
+    const { filter, word, sortBy, direction, offset } = req.query;
 
-      if(filter == ""){
+      if(filter === ""){
         Review.find({})
             .sort({ "reviewDatetime": 1 })
             .limit(20)
@@ -108,13 +109,13 @@ module.exports = {
   
     },
     getComments: (req, res) => {
-      const reviewId = req.body.reviewId;
+      const reviewId = req.query.reviewId;
       Comment.find({"reviewId": reviewId})
       .then((comments) => ResHelper.success(res, {comment: comments, count: comments.length})
       ).catch((err) => ResHelper.error(res, err));
     },
     getFavorite: (req, res) => {
-      const reviewId = req.body.reviewId; // individual user
+      const reviewId = req.query.reviewId; // individual user
       Favorite.find({"reviewId": reviewId})
       .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
       ).catch((err) => ResHelper.error(res, err));
