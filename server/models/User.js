@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { JWT_SECRET } = process.env;
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -51,6 +53,19 @@ UserSchema.pre("save", function (next) {
 
 UserSchema.methods.isValidPassword = function (newPassword) {
   return bcrypt.compareSync(newPassword, this.password);
+};
+
+UserSchema.statics.findByToken = function (token, cb) {
+  var user = this;
+  jwt.verify(token, JWT_SECRET, function (err, decode) {
+    user.findOne({ _id: decode }, function (err, user) {
+      if (err) {
+        return cb(err);
+      } else {
+        cb(null, user);
+      }
+    });
+  });
 };
 
 module.exports = mongoose.model("User", UserSchema);

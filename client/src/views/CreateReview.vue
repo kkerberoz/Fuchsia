@@ -362,7 +362,7 @@ export default {
         //Go post
         const data = {
           reviewTitle: this.reviewTitle,
-          reviewContent: this.html,
+          reviewContent: `${this.html}`,
           category: this.category,
           imageLink: "https://bulma.io/images/placeholders/1280x960.png",
           view: 0,
