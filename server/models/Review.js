@@ -20,7 +20,7 @@ const ReviewSchema = new mongoose.Schema(
       default: Date.now(),
     },
     category: {
-      type: String,
+      type: Array,
       required: true,
     },
     status: {
