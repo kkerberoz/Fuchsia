@@ -16,7 +16,9 @@ module.exports = {
       return ResHelper.fail(res, "category is required!");
     }
 
+    console.log(req.user);
     const newReview = Review({
+      userId: req.user._id,
       reviewTitle,
       reviewContent,
       category,
@@ -32,12 +34,12 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-    getReviews: (req, res) => {
-      const { filter, word, sortBy, direction, offset } = req.body;
+  getReviews: (req, res) => {
+    const { filter, word, sortBy, direction, offset } = req.body;
 
       if(filter == ""){
         Review.find({})
-            .sort({ reviewDatetime: 1 })
+            .sort({ "reviewDatetime": 1 })
             .limit(20)
             .skip(20 * (offset - 1))
             .then((reviews) => 
