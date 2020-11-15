@@ -6,6 +6,6 @@ const PostController = require("../controller/postController");
 
 //Routes
 router.post("/postreview", auth, PostController.postReview);
-// router.get("/review", PostController.getReviews);
+router.post("/getreview", PostController.getReviews);
 
 module.exports = router;
