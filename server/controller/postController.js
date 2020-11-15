@@ -14,6 +14,7 @@ module.exports = {
     }
 
     const newReview = Review({
+      userID: req.user._id,
       reviewTitle,
       reviewContent,
       category,
@@ -29,45 +30,49 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-    getReviews: (req, res) => {
-      const { filter, word, sortBy, direction, offset } = req.body;
+  getReviews: (req, res) => {
+    const { filter, word, sortBy, direction, offset } = req.body;
 
-      if (!filter.localeCompare("category")) {
-        if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ category: word })
-            .sort({ reviewDatetime: direction })
-            .limit(20)
-            .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
-        else if (!sortBy.localeCompare("view")) {
-          Review.find({ category: word })
-            .sort({ view: direction })
-            .limit(20)
-            .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
-        }
-      } else {
-        if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ reviewTitle: word })
-            .sort({ reviewDatetime: direction })
-            .limit(20)
-            .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
-        else if (!sortBy.localeCompare("view")) {
-          Review.find({ reviewTitle: word })
-            .sort({ view: direction })
-            .limit(20)
-            .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
-        }
+    if (!filter.localeCompare("category")) {
+      if (!sortBy.localeCompare("reviewDatetime"))
+        Review.find({ category: word })
+          .sort({ reviewDatetime: direction })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) =>
+            ResHelper.success(res, { review: reviews, count: reviews.length })
+          )
+          .catch((err) => ResHelper.error(res, err));
+      else if (!sortBy.localeCompare("view")) {
+        Review.find({ category: word })
+          .sort({ view: direction })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) =>
+            ResHelper.success(res, { review: reviews, count: reviews.length })
+          )
+          .catch((err) => ResHelper.error(res, err));
       }
-    },
+    } else {
+      if (!sortBy.localeCompare("reviewDatetime"))
+        Review.find({ reviewTitle: word })
+          .sort({ reviewDatetime: direction })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) =>
+            ResHelper.success(res, { review: reviews, count: reviews.length })
+          )
+          .catch((err) => ResHelper.error(res, err));
+      else if (!sortBy.localeCompare("view")) {
+        Review.find({ reviewTitle: word })
+          .sort({ view: direction })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) =>
+            ResHelper.success(res, { review: reviews, count: reviews.length })
+          )
+          .catch((err) => ResHelper.error(res, err));
+      }
+    }
+  },
 };
