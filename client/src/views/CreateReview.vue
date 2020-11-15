@@ -81,7 +81,12 @@
               <label>Title:</label>
               <input v-model="reviewTitle" type="text" class="title-input">
             </div>
+            <div>
+              <label>Description:</label>
+              <input v-model="reviewDescription" type="text" class="title-input">
+            </div>
             <div class="editor">
+              <label > Content: </label>
               <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
                 <div class="menubar">
                   <button
@@ -212,7 +217,6 @@
 
                 </div>
               </editor-menu-bar>
-
               <editor-content
                 class="editor__content editor-area"
                 :editor="editor"
@@ -220,7 +224,9 @@
             </div>
           </div>
           <div v-if="isPreviewState">
-            <div style="color: #c6007e; font-size: 20 px;">Title: {{reviewTitle}}</div>
+            <!-- <div style="color: #c6007e; font-size: 20 px;">Title: <p style="color: black;">{{reviewTitle}}</p></div>
+            <div style="margin-top:2%; color: #c6007e; font-size: 20 px;">Description:  <p style="color: black;">{{reviewDescription}}</p></div>
+            <div style="margin-top:2%; color: #c6007e; font-size: 20 px;">Content:  <p style="color: black;">{{reviewDescription}}</p></div> -->
             <div v-html="html"></div>
             <!-- Content preview is here -->
           </div>
@@ -291,6 +297,7 @@ export default {
       html: "",
       content: "",
       reviewTitle: "",
+      reviewDescription: "",
 
       editor: new Editor({
         extensions: [
@@ -363,6 +370,7 @@ export default {
         const data = {
           reviewTitle: this.reviewTitle,
           reviewContent: `${this.html}`,
+          reviewDescription: this.reviewDescription,
           category: this.category,
           imageLink: "https://bulma.io/images/placeholders/1280x960.png",
           view: 0,

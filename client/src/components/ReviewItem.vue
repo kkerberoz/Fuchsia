@@ -14,7 +14,7 @@
         <p @click="goToReview" class="title is-4 title-effect" >{{reviewItem.reviewTitle}}</p>
         <hr class="pink-line">
         <div class="content">
-          {{reviewItem.reviewContent}}
+          {{reviewItem.reviewDescription}}
           <br/>
           <div class="columns bottom-card">
               <div class="column">
@@ -38,19 +38,16 @@
 
 <script>
 export default {
+  props: {
+    reviewItem: {
+      type: Object,
+      required: true
+    }
+  },
     computed: {
-        hasImage() {
-            return true;
-        },
-        reviewItem() {
-            return {
-                reviewTitle: "this is title",
-                reviewContent: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus neciaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus neciaculis mauris.",
-                imageLink: "https://bulma.io/images/placeholders/1280x960.png",
-                reviewDateTime: "11:09 PM - 1 Jan 2016",
-                category: ["travel", "camera"]
-            }
-        }
+      hasImage() {
+        return this.reviewItem.imageLink !== "";
+      }
     },
     methods: {
       goToReview() {
