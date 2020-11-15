@@ -202,6 +202,14 @@
                   <button class="menubar__button" @click="commands.redo">
                     <icon name="redo" />
                   </button>
+
+                  <button
+                    class="menubar__button"
+                    @click="showImagePrompt(commands.image)"
+                  >
+                    <icon name="image" />
+                  </button>
+
                 </div>
               </editor-menu-bar>
 
@@ -211,7 +219,9 @@
               />
             </div>
           </div>
-          <div v-if="isPreviewState" v-html="html">
+          <div v-if="isPreviewState">
+            <div style="color: #c6007e; font-size: 20 px;">Title: {{reviewTitle}}</div>
+            <div v-html="html"></div>
             <!-- Content preview is here -->
           </div>
         </div>
@@ -333,7 +343,7 @@ export default {
   },
   methods: {
     showImagePrompt(command) {
-      const src = prompt("Enter the url of your image here");
+      const src = prompt("https://bulma.io/images/placeholders/1280x960.png");
       if (src !== null) {
         command({ src });
       }
@@ -471,6 +481,14 @@ export default {
 
 #categoryTab {
   background-color: $primary;
+}
+
+// .ProseMirror [contenteditable="false"] {
+//   white-space: normal;
+// }
+
+p {
+  white-space: pre-wrap;
 }
 
 .tabStage {
