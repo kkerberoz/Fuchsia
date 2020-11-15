@@ -19,4 +19,11 @@ const error = (res, err, status = 500) => {
   });
 };
 
-module.exports = { success, fail, error };
+const unauth = (res, message, status = 401) => {
+  res.status(status).json({
+    status: "Unauthorized",
+    message,
+  });
+};
+
+module.exports = { success, fail, error, unauth };

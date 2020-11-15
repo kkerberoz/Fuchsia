@@ -11,6 +11,7 @@ mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
+  useUnifiedTopology: true,
 });
 mongoose.connection.once("open", () =>
   console.log("MongoDB database connection established successfully!")
@@ -28,10 +29,12 @@ app.get("/", (req, res) => {
   console.log("Hello");
 });
 
-app.use("/api/login", require("../routes/api/login"));
-app.use("/api/register", require("../routes/api/register"));
-app.use("/api/postReview", require("../routes/api/postReview"));
-app.use("/api/getReview", require("../routes/api/getReview"));
+app.use("/api", require("../routes/authRoutes"));
+app.use("/api", require("../routes/postRoutes"));
+
+app.use(function (req, res) {
+  res.send({ error: "Route is not found" }, 404);
+});
 
 app.listen(port, () => {
   console.log(
