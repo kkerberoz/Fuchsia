@@ -7,5 +7,10 @@ const PostController = require("../controller/postController");
 //Routes
 router.post("/postreview", auth, PostController.postReview);
 router.post("/getreview", PostController.getReviews);
+router.post("/postcomment", auth, PostController.postComment);
+router.post("/getcomment", PostController.getComments);
+router.post("/getfollowed", PostController.getFolloweds);
+router.post("/getfavorite", PostController.getFavorite);
+
 
 module.exports = router;
