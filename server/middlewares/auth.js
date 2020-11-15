@@ -3,6 +3,7 @@ const ResHelper = require("../helpers/ResHelper");
 
 let auth = (req, res, next) => {
   let token = req.cookies.jwt;
+  console.log(token)
   User.findByToken(token, (err, user) => {
     if (err) {
       throw err;
@@ -12,6 +13,9 @@ let auth = (req, res, next) => {
       } else {
         req.token = token;
         req.user = user;
+
+        console.log(user);
+        
         next();
       }
     }
