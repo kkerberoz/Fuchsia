@@ -2,7 +2,7 @@ const User = require("../models/User");
 const ResHelper = require("../helpers/ResHelper");
 
 let auth = (req, res, next) => {
-  let token = req.cookies.jwt;
+  let token = req.headers.Author;
   User.findByToken(token, (err, user) => {
     if (err) {
       throw err;
