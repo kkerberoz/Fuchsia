@@ -77,6 +77,10 @@
             </div>
           </div>
           <div v-if="isCreateReviewState">
+            <div>
+              <label>Title:</label>
+              <input v-model="reviewTitle" type="text" class="title-input">
+            </div>
             <div class="editor">
               <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
                 <div class="menubar">
@@ -198,6 +202,14 @@
                   <button class="menubar__button" @click="commands.redo">
                     <icon name="redo" />
                   </button>
+
+                  <button
+                    class="menubar__button"
+                    @click="showImagePrompt(commands.image)"
+                  >
+                    <icon name="image" />
+                  </button>
+
                 </div>
               </editor-menu-bar>
 
@@ -208,27 +220,9 @@
             </div>
           </div>
           <div v-if="isPreviewState">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply
-            dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when
-            an unknown printer took a galley of type and scrambled it to make a
-            type specimen book. It has survived not only five centuries, but
-            also the leap into electronic typesetting, remaining essentially
-            unchanged. It was popularised in the 1960s with the release of
-            Letraset sheets containing Lorem Ipsum passages, and more recently
-            with desktop publishing software like Aldus PageMaker including
-            versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and
+            <div style="color: #c6007e; font-size: 20 px;">Title: {{reviewTitle}}</div>
+            <div v-html="html"></div>
+            <!-- Content preview is here -->
           </div>
         </div>
       </div>
@@ -296,6 +290,7 @@ export default {
       Sports: false,
       html: "",
       content: "",
+      reviewTitle: "",
 
       editor: new Editor({
         extensions: [
@@ -348,7 +343,7 @@ export default {
   },
   methods: {
     showImagePrompt(command) {
-      const src = prompt("Enter the url of your image here");
+      const src = prompt("https://bulma.io/images/placeholders/1280x960.png");
       if (src !== null) {
         command({ src });
       }
@@ -366,13 +361,10 @@ export default {
       if (this.tabStage === 3) {
         //Go post
         const data = {
-          userId: "12345",
-          reviewTitle: "Really?",
-          reviewContent: "this is content",
-          reviewDatetime: "wednesday",
-          category: "Sport",
-          status: "Ban",
-          imageLink: "https://test.png",
+          reviewTitle: this.reviewTitle,
+          reviewContent: this.html,
+          category: this.category,
+          imageLink: "https://bulma.io/images/placeholders/1280x960.png",
           view: 0,
         };
         this.$store.dispatch("review/postReview", data);
@@ -450,6 +442,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.title-input {
+  width:100%; 
+  margin-top: 1%;
+  border: 2px solid $primary;
+  margin-bottom: 1%;
+}
+
 .editor-area {
   margin-top: 1%;
   border: 2px solid $primary;
@@ -481,6 +481,14 @@ export default {
 
 #categoryTab {
   background-color: $primary;
+}
+
+// .ProseMirror [contenteditable="false"] {
+//   white-space: normal;
+// }
+
+p {
+  white-space: pre-wrap;
 }
 
 .tabStage {
