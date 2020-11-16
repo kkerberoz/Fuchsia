@@ -46,8 +46,9 @@ module.exports = {
         .sort({ "reviewDatetime": 1 })
         .limit(20)
         .skip(20 * (offset - 1))
-        .then((reviews) =>
+        .then((reviews) => {
           ResHelper.success(res, {review: reviews, count: reviews.length})
+          }
         ).catch((err) => ResHelper.error(res, err));
     }
     else if (!filter.localeCompare("category")) {
