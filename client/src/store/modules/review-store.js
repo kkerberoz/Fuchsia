@@ -9,6 +9,7 @@ const review = {
             reviewTitle: "",
             reviewContent: "",
             reviewDatetime: "",
+            reviewDescription: "",
             category: "",
             status: "",
             imageLink: "",
@@ -35,8 +36,22 @@ const review = {
             context.commit("SET_REVIEW_INFO", response.data);
         },
         async postReview(context, reviewData) {
-            const response = await axios.post(`${BASE_API_URL}/postreview`, reviewData);
+            const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+            const response = await axios.post(`${BASE_API_URL}/postreview`, reviewData, {headers: {Authorization: jwt_token}});
             console.log("POST review object:", response.status);
+        },
+        async getReviewList(context, page) {
+            const params = {
+                filter: "",
+                word: "",
+                sortBy: "",
+                direction: 1,
+                offset: page,
+            }
+            const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
+            console.log("HERE",response.data.data.review);
+            context.commit("SET_REVIEW_LIST", response.data.data.review);
+            console.log("get Review List:", response.status);
         }
     },
     getters: {

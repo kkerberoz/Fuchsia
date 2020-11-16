@@ -1,7 +1,7 @@
 <template>
   <div class="columns is-mobile is-multiline is-centered" v-if="hasReview">
-    <div v-for="review in 10" :key="review" class="column is-narrow">
-        <review-item :review="review"></review-item>
+    <div v-for="review in reviews" :key="review.title" class="column is-narrow">
+        <review-item :reviewItem = "review"></review-item>
     </div>
   </div>
 </template>
@@ -12,10 +12,20 @@ export default {
   components: {
     ReviewItem
   },
+  props: {
+    currentPage: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     hasReview() {
       return true;
     },
+    reviews() {
+      return this.$store.getters["review/getReviewList"];
+    }
+    
   },
 };
 </script>
