@@ -1,8 +1,16 @@
 <template>
   <section class="hero-body is-fullheight">
-    <div  class="container" style="width: 77%">
-      <b-field class="column">
-          <b-select v-model="category" placeholder="Select a category" rounded>
+      <b-field class="container" style="width: 77%">
+        <b-autocomplete
+          v-model="searchKeyWord"
+          rounded
+          placeholder="Search here . . ."
+          v-debounce:400ms="searchBySearchBar"
+          icon="magnify"
+          clearable
+        >
+        </b-autocomplete>
+        <b-select v-model="category" placeholder="Select a category" rounded>
               <option selected value="">All category</option>
               <option value="Camera">Camera</option>
               <option value="Natural">Natural</option>
@@ -13,18 +21,6 @@
               <option value="Sports">Sports</option>
           </b-select>
       </b-field>
-      <b-field>
-        <b-autocomplete
-          v-model="searchKeyWord"
-          rounded
-          placeholder="Search here . . ."
-          v-debounce:400ms="searchBySearchBar"
-          icon="magnify"
-          clearable
-        >
-        </b-autocomplete>
-      </b-field>
-    </div>
     <div class="container">
       <review-list :currentPage="currentPage"></review-list>
     </div>
