@@ -16,6 +16,8 @@
     </div>
     
     <div style="margin-top: 5%; color:white;">
+
+      <div class="container" style="width:50%;">
     <b-pagination
       :total="allReviewCount"
       v-model="currentPage"
@@ -32,6 +34,7 @@
       aria-page-label="Page"
       aria-current-label="Current page">
     </b-pagination>
+    </div>
 </div>
   </section>
 </template>
@@ -54,15 +57,14 @@ import ReviewList from "../components/ReviewList";
     },
     methods: {
       searchBySearchBar() {
-        // if (this.searchKeyWord != "") {
-        // this.$store.dispatch("book/searchBookListBySearchBar", this.searchKeyWord);
-        // // if(this.$route.path !== "/") {
-        // //   this.$router.push({name: "home"});
-        // // }
-        // // } else {
-        // //   this.$store.dispatch("book/restoreBookData");
-        // // }
+        if (this.searchKeyWord != "") {
+          // this.$store.dispatch("book/searchBookListBySearchBar", this.searchKeyWord);
+          // ??????????????????????????????????????????????????????????????????????????????????????????????????
+        } 
+        else {
+          this.$store.dispatch("review/getReviewList", this.currentPage);
         }
+      }
     },
     async mounted() {
       this.$store.dispatch("review/getReviewList", this.currentPage);

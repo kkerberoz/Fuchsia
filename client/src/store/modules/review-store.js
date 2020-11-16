@@ -61,7 +61,20 @@ const review = {
             console.log("HERE",response.data.data.review);
             context.commit("SET_REVIEW_LIST", response.data.data.review);
             console.log("get Review List:", response.status);
-        }
+        },
+        // async getReviewListBySearch(context, word) {
+        //     const params = {
+        //         filter: "",
+        //         word: "",
+        //         sortBy: "",
+        //         direction: 1,
+        //         offset: page,
+        //     }
+        //     const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
+        //     console.log("HERE",response.data.data.review);
+        //     context.commit("SET_REVIEW_LIST", response.data.data.review);
+        //     console.log("get Review List:", response.status);
+        // }
     },
     getters: {
         getReviewInfo: (state) => state.reviewInfo,
