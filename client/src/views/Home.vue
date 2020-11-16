@@ -40,9 +40,10 @@ import ReviewList from "../components/ReviewList";
         isRounded: true
       }
     },
-    mounted() {
-      // this.$store.dispatch("review/getReviewList", this.currentPage);
-      // console.log();
+    async mounted() {
+      await this.$store.dispatch("review/setReviewCount");
+      this.allReviewCount = this.$store.getters["review/getReviewCount"];
+      console.log(this.$store.getters["review/getReviewCount"]);
     },
     watch: {
       currentPage() {
