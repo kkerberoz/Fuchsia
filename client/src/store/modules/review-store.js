@@ -16,11 +16,15 @@ const review = {
             view: 0
         },
         comments: [],
+        searchKey: "",
         reviewList: [],
         searchKeyword: "",
         reviewCount: 0
     },
     mutations: {
+        SET_SEARCH_KEY(state, key) {
+            state.searchKey = key;
+        },
         SET_REVIEW_COUNT(state, num) {
             state.reviewCount = num;
         },
@@ -35,6 +39,9 @@ const review = {
         }
     },
     actions: {
+        setSearchKey(context, key) {
+            context.commit("SET_SEARCH_KEY", key);
+        },
         async setReviewCount(context) {
             const response = await axios.get(`${BASE_API_URL}/getreviewscount`);
             context.commit("SET_REVIEW_COUNT",response.data.data);
@@ -58,28 +65,36 @@ const review = {
                 offset: page,
             }
             const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
-            console.log("HERE",response.data.data.review);
+            
             context.commit("SET_REVIEW_LIST", response.data.data.review);
             console.log("get Review List:", response.status);
+            console.log("data list",response.data.data.review);
         },
-        // async getReviewListBySearch(context, word) {
-        //     const params = {
-        //         filter: "",
-        //         word: "",
-        //         sortBy: "",
-        //         direction: 1,
-        //         offset: page,
-        //     }
-        //     const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
-        //     console.log("HERE",response.data.data.review);
-        //     context.commit("SET_REVIEW_LIST", response.data.data.review);
-        //     console.log("get Review List:", response.status);
-        // }
+        async getSearchReviewList(context, keyObject) {
+            if(keyObject.word === context.getters.getSearchKey) {
+                // console.log("word : ", keyObject.word)
+                const params = {
+                    filter: "search",
+                    word: context.getters.getSearchKey,
+                    sortBy: "reviewDatetime",
+                    direction: 1,
+                    offset: keyObject.page,
+                }
+                console.log("in the get search");
+                const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
+                
+                context.commit("SET_REVIEW_LIST", response.data.data.review);
+                console.log("get Review List:", response.status);
+                console.log("data list",response.data.data.review);
+            }
+            
+        }
     },
     getters: {
         getReviewInfo: (state) => state.reviewInfo,
         getReviewList: (state) => state.reviewList,
         getReviewCount: (state) => state.reviewCount,
+        getSearchKey: (state) => state.searchKey
     },
 };
 export default review;

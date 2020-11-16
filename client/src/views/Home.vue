@@ -58,7 +58,11 @@ import ReviewList from "../components/ReviewList";
     methods: {
       searchBySearchBar() {
         if (this.searchKeyWord != "") {
-          this.$store.dispatch("review/getSearchReviewList", this.currentPage);
+          const keyObject = {
+            page: this.currentPage,
+            word: this.searchKeyWord
+          }
+          this.$store.dispatch("review/getSearchReviewList", keyObject);
         } 
         else {
           this.$store.dispatch("review/getReviewList", this.currentPage);
@@ -73,6 +77,10 @@ import ReviewList from "../components/ReviewList";
     watch: {
       currentPage() {
         this.$store.dispatch("review/getReviewList", this.currentPage);
+      },
+      searchKeyWord() {
+        this.$store.dispatch("review/setSearchKey", this.searchKeyWord);
+        console.log(this.searchKeyWord)
       }
     }
   };
