@@ -16,7 +16,6 @@ module.exports = {
       return ResHelper.fail(res, "category is required!");
     }
 
-    console.log(req.user);
     const newReview = Review({
       userId: req.user._id,
       reviewTitle,
@@ -34,6 +33,12 @@ module.exports = {
         });
       })
       .catch((err) => ResHelper.error(res, err));
+  },
+  getAllreviews: (res) => {
+    Review.count()
+    .then((reviews) => 
+      ResHelper.success(res, reviews)
+    ).catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
     const { filter, word, sortBy, direction, offset } = req.query;
