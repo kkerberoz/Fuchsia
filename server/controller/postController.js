@@ -40,7 +40,8 @@ module.exports = {
     .catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
-    const { filter, word, sortBy, direction, offset } = req.query; 
+    const { filter, word, category, sortBy, direction, offset } = req.query; 
+    //console.log(filter);
     if(filter === ""){
       Review.find()
         .sort({ "reviewDatetime": 1 })
@@ -51,24 +52,42 @@ module.exports = {
           }
         ).catch((err) => ResHelper.error(res, err));
     }
-    else if (!filter.localeCompare("category")) {
+    else if (category.localeCompare("") && !filter.localeCompare("reviewTitle")) {
       if (!sortBy.localeCompare("reviewDatetime"))
-        Review.find({ category: word })
-          .sort({ reviewDatetime: direction })
+        Review.find({ "category": category, "reviewTitle": {$regex: word }})
+          .sort({ "reviewDatetime": direction })
           .limit(20)
           .skip(20 * (offset - 1))
           .then((reviews) => 
             ResHelper.success(res, {review: reviews, count: reviews.length})
           ).catch((err) => ResHelper.error(res, err));
       else if (!sortBy.localeCompare("view")) {
-        Review.find({ category: word })
-          .sort({ view: direction })
+        Review.find({ "category": category, "reviewTitle": {$regex: word }})
+          .sort({ "view": direction })
           .limit(20)
           .skip(20 * (offset - 1))
           .then((reviews) => 
             ResHelper.success(res, {review: reviews, count: reviews.length})
           ).catch((err) => ResHelper.error(res, err));
       }
+      else if (category.localeCompare("")) {
+        if (!sortBy.localeCompare("reviewDatetime"))
+          Review.find({ "category": category })
+            .sort({ "reviewDatetime": direction })
+            .limit(20)
+            .skip(20 * (offset - 1))
+            .then((reviews) => 
+              ResHelper.success(res, {review: reviews, count: reviews.length})
+            ).catch((err) => ResHelper.error(res, err));
+        else if (!sortBy.localeCompare("view")) {
+          Review.find({ "category": category })
+            .sort({ "view": direction })
+            .limit(20)
+            .skip(20 * (offset - 1))
+            .then((reviews) => 
+              ResHelper.success(res, {review: reviews, count: reviews.length})
+            ).catch((err) => ResHelper.error(res, err));
+        }
     } else {
       if (!sortBy.localeCompare("reviewDatetime"))
         Review.find({ reviewTitle: {$regex: word} })
@@ -88,12 +107,13 @@ module.exports = {
           ).catch((err) => ResHelper.error(res, err));
       }
     }
+    }
   },
   getReviewInfo: (req, res) => {
     const reviewId = req.query.reviewId;
-    Review.findOne({ reviewId: reviewId })
+    Review.findOne({ "reviewId": reviewId })
     .then((reviews) => 
-        ResHelper.success(res, {review: reviews})
+        ResHelper.success(res, {reviewInfo: reviews})
     ).catch((err) => ResHelper.error(res, err));
   },
   postComment: (req, res) => {
