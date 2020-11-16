@@ -59,7 +59,7 @@ module.exports = {
       // search review & no category
       else {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ reviewTitle: {$regex: word} })
+          Review.find({ reviewTitle: { $regex: new RegExp('^' + word, 'i')} })
           .sort({ reviewDatetime: direction })
           .limit(20)
           .skip(20 * (offset - 1))
@@ -67,7 +67,7 @@ module.exports = {
             ResHelper.success(res, {review: reviews, count: reviews.length})
           ).catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ reviewTitle: {$regex: word} })
+          Review.find({ reviewTitle: {$regex: new RegExp('^' + word, 'i')} })
             .sort({ view: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -100,7 +100,7 @@ module.exports = {
       }
       else {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ "category": category, "reviewTitle": {$regex: word }})
+          Review.find({ "category": category, "reviewTitle": {$regex: new RegExp('^' + word, 'i') }})
           .sort({ "reviewDatetime": direction })
           .limit(20)
           .skip(20 * (offset - 1))
@@ -108,7 +108,7 @@ module.exports = {
             ResHelper.success(res, {review: reviews, count: reviews.length})
           ).catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ "category": category, "reviewTitle": {$regex: word }})
+          Review.find({ "category": category, "reviewTitle": {$regex: new RegExp('^' + word, 'i') }})
             .sort({ "view": direction })
             .limit(20)
             .skip(20 * (offset - 1))
