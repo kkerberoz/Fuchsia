@@ -13,6 +13,10 @@ export default {
     ReviewItem
   },
   props: {
+    // reviews: {
+    //   type: Object,
+    //   required: false
+    // },
     currentPage: {
       type: Number,
       required: true
@@ -25,7 +29,6 @@ export default {
     reviews() {
       return this.$store.getters["review/getReviewList"];
     }
-    
   },
 };
 </script>

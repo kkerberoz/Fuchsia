@@ -17,9 +17,13 @@ const review = {
         },
         comments: [],
         reviewList: [],
-        searchKeyword: ""
+        searchKeyword: "",
+        reviewCount: 0
     },
     mutations: {
+        SET_REVIEW_COUNT(state, num) {
+            state.reviewCount = num;
+        },
         SET_REVIEW_INFO(state, info) {
             state.reviewInfo = info;
         },
@@ -31,6 +35,11 @@ const review = {
         }
     },
     actions: {
+        async setReviewCount(context) {
+            const response = await axios.get(`${BASE_API_URL}/getreviewscount`);
+            context.commit("SET_REVIEW_COUNT",response.data.data);
+            console.log("GET reviews count:", response.status);
+        },
         async setReviewInfo(context) {
             const response = await axios.get(`${BASE_API_URL}`);
             context.commit("SET_REVIEW_INFO", response.data);
@@ -56,7 +65,8 @@ const review = {
     },
     getters: {
         getReviewInfo: (state) => state.reviewInfo,
-        getReviewList: (state) => state.reviewList
+        getReviewList: (state) => state.reviewList,
+        getReviewCount: (state) => state.reviewCount,
     },
 };
 export default review;

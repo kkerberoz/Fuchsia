@@ -1,25 +1,36 @@
 <template>
   <section class="hero-body is-fullheight">
+    <b-field class="container" style="width: 77%">
+      <b-autocomplete
+        v-model="searchKeyWord"
+        rounded
+        placeholder="Search here . . ."
+        v-debounce:400ms="searchBySearchBar"
+        icon="magnify"
+        clearable
+      >
+      </b-autocomplete>
+    </b-field>
     <div class="container">
       <review-list :currentPage="currentPage"></review-list>
     </div>
     
     <div style="margin-top: 5%; color:white;">
     <b-pagination
-        :total="allReviewCount"
-        v-model="currentPage"
-        range-before=3
-        range-after=1
-        order="is-centered"
-        :simple ="isSimple"
-        :rounded ="isRounded"
-        per-page=20
-        icon-prev="chevron-left"
-        icon-next="chevron-right"
-        aria-next-label="Next page"
-        aria-previous-label="Previous page"
-        aria-page-label="Page"
-        aria-current-label="Current page">
+      :total="allReviewCount"
+      v-model="currentPage"
+      range-before=3
+      range-after=1
+      order="is-centered"
+      :simple ="isSimple"
+      :rounded ="isRounded"
+      per-page=20
+      icon-prev="chevron-left"
+      icon-next="chevron-right"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page">
     </b-pagination>
 </div>
   </section>
@@ -34,15 +45,29 @@ import ReviewList from "../components/ReviewList";
     },
     data() {
       return {
-        allReviewCount: 200,
+        searchKeyWord: "",
+        allReviewCount: 0,
         currentPage: 1,
         isSimple: false,
         isRounded: true
       }
     },
-    mounted() {
-      // this.$store.dispatch("review/getReviewList", this.currentPage);
-      // console.log();
+    methods: {
+      searchBySearchBar() {
+        // if (this.searchKeyWord != "") {
+        // this.$store.dispatch("book/searchBookListBySearchBar", this.searchKeyWord);
+        // // if(this.$route.path !== "/") {
+        // //   this.$router.push({name: "home"});
+        // // }
+        // // } else {
+        // //   this.$store.dispatch("book/restoreBookData");
+        // // }
+        }
+    },
+    async mounted() {
+      this.$store.dispatch("review/getReviewList", this.currentPage);
+      await this.$store.dispatch("review/setReviewCount");
+      this.allReviewCount = this.$store.getters["review/getReviewCount"];
     },
     watch: {
       currentPage() {
