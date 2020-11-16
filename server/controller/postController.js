@@ -44,7 +44,7 @@ module.exports = {
     ).catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
-    const { filter, word, sortBy, direction, offset } = req.query;
+    const { filter, word, sortBy, direction, offset } = req.query; 
     if(filter === ""){
       Review.find()
           .sort({ "reviewDatetime": 1 })
@@ -92,6 +92,13 @@ module.exports = {
       }
     }
   },
+  getReviewInfo: (req, res) => {
+    const reviewId = req.query.reviewId;
+    Review.findOne({ reviewId: reviewId })
+    .then((reviews) => 
+        ResHelper.success(res, {review: reviews})
+    ).catch((err) => ResHelper.error(res, err));
+  },
   postComment: (req, res) => {
     const { reviewId, commentContent } = req.body;
     if (!reviewId) {
@@ -121,13 +128,13 @@ module.exports = {
     ).catch((err) => ResHelper.error(res, err));
   },
   getFavorite: (req, res) => {
-    const reviewId = req.query.reviewId; // individual user
+    const reviewId = req.query.reviewId; 
     Favorite.find({"reviewId": reviewId})
     .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
     ).catch((err) => ResHelper.error(res, err));
   },
   getFolloweds: (req, res) => {
-    Followed.find({"userId": /* _id */res})
+    Followed.find({"userId": req.user._id})
     .then((followeds) => ResHelper.success(res, {followed: followeds, count: followeds.length})
     ).catch((err) => ResHelper.error(res, err));
   }
