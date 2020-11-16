@@ -42,8 +42,12 @@ module.exports = {
   getReviews: (req, res) => {
     const { filter, word, category, sortBy, direction, offset } = req.query; 
     //console.log(filter);
+
+    //no category
     if(filter === ""){
-      Review.find()
+      // All review
+      if(word === "") {
+        Review.find()
         .sort({ "reviewDatetime": 1 })
         .limit(20)
         .skip(20 * (offset - 1))
@@ -51,26 +55,31 @@ module.exports = {
           ResHelper.success(res, {review: reviews, count: reviews.length})
           }
         ).catch((err) => ResHelper.error(res, err));
-    }
-    else if (category.localeCompare("") && !filter.localeCompare("reviewTitle")) {
-      if (!sortBy.localeCompare("reviewDatetime"))
-        Review.find({ "category": category, "reviewTitle": {$regex: word }})
-          .sort({ "reviewDatetime": direction })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) => 
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
-      else if (!sortBy.localeCompare("view")) {
-        Review.find({ "category": category, "reviewTitle": {$regex: word }})
-          .sort({ "view": direction })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) => 
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
       }
-      else if (category.localeCompare("")) {
+      // search review & no category
+      else {
+        if (!sortBy.localeCompare("reviewDatetime"))
+          Review.find({ reviewTitle: {$regex: word} })
+          .sort({ reviewDatetime: direction })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) => 
+            ResHelper.success(res, {review: reviews, count: reviews.length})
+          ).catch((err) => ResHelper.error(res, err));
+        else if (!sortBy.localeCompare("view")) {
+          Review.find({ reviewTitle: {$regex: word} })
+            .sort({ view: direction })
+            .limit(20)
+            .skip(20 * (offset - 1))
+            .then((reviews) => 
+              ResHelper.success(res, {review: reviews, count: reviews.length})
+            ).catch((err) => ResHelper.error(res, err));
+        }
+      }
+    }
+    //category
+    else if(filter === "category"){
+      if(word === "") {
         if (!sortBy.localeCompare("reviewDatetime"))
           Review.find({ "category": category })
             .sort({ "reviewDatetime": direction })
@@ -88,25 +97,26 @@ module.exports = {
               ResHelper.success(res, {review: reviews, count: reviews.length})
             ).catch((err) => ResHelper.error(res, err));
         }
-    } else {
-      if (!sortBy.localeCompare("reviewDatetime"))
-        Review.find({ reviewTitle: {$regex: word} })
-          .sort({ reviewDatetime: direction })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) => 
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
-      else if (!sortBy.localeCompare("view")) {
-        Review.find({ reviewTitle: {$regex: word} })
-          .sort({ view: direction })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) => 
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
       }
-    }
+      else {
+        if (!sortBy.localeCompare("reviewDatetime"))
+          Review.find({ "category": category, "reviewTitle": {$regex: word }})
+          .sort({ "reviewDatetime": direction })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) => 
+            ResHelper.success(res, {review: reviews, count: reviews.length})
+          ).catch((err) => ResHelper.error(res, err));
+        else if (!sortBy.localeCompare("view")) {
+          Review.find({ "category": category, "reviewTitle": {$regex: word }})
+            .sort({ "view": direction })
+            .limit(20)
+            .skip(20 * (offset - 1))
+            .then((reviews) => 
+              ResHelper.success(res, {review: reviews, count: reviews.length})
+            ).catch((err) => ResHelper.error(res, err));
+        }
+      }
     }
   },
   getReviewInfo: (req, res) => {
