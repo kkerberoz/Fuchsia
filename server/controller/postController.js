@@ -34,6 +34,12 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
+  getAllreviews: (res) => {
+    Review.count()
+    .then((reviews) => 
+      ResHelper.success(res, reviews)
+    ).catch((err) => ResHelper.error(res, err));
+  },
   getReviews: (req, res) => {
     const { filter, word, sortBy, direction, offset } = req.query;
     if(filter === ""){
