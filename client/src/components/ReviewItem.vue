@@ -46,6 +46,7 @@ export default {
   },
     computed: {
       hasImage() {
+        console.log(this.reviewItem.imageLink);
         return this.reviewItem.imageLink !== "";
       }
     },
