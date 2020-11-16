@@ -70,7 +70,7 @@ module.exports = {
             ResHelper.success(res, {review: reviews, count: reviews.length})
           ).catch((err) => ResHelper.error(res, err));
       }
-    else if (category.localeCompare("")) {
+      else if (category.localeCompare("")) {
         if (!sortBy.localeCompare("reviewDatetime"))
           Review.find({ "category": category })
             .sort({ "reviewDatetime": direction })
