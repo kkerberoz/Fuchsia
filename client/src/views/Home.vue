@@ -73,19 +73,21 @@ import ReviewList from "../components/ReviewList";
     methods: {
       searchBySearchBar() {
         if (this.searchKeyWord != "") {
-          if(this.category === ""){
+          if(this.category !== ""){
             let keyObject = {
-              filter: "reviewTitle",
+              filter: "category",
               category: this.category,
               page: this.currentPage,
               word: this.searchKeyWord
             }
+            console.log("category",this.category)
             this.$store.dispatch("review/getSearchReviewList", keyObject);
           }
           else {
             let keyObject = {
-              filter: "reviewTitle",
+              filter: "",
               page: this.currentPage,
+              category: this.category,
               word: this.searchKeyWord
             }
             this.$store.dispatch("review/getSearchReviewList", keyObject);
@@ -93,17 +95,19 @@ import ReviewList from "../components/ReviewList";
           
         } 
         else {
-          if(this.category === ""){
+          if(this.category !== ""){
             let keyObject = {
-              filter: "",
+              filter: "category",
               category: this.category,
               page: this.currentPage,
             }
+            console.log("category",this.category)
             this.$store.dispatch("review/getReviewList", keyObject);
           }
           else {
             let keyObject = {
               filter: "",
+              category: this.category,
               page: this.currentPage,
             }
             this.$store.dispatch("review/getReviewList", keyObject);
@@ -116,16 +120,17 @@ import ReviewList from "../components/ReviewList";
       console.log("mounted");
       if(this.category !== ""){
         let keyObject = {
-          filter: "",
+          filter: "category",
           category: this.category,
           page: this.currentPage,
         }
-        console.log("category")
+        console.log("category",this.category)
         this.$store.dispatch("review/getReviewList", keyObject);
       }
       else {
         let keyObject = {
           filter: "",
+          category: this.category,
           page: this.currentPage,
         }
         console.log("other")
@@ -141,6 +146,50 @@ import ReviewList from "../components/ReviewList";
       searchKeyWord() {
         this.$store.dispatch("review/setSearchKey", this.searchKeyWord);
         console.log(this.searchKeyWord)
+      },
+      category() {
+        if (this.searchKeyWord != "") {
+          if(this.category !== ""){
+            let keyObject = {
+              filter: "category",
+              category: this.category,
+              page: this.currentPage,
+              word: this.searchKeyWord
+            }
+            console.log("category",this.category)
+            this.$store.dispatch("review/getSearchReviewList", keyObject);
+          }
+          else {
+            let keyObject = {
+              filter: "",
+              page: this.currentPage,
+              category: this.category,
+              word: this.searchKeyWord
+            }
+            this.$store.dispatch("review/getSearchReviewList", keyObject);
+          }
+          
+        } 
+        else {
+          if(this.category !== ""){
+            let keyObject = {
+              filter: "category",
+              category: this.category,
+              page: this.currentPage,
+            }
+            console.log("category",this.category)
+            this.$store.dispatch("review/getReviewList", keyObject);
+          }
+          else {
+            let keyObject = {
+              filter: "",
+              category: this.category,
+              page: this.currentPage,
+            }
+            this.$store.dispatch("review/getReviewList", keyObject);
+          }
+          
+        }
       }
     }
   };

@@ -57,12 +57,12 @@ const review = {
             console.log("POST review object:", response.status);
         },
         async getReviewList(context, keyObject) {
-            console.log("!!!",keyObject)
+            console.log("#$#",keyObject.category)
             const params = {
-                filter: "reviewTitle",
-                category: "",
+                filter: keyObject.filter,
+                category: keyObject.category,
                 word: "",
-                sortBy: "",
+                sortBy: "reviewDatetime",
                 direction: 1,
                 offset: keyObject.page,
             }
@@ -73,6 +73,7 @@ const review = {
             console.log("data list",response.data.data.review);
         },
         async getSearchReviewList(context, keyObject) {
+            console.log("#$#",keyObject.category)
             if(keyObject.word === context.getters.getSearchKey) {
                 // console.log("word : ", keyObject.word)
                 const params = {
