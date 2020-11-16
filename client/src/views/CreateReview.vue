@@ -79,15 +79,29 @@
           <div v-if="isCreateReviewState">
             <div>
               <label class="title">Title:</label>
-              <input v-model="reviewTitle" type="text" class="input" />
+              <input
+                v-model="reviewTitle"
+                type="text"
+                class="input"
+                style="margin-top:10px"
+              />
             </div>
             <div>
               <label class="title">Description:</label>
-              <input v-model="reviewDescription" type="text" class="input" />
+              <input
+                v-model="reviewDescription"
+                type="text"
+                class="input"
+                style="margin-top:10px"
+              />
             </div>
             <div class="editor">
-              <label class="title"> Content: </label>
-              <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+              <label class="title" style="margin-top:10px"> Content: </label>
+              <editor-menu-bar
+                :editor="editor"
+                v-slot="{ commands, isActive }"
+                style="margin-top:10px"
+              >
                 <div class="menubar">
                   <button
                     class="menubar__button"
@@ -216,7 +230,11 @@
                   </button>
                 </div>
               </editor-menu-bar>
-              <editor-content class="editor__content" :editor="editor" />
+              <editor-content
+                class="editor__content"
+                :editor="editor"
+                style="margin-top:20px"
+              />
             </div>
           </div>
           <div v-if="isPreviewState">
@@ -318,6 +336,10 @@
             new History(),
             new Image(),
           ],
+          content: `<p></p>
+          <p></p>
+          <p></p>
+          <p></p>`,
           onUpdate: ({ getHTML }) => {
             this.html = getHTML();
             if (this.html === "<p></p>") this.content = "";
@@ -455,12 +477,11 @@
 </script>
 
 <style lang="scss" scoped>
-  .editor__content .ProseMirror {
+  .ProseMirror {
     min-height: 20vh;
   }
   .editor__content {
-    min-height: 20vh;
-    border: 2px solid $primary;
+    border: 1px solid $black;
   }
 
   .buttonGroup {
