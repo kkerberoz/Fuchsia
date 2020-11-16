@@ -1,5 +1,16 @@
 <template>
   <section class="hero-body is-fullheight">
+    <b-field class="container" style="width: 77%">
+      <b-autocomplete
+        v-model="searchKeyWord"
+        rounded
+        placeholder="Search here . . ."
+        v-debounce:400ms="searchBySearchBar"
+        icon="magnify"
+        clearable
+      >
+      </b-autocomplete>
+    </b-field>
     <div class="container">
       <review-list :currentPage="currentPage"></review-list>
     </div>
@@ -34,16 +45,29 @@ import ReviewList from "../components/ReviewList";
     },
     data() {
       return {
-        allReviewCount: 200,
+        searchKeyWord: "",
+        allReviewCount: 0,
         currentPage: 1,
         isSimple: false,
         isRounded: true
       }
     },
+    methods: {
+      searchBySearchBar() {
+        // if (this.searchKeyWord != "") {
+        // this.$store.dispatch("book/searchBookListBySearchBar", this.searchKeyWord);
+        // // if(this.$route.path !== "/") {
+        // //   this.$router.push({name: "home"});
+        // // }
+        // // } else {
+        // //   this.$store.dispatch("book/restoreBookData");
+        // // }
+        }
+    },
     async mounted() {
+      this.$store.dispatch("review/getReviewList", this.currentPage);
       await this.$store.dispatch("review/setReviewCount");
       this.allReviewCount = this.$store.getters["review/getReviewCount"];
-      console.log(this.$store.getters["review/getReviewCount"]);
     },
     watch: {
       currentPage() {

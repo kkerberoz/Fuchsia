@@ -37,7 +37,8 @@ const review = {
     actions: {
         async setReviewCount(context) {
             const response = await axios.get(`${BASE_API_URL}/getreviewscount`);
-            context.commit("SET_REVIEW_COUNT",response.data);
+            context.commit("SET_REVIEW_COUNT",response.data.data);
+            console.log("GET reviews count:", response.status);
         },
         async setReviewInfo(context) {
             const response = await axios.get(`${BASE_API_URL}`);
@@ -64,7 +65,8 @@ const review = {
     },
     getters: {
         getReviewInfo: (state) => state.reviewInfo,
-        getReviewList: (state) => state.reviewList
+        getReviewList: (state) => state.reviewList,
+        getReviewCount: (state) => state.reviewCount,
     },
 };
 export default review;

@@ -34,12 +34,10 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-  getReviewsCount: (req, res) => {
+  getReviewsCount: async (req, res) =>  {
     Review.countDocuments()
-    .then((reviews) => {
-      ResHelper.success(res, reviews)
-    }
-    ).catch((err) => ResHelper.error(res, err));
+    .then((reviews) => ResHelper.success(res, reviews))
+    .catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
     const { filter, word, sortBy, direction, offset } = req.query;

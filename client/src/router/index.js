@@ -43,7 +43,7 @@ const routes = [
     component: () => import("../views/Review.vue"),
   },
   {
-    path: "/createReview",
+    path: "/createreview",
     name: "CreateReview",
     beforeEnter: guardMyroute,
     component: () => import("../views/CreateReview.vue"),
