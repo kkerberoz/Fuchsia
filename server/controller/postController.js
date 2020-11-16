@@ -34,25 +34,21 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-  getReviewsCount: (req, res) => {
+  getReviewsCount: async (req, res) =>  {
     Review.countDocuments()
-    .then((reviews) => {
-        res.status(200).json({
-          reviewsCount: reviews
-        });
-      }
-    ).catch((err) => ResHelper.error(res, err));
+    .then((reviews) => ResHelper.success(res, reviews))
+    .catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
     const { filter, word, sortBy, direction, offset } = req.query; 
     if(filter === ""){
       Review.find()
-          .sort({ "reviewDatetime": 1 })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) =>
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
+        .sort({ "reviewDatetime": 1 })
+        .limit(20)
+        .skip(20 * (offset - 1))
+        .then((reviews) =>
+          ResHelper.success(res, {review: reviews, count: reviews.length})
+        ).catch((err) => ResHelper.error(res, err));
     }
     else if (!filter.localeCompare("category")) {
       if (!sortBy.localeCompare("reviewDatetime"))
