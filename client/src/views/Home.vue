@@ -1,26 +1,27 @@
 <template>
   <section class="hero-body is-fullheight">
-      <b-field class="container" style="width: 77%">
-        <b-autocomplete
-          v-model="searchKeyWord"
-          rounded
-          placeholder="Search here . . ."
-          v-debounce:400ms="searchBySearchBar"
-          icon="magnify"
-          clearable
-        >
-        </b-autocomplete>
-        <b-select v-model="category" placeholder="Select a category" rounded>
-              <option selected value="">All category</option>
-              <option value="Camera">Camera</option>
-              <option value="Natural">Natural</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Food">Food</option>
-              <option value="Drink">Drink</option>
-              <option value="Restaurant">Restaurant</option>
-              <option value="Sports">Sports</option>
-          </b-select>
-      </b-field>
+    <b-field class="container" style="width: 77%">
+      <b-autocomplete
+        style="width: 100%; margin: auto;"
+        v-model="searchKeyWord"
+        rounded
+        placeholder="Search here . . ."
+        v-debounce:400ms="searchBySearchBar"
+        icon="magnify"
+        clearable
+      >
+      </b-autocomplete>
+      <b-select v-model="category" placeholder="Select a category" rounded>
+          <option selected value="">All category</option>
+          <option value="Camera">Camera</option>
+          <option value="Natural">Natural</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Food">Food</option>
+          <option value="Drink">Drink</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Sports">Sports</option>
+      </b-select>
+    </b-field>
     <div class="container">
       <review-list :currentPage="currentPage"></review-list>
     </div>
