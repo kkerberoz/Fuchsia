@@ -1,33 +1,16 @@
 <template>
-  <div class="Site">
-    <Navbar />
-
-    <div class="Site-content">
+  <div id="app">
+    <component :is="this.$route.meta.layout || 'div'">
       <router-view />
-    </div>
-
-    <Footer />
+    </component>
   </div>
 </template>
 <script>
-  import Navbar from "./components/Navbar";
-  import Footer from "./components/Footer";
-  export default {
-    components: { Navbar, Footer },
-  };
+  export default {};
 </script>
 
 <style lang="scss">
   #app {
     font-family: $kanit-font;
-  }
-  .Site {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
-
-  .Site-content {
-    flex: 1;
   }
 </style>
