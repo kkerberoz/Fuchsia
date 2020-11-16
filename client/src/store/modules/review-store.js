@@ -56,13 +56,15 @@ const review = {
             const response = await axios.post(`${BASE_API_URL}/postreview`, reviewData, {headers: {Authorization: jwt_token}});
             console.log("POST review object:", response.status);
         },
-        async getReviewList(context, page) {
+        async getReviewList(context, keyObject) {
+            console.log("#$#",keyObject.category)
             const params = {
-                filter: "",
+                filter: keyObject.filter,
+                category: keyObject.category,
                 word: "",
-                sortBy: "",
+                sortBy: "reviewDatetime",
                 direction: 1,
-                offset: page,
+                offset: keyObject.page,
             }
             const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
             
@@ -71,14 +73,16 @@ const review = {
             console.log("data list",response.data.data.review);
         },
         async getSearchReviewList(context, keyObject) {
+            console.log("#$#",keyObject.category)
             if(keyObject.word === context.getters.getSearchKey) {
                 // console.log("word : ", keyObject.word)
                 const params = {
-                    filter: "search",
+                    filter: keyObject.filter,
                     word: context.getters.getSearchKey,
                     sortBy: "reviewDatetime",
                     direction: 1,
                     offset: keyObject.page,
+                    category: keyObject.category
                 }
                 console.log("in the get search");
                 const response = await axios.get(`${BASE_API_URL}/getreview`,{params});

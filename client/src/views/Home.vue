@@ -1,16 +1,30 @@
 <template>
   <section class="hero-body is-fullheight">
-    <b-field class="container" style="width: 77%">
-      <b-autocomplete
-        v-model="searchKeyWord"
-        rounded
-        placeholder="Search here . . ."
-        v-debounce:400ms="searchBySearchBar"
-        icon="magnify"
-        clearable
-      >
-      </b-autocomplete>
-    </b-field>
+    <div  class="container" style="width: 77%">
+      <b-field class="column">
+          <b-select v-model="category" placeholder="Select a category" rounded>
+              <option selected value="">All category</option>
+              <option value="Camera">Camera</option>
+              <option value="Natural">Natural</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Food">Food</option>
+              <option value="Drink">Drink</option>
+              <option value="Restaurant">Restaurant</option>
+              <option value="Sports">Sports</option>
+          </b-select>
+      </b-field>
+      <b-field>
+        <b-autocomplete
+          v-model="searchKeyWord"
+          rounded
+          placeholder="Search here . . ."
+          v-debounce:400ms="searchBySearchBar"
+          icon="magnify"
+          clearable
+        >
+        </b-autocomplete>
+      </b-field>
+    </div>
     <div class="container">
       <review-list :currentPage="currentPage"></review-list>
     </div>
@@ -48,6 +62,7 @@ import ReviewList from "../components/ReviewList";
     },
     data() {
       return {
+        category: "",
         searchKeyWord: "",
         allReviewCount: 0,
         currentPage: 1,
@@ -58,19 +73,69 @@ import ReviewList from "../components/ReviewList";
     methods: {
       searchBySearchBar() {
         if (this.searchKeyWord != "") {
-          const keyObject = {
-            page: this.currentPage,
-            word: this.searchKeyWord
+          if(this.category !== ""){
+            let keyObject = {
+              filter: "category",
+              category: this.category,
+              page: this.currentPage,
+              word: this.searchKeyWord
+            }
+            console.log("category",this.category)
+            this.$store.dispatch("review/getSearchReviewList", keyObject);
           }
-          this.$store.dispatch("review/getSearchReviewList", keyObject);
+          else {
+            let keyObject = {
+              filter: "",
+              page: this.currentPage,
+              category: this.category,
+              word: this.searchKeyWord
+            }
+            this.$store.dispatch("review/getSearchReviewList", keyObject);
+          }
+          
         } 
         else {
-          this.$store.dispatch("review/getReviewList", this.currentPage);
+          if(this.category !== ""){
+            let keyObject = {
+              filter: "category",
+              category: this.category,
+              page: this.currentPage,
+            }
+            console.log("category",this.category)
+            this.$store.dispatch("review/getReviewList", keyObject);
+          }
+          else {
+            let keyObject = {
+              filter: "",
+              category: this.category,
+              page: this.currentPage,
+            }
+            this.$store.dispatch("review/getReviewList", keyObject);
+          }
+          
         }
       }
     },
     async mounted() {
-      this.$store.dispatch("review/getReviewList", this.currentPage);
+      console.log("mounted");
+      if(this.category !== ""){
+        let keyObject = {
+          filter: "category",
+          category: this.category,
+          page: this.currentPage,
+        }
+        console.log("category",this.category)
+        this.$store.dispatch("review/getReviewList", keyObject);
+      }
+      else {
+        let keyObject = {
+          filter: "",
+          category: this.category,
+          page: this.currentPage,
+        }
+        console.log("other")
+        this.$store.dispatch("review/getReviewList", keyObject);
+      }
       await this.$store.dispatch("review/setReviewCount");
       this.allReviewCount = this.$store.getters["review/getReviewCount"];
     },
@@ -81,6 +146,50 @@ import ReviewList from "../components/ReviewList";
       searchKeyWord() {
         this.$store.dispatch("review/setSearchKey", this.searchKeyWord);
         console.log(this.searchKeyWord)
+      },
+      category() {
+        if (this.searchKeyWord != "") {
+          if(this.category !== ""){
+            let keyObject = {
+              filter: "category",
+              category: this.category,
+              page: this.currentPage,
+              word: this.searchKeyWord
+            }
+            console.log("category",this.category)
+            this.$store.dispatch("review/getSearchReviewList", keyObject);
+          }
+          else {
+            let keyObject = {
+              filter: "",
+              page: this.currentPage,
+              category: this.category,
+              word: this.searchKeyWord
+            }
+            this.$store.dispatch("review/getSearchReviewList", keyObject);
+          }
+          
+        } 
+        else {
+          if(this.category !== ""){
+            let keyObject = {
+              filter: "category",
+              category: this.category,
+              page: this.currentPage,
+            }
+            console.log("category",this.category)
+            this.$store.dispatch("review/getReviewList", keyObject);
+          }
+          else {
+            let keyObject = {
+              filter: "",
+              category: this.category,
+              page: this.currentPage,
+            }
+            this.$store.dispatch("review/getReviewList", keyObject);
+          }
+          
+        }
       }
     }
   };
