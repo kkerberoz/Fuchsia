@@ -34,7 +34,7 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-  getAllreviews: (res) => {
+  getReviewsCount: (res) => {
     Review.count()
     .then((reviews) => 
       ResHelper.success(res, reviews)
