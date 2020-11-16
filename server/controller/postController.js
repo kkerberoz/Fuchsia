@@ -34,10 +34,13 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-  getReviewsCount: (res) => {
-    Review.count()
-    .then((reviews) => 
-      ResHelper.success(res, reviews)
+  getReviewsCount: (req, res) => {
+    Review.countDocuments()
+    .then((reviews) => {
+        res.status(200).json({
+          reviewsCount: reviews
+        });
+      }
     ).catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
