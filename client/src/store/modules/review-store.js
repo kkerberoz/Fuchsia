@@ -95,6 +95,13 @@ const review = {
                 console.log("data list",response.data.data.review);
             }
             
+        },
+        async getReviewInfo(context, reviewId) {
+            const params = { reviewId }
+            const response = await axios.get(`${BASE_API_URL}/getreviewinfo`, {params});
+            context.commit("SET_REVIEW_INFO", response.data.data.reviewInfo);
+            console.log("get Review Info:", response.status);
+            console.log("data info",response.data.data.reviewInfo);
         }
     },
     getters: {
