@@ -29,12 +29,9 @@
         <div class="column">
           <h1 style="margin-left: 7%; color: #c6007e;">Post By: .........  dd/mm/yyyy</h1>
         </div>
-        <div class="column" style="margin-right: 5%;">
+        <div @click="report" class="column" style="margin-right: 5%; cursor:pointer;">
           <h1 style="color: #c6007e;" class="is-pulled-right">
-            <b-icon
-              icon="assistant-photo"
-              size="is-small">
-            </b-icon>
+            <i class="fas fa-flag"></i>
             Report
           </h1>
         </div>
@@ -62,13 +59,33 @@
         return this.$store.getters["review/getReviewInfo"];
       },
       isOwner() {
+        
         //Compare _id API -----------------------------------------------------------------------------------------------------------
         return true;
       }
     },
     methods: {
+      report() {
+        this.$swal({
+          title: "Are you sure?",
+          text: "This review will be reported to Admin.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, report it!",
+          cancelButtonText: "Cancel!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            // report status ---------------------------------------------------------------------------------------
+            this.$swal({
+              title: "Reported to Admin.",
+              icon: "success",
+            });
+          }
+        });
+      },
       deleteReview() {
-        //Delete review API ----------------------------------------------------------------------------------------------------------
+        //Delete review API -------------------------------------------------------------------------------------------
       },
       rate() {
         this.$buefy.toast.open({
