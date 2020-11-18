@@ -169,7 +169,7 @@ module.exports = {
   deleteReview: (req, res) => {
     const reviewId = req.query.reviewId;
     Review.deleteOne( {"reviewId": reviewId} )
-    .then((reviews) => ResHelper.success(res, { followed: reviews })
+    .then((reviews) => ResHelper.success(res, { review: reviews })
     ).catch((err) => ResHelper.error(res, err));
   },
   violentRegconition: (req, res) => {
