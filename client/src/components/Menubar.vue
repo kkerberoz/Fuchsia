@@ -4,7 +4,7 @@
       <div class="tabs">
         <ul>
           <li>
-            <router-link :to="{ name: 'Error' }">
+            <router-link :to="{ name: 'Testadmin' }">
               Content
             </router-link>
           </li>
