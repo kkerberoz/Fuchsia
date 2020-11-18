@@ -8,8 +8,7 @@ let auth = (req, res, next) => {
     if (err) {
       // console.log("!!!!!")
       ResHelper.error(res, err);
-    } 
-    else {
+    } else {
       if (!user) {
         return ResHelper.unauth(res, "You need to logged in");
       } else {
@@ -17,7 +16,6 @@ let auth = (req, res, next) => {
         req.user = user;
 
         // console.log(user);
-        
         next();
       }
     }
