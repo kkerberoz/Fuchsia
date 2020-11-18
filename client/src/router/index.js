@@ -61,9 +61,22 @@ const routes = [
     meta: { layout: DefaultLayout },
   },
   {
-    path: "/Admin",
+    path: "/admin",
     name: "Admin",
     component: () => import("../views/Admin/AdminIndex.vue"),
+    meta: { layout: AdminLayout },
+    children: [
+      {
+        path: "report",
+        name: "Error",
+        component: () => import("../views/Error.vue"),
+      },
+    ],
+  },
+  {
+    path: "/adminreport",
+    name: "AdminReport",
+    component: () => import("../views/Admin/AdminReport.vue"),
     meta: { layout: AdminLayout },
   },
 ];
