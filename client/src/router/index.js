@@ -18,6 +18,19 @@ function guardMyroute(to, from, next) {
   }
 }
 
+function guardMyadmin(to, from, next) {
+  var isAuthenticated = false;
+  const role = JSON.parse(localStorage.getItem("role"));
+  if (store.state.auth.status.loggedIn === true && role === "ADMIN")
+    isAuthenticated = true;
+  else isAuthenticated = false;
+  if (isAuthenticated) {
+    next();
+  } else {
+    next("/login");
+  }
+}
+
 const routes = [
   {
     path: "/",
@@ -61,9 +74,24 @@ const routes = [
     meta: { layout: DefaultLayout },
   },
   {
-    path: "/Admin",
+    path: "/admin",
     name: "Admin",
+    beforeEnter: guardMyadmin,
     component: () => import("../views/Admin/AdminIndex.vue"),
+    meta: { layout: AdminLayout },
+    children: [
+      {
+        path: "test",
+        name: "Testadmin",
+        component: () => import("../views/Admin/Testadmin.vue"),
+        meta: { layout: AdminLayout },
+      },
+    ],
+  },
+  {
+    path: "/adminreport",
+    name: "AdminReport",
+    component: () => import("../views/Admin/AdminReport.vue"),
     meta: { layout: AdminLayout },
   },
 ];

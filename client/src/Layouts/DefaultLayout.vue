@@ -1,11 +1,9 @@
 <template>
   <div class="Site">
     <Navbar />
-
     <div class="Site-content">
-      <router-view />
+      <router-view></router-view>
     </div>
-
     <Footer />
   </div>
 </template>

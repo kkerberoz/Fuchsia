@@ -55,24 +55,11 @@
         </div>
       </div>
     </div>
-    <section class="section">
-      <div class="container">
-        <Menubar />
-        <section class="section">
-          <router-view />
-        </section>
-      </div>
-    </section>
   </div>
 </template>
 
 <script>
-  import Menubar from "../../components/Menubar";
-  export default {
-    components: {
-      Menubar,
-    },
-  };
+  export default {};
 </script>
 
 <style lang="scss" scoped>
