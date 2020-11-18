@@ -75,7 +75,8 @@ module.exports = {
 
         if (user.isValidPassword(password)) {
           const token = AuthHelper.createToken(user);
-          ResHelper.success(res, { message: "Login successful!", token });
+          const role = user.role;
+          ResHelper.success(res, { message: "Login successful!", token, role });
         } else {
           ResHelper.fail(res, "Wrong password");
         }
