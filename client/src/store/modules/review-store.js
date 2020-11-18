@@ -1,6 +1,8 @@
 const BASE_API_URL = "http://localhost:5000/api";
 import axios from "axios";
-
+import Vue from "vue";
+import VueSweetalert2 from "vue-sweetalert2";
+Vue.use(VueSweetalert2);
 const review = {
     namespaced: true,
     state: {
@@ -55,6 +57,7 @@ const review = {
             const jwt_token = JSON.parse(localStorage.getItem("jwt"));
             const response = await axios.post(`${BASE_API_URL}/postreview`, reviewData, {headers: {Authorization: jwt_token}});
             console.log("POST review object:", response.status);
+            return response.data.data.review._id;
         },
         async getReviewList(context, keyObject) {
             console.log("#$#",keyObject.category)

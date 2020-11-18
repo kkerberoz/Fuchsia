@@ -27,9 +27,10 @@ module.exports = {
 
     newReview
       .save()
-      .then(() => {
+      .then((review) => {
         ResHelper.success(res, {
           message: "Post successful!",
+          review
         });
       })
       .catch((err) => ResHelper.error(res, err));
