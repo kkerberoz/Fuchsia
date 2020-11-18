@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import store from "../store/index";
 import DefaultLayout from "../Layouts/DefaultLayout";
 import AdminLayout from "../Layouts/AdminLayout";
+import axios from "axios";
+const BASE_API_URL = "http://localhost:5000/api";
 Vue.use(VueRouter);
 
 //guard router
@@ -31,11 +33,30 @@ function guardMyadmin(to, from, next) {
   }
 }
 
+function checkLogin(to, from, next) {
+  const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+  const params = { token: jwt_token };
+  if (!jwt_token) {
+    next();
+  } else {
+    axios
+      .get(`${BASE_API_URL}/checklogin`, { params })
+      .then((token) => {
+        next();
+        console.log(token.data.data.decode);
+      })
+      .catch((err) => {
+        next("/login");
+        console.log("error", err);
+      });
+  }
+}
+
 const routes = [
   {
     path: "/",
     name: "Home",
-    beforeEnter: guardMyroute,
+    beforeEnter: checkLogin,
     component: Home,
     meta: { layout: DefaultLayout },
   },

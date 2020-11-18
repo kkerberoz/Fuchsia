@@ -16,6 +16,7 @@ class LoginService {
   // Removes JWT from local storage
   static logout() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("role");
   }
 }
 
