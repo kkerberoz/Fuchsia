@@ -11,7 +11,7 @@
         </figure>
       </div>
       <div class="card-content">
-        <p @click="goToReview" class="title is-4 title-effect" >{{reviewItem.reviewTitle}}</p>
+        <p @click="goToReview(reviewItem._id)" class="title is-4 title-effect" >{{reviewItem.reviewTitle}}</p>
         <hr class="pink-line">
         <div class="content">
           {{reviewItem.reviewDescription}}
@@ -50,8 +50,8 @@ export default {
       }
     },
     methods: {
-      goToReview() {
-        this.$router.push({name: "Review", params: {reviewId : "Sdsd"}});
+      goToReview(reviewId) {
+        this.$router.push({name: "Review", params: {reviewId}});
       }
     }
 }
