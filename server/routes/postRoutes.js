@@ -16,5 +16,8 @@ router.get("/getreviewinfo", PostController.getReviewInfo);
 // router.get("/getfavorite", PostController.getFavorite);
 router.get("/violentregconition", PostController.violentRegconition);
 
+// for user
+router.get("/getreviewer", PostController.getReviwer);
+// ------- //
 
 module.exports = router;

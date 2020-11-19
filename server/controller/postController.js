@@ -4,6 +4,7 @@ const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
 const violent = require("../../violent.json");
+const User = require("../models/User");
 module.exports = {
   postReview: (req, res) => {
     const { reviewTitle, reviewDescription, reviewContent, category, imageLink } = req.body;
@@ -168,10 +169,18 @@ module.exports = {
   },
   deleteReview: (req, res) => {
     const reviewId = req.query.reviewId;
-    Review.deleteOne( {"reviewId": reviewId} )
+    Review.deleteOne( { _id : reviewId} )
     .then((reviews) => ResHelper.success(res, { review: reviews })
     ).catch((err) => ResHelper.error(res, err));
   },
+  // for admin 
+  getReviwer: (req, res) => {
+    const { name } = req.query;
+    var allUser = User.find({ "firstName":  {$regex: new RegExp('^' + name, 'i')} });
+    console.log(allUser + res);
+
+  },
+  // ------- //
   violentRegconition: (req, res) => {
     const { reviewTitle, reviewDescription, reviewContent } = req.query;
     console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
