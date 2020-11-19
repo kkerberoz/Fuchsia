@@ -142,6 +142,7 @@ module.exports = {
     }
 
     const newComment = Comment({
+      userId: req.user._id,
       reviewId,
       commentContent
     })
@@ -156,13 +157,14 @@ module.exports = {
   },
   getComments: (req, res) => {
     const reviewId = req.query.reviewId;
+    console.log("HERE",reviewId)
     Comment.find({"reviewId": reviewId})
     .then((comments) => ResHelper.success(res, {comment: comments, count: comments.length})
     ).catch((err) => ResHelper.error(res, err));
   },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId; 
-    Favorite.find({"reviewId": reviewId})
+    Favorite.find({"_id": reviewId})
     .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
     ).catch((err) => ResHelper.error(res, err));
   },
@@ -172,8 +174,9 @@ module.exports = {
     ).catch((err) => ResHelper.error(res, err));
   },
   deleteReview: (req, res) => {
-    const reviewId = req.query.reviewId;
-    Review.deleteOne( {"reviewId": reviewId} )
+    const {reviewId} = req.body;
+    // console.log(reviewId)
+    Review.deleteOne( {"_id": reviewId} )
     .then((reviews) => ResHelper.success(res, { review: reviews })
     ).catch((err) => ResHelper.error(res, err));
   },

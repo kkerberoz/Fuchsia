@@ -17,13 +17,16 @@ const review = {
             imageLink: "",
             view: 0
         },
-        comments: [],
+        commentList: [],
         searchKey: "",
         reviewList: [],
         searchKeyword: "",
         reviewCount: 0
     },
     mutations: {
+        SET_COMMENT_LIST(state, data) {
+            state.commentList = data;
+        },
         SET_SEARCH_KEY(state, key) {
             state.searchKey = key;
         },
@@ -41,6 +44,15 @@ const review = {
         }
     },
     actions: {
+        async setCommentList(context, reviewId) {
+            const params = {
+                reviewId
+            }
+            const response = await axios.get(`${BASE_API_URL}/getcomments`, {params});
+            context.commit("SET_COMMENT_LIST", response.data.data.comment);
+            console.log("comment list: ", response.data.data.comment);
+            console.log("GET comment list:", response.status);
+        },
         setSearchKey(context, key) {
             context.commit("SET_SEARCH_KEY", key);
         },
@@ -60,7 +72,7 @@ const review = {
             return response.data.data.review._id;
         },
         async getReviewList(context, keyObject) {
-            console.log("#$#",keyObject.category)
+            // console.log("#$#",keyObject.category)
             const params = {
                 filter: keyObject.filter,
                 category: keyObject.category,
@@ -72,11 +84,11 @@ const review = {
             const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
             
             context.commit("SET_REVIEW_LIST", response.data.data.review);
-            console.log("get Review List:", response.status);
+            console.log("GET Review List:", response.status);
             console.log("data list",response.data.data.review);
         },
         async getSearchReviewList(context, keyObject) {
-            console.log("#$#",keyObject.category)
+            // console.log("#$#",keyObject.category)
             if(keyObject.word === context.getters.getSearchKey) {
                 // console.log("word : ", keyObject.word)
                 const params = {
@@ -110,7 +122,8 @@ const review = {
         getReviewInfo: (state) => state.reviewInfo,
         getReviewList: (state) => state.reviewList,
         getReviewCount: (state) => state.reviewCount,
-        getSearchKey: (state) => state.searchKey
+        getSearchKey: (state) => state.searchKey,
+        getCommentList: (state) => state.commentList
     },
 };
 export default review;

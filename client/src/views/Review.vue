@@ -21,28 +21,37 @@
             :show-score = "showScore"
             size="default"
             style="margin-top: 5%;"
-          >dsds</b-rate>
+          ></b-rate>
           <hr class="pink-line">
         </div>
       </div>
       <div class="columns">
         <div class="column">
-          <h1 style="margin-left: 7%; color: #c6007e;">Post By: .........  dd/mm/yyyy</h1>
+          <h1 style="margin-left: 7%; color: #c6007e;">Post By: ......  {{datetime}}</h1>
         </div>
-        <div @click="report" class="column" style="margin-right: 5%; cursor:pointer;">
-          <h1 style="color: #c6007e;" class="is-pulled-right">
+        <div class="column" style="margin-right: 5%; cursor:pointer;">
+          <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
             <i class="fas fa-flag"></i>
             Report
           </h1>
         </div>
       </div>
+      
     </div>
+    <div class="comment-group">
+      <comment-list></comment-list>
+    </div>
+    
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import CommentList from "../components/CommentList";
   export default {
+    components: {
+      CommentList
+    },
     props: {
       reviewId: {
         type: String,
@@ -57,6 +66,13 @@ import axios from "axios";
       }
     },
     computed: {
+      datetime() {
+        const datetimeObj = new Date(this.reviewInfo.reviewDatetime);
+        const date = datetimeObj.getDate();
+        const month = datetimeObj.getMonth();
+        const year = datetimeObj.getFullYear();
+        return `${date}-${month}-${year}`;
+      },
       reviewInfo() {
         return this.$store.getters["review/getReviewInfo"];
       },
@@ -65,15 +81,22 @@ import axios from "axios";
       report() {
         this.$swal({
           title: "Are you sure?",
-          text: "This review will be reported to Admin.",
+          text: "Determine the reason of reporting.",
           icon: "warning",
+          input: "text",
+          inputAttributes: {
+            autocapitalize: "off"
+          },
           showCancelButton: true,
           confirmButtonText: "Yes, report it!",
           cancelButtonText: "Cancel!",
+          preConfirm: (reason) => {
+            // report status ---------------------------------------------------------------------------------------
+            console.log(reason);
+          },
         })
         .then((result) => {
           if (result.isConfirmed) {
-            // report status ---------------------------------------------------------------------------------------
             this.$swal({
               title: "Reported to Admin.",
               icon: "success",
@@ -81,7 +104,31 @@ import axios from "axios";
           }
         });
       },
-      deleteReview() {
+      async deleteReview() {
+
+        this.$swal({
+          title: "Are you sure?",
+          text: "This review will be deleted!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "Cancel!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            axios.post("http://localhost:5000/api/deletereview", {reviewId: this.reviewId}).then((response) => {
+              if(response.status === 200) {
+                this.$swal({
+                  title: "Delete Complete.",
+                  icon: "success",
+                }).then(() => {
+                  this.$router.push({name: "Home"});
+                });
+              }
+            });
+          }
+        });
+
         
         //Delete review API -------------------------------------------------------------------------------------------
       },
@@ -94,6 +141,7 @@ import axios from "axios";
     },
     async mounted() {
       this.$store.dispatch("review/getReviewInfo", this.reviewId);
+      this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
       const response = await axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}});
       // console.log("this is res" ,response.data)
@@ -107,6 +155,14 @@ import axios from "axios";
   hr {
     margin: 0;
   }
+
+  .comment-group {
+    margin-top: 5%;
+    padding: 0 40px 40px 0;
+    width: 100%;
+    height: auto;
+  }
+
 
   .pink-line {
       border-top: 1px solid $secondary;

@@ -98,7 +98,7 @@ import ReviewList from "../components/ReviewList";
               category: this.category,
               page: this.currentPage,
             }
-            console.log("category",this.category)
+            // console.log("category",this.category)
             this.$store.dispatch("review/getReviewList", keyObject);
           }
           else {
@@ -121,7 +121,7 @@ import ReviewList from "../components/ReviewList";
           category: this.category,
           page: this.currentPage,
         }
-        console.log("category",this.category)
+        // console.log("category",this.category)
         this.$store.dispatch("review/getReviewList", keyObject);
       }
       else {
@@ -130,7 +130,7 @@ import ReviewList from "../components/ReviewList";
           category: this.category,
           page: this.currentPage,
         }
-        console.log("other")
+        // console.log("other")
         this.$store.dispatch("review/getReviewList", keyObject);
       }
       await this.$store.dispatch("review/setReviewCount");
@@ -153,7 +153,7 @@ import ReviewList from "../components/ReviewList";
               page: this.currentPage,
               word: this.searchKeyWord
             }
-            console.log("category",this.category)
+            // console.log("category",this.category)
             this.$store.dispatch("review/getSearchReviewList", keyObject);
           }
           else {
@@ -174,7 +174,7 @@ import ReviewList from "../components/ReviewList";
               category: this.category,
               page: this.currentPage,
             }
-            console.log("category",this.category)
+            // console.log("category",this.category)
             this.$store.dispatch("review/getReviewList", keyObject);
           }
           else {
