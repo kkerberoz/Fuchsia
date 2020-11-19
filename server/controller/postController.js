@@ -3,6 +3,7 @@ const Review = require("../models/Review");
 const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
+const violent = require("../../violent.json");
 module.exports = {
   postReview: (req, res) => {
     const { reviewTitle, reviewDescription, reviewContent, category, imageLink } = req.body;
@@ -169,5 +170,33 @@ module.exports = {
     Followed.find({"userId": req.user._id})
     .then((followeds) => ResHelper.success(res, {followed: followeds, count: followeds.length})
     ).catch((err) => ResHelper.error(res, err));
+  },
+  deleteReview: (req, res) => {
+    const reviewId = req.query.reviewId;
+    Review.deleteOne( {"reviewId": reviewId} )
+    .then((reviews) => ResHelper.success(res, { review: reviews })
+    ).catch((err) => ResHelper.error(res, err));
+  },
+  violentRegconition: (req, res) => {
+    const { reviewTitle, reviewDescription, reviewContent } = req.query;
+    console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
+    var i;
+    var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
+    // var engTitleReplace, engDescriptionReplace, engContentReplace;
+    for (i = 0; i < (violent.Thai.word).length; i++){
+      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
+      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], "[]");
+      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
+    }
+    console.log(thaiTitleReplace);
+    console.log(thaiDescriptionReplace);
+    console.log(thaiContentReplace);
+    console.log(res);
+    // for (i = 0; i < 10; i++){
+    //   engTitleReplace = reviewTitle.replace("", "[]");
+    //   engDescriptionReplace = reviewDescription.replace("", "[]");
+    //   engContentReplace = reviewContent.replace("", "[]");
+    // }
+    
   }
 };
