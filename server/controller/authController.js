@@ -102,8 +102,8 @@ module.exports = {
     });
   },
   getUser: (req, res) => {
-    const userId = req.user._id;
-    User.findOne({ _id: userId })
+    const id_user = req.user._id;
+    User.findOne({ _id: id_user })
       .then((user) => {
         if (!user) {
           return ResHelper.fail(res, "No user found with that email");

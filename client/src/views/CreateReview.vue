@@ -400,7 +400,7 @@
             view: 0,
           };
           this.$store.dispatch("review/postReview", data).then( (reviewId) => {
-            console.log(reviewId)
+            console.log("reviewID",reviewId)
             if(reviewId) {
               this.$swal({
                   title: "POST CREATED!", 

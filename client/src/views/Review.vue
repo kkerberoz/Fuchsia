@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import axios from "axios";
   export default {
     props: {
       reviewId: {
@@ -50,6 +51,7 @@
     },
     data() {
       return {
+        isOwner: false,
         showScore: true,
         score: 0,
       }
@@ -58,11 +60,6 @@
       reviewInfo() {
         return this.$store.getters["review/getReviewInfo"];
       },
-      isOwner() {
-        
-        //Compare _id API -----------------------------------------------------------------------------------------------------------
-        return true;
-      }
     },
     methods: {
       report() {
@@ -85,6 +82,7 @@
         });
       },
       deleteReview() {
+        
         //Delete review API -------------------------------------------------------------------------------------------
       },
       rate() {
@@ -94,9 +92,13 @@
         });
       }
     },
-    mounted() {
-      console.log(this.reviewId);
-      this.$store.dispatch("review/getReviewInfo");
+    async mounted() {
+      this.$store.dispatch("review/getReviewInfo", this.reviewId);
+      const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+      const response = await axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}});
+      // console.log("this is res" ,response.data)
+      this.isOwner = (this.reviewInfo.userId === response.data.data._id) ? true : false;
+      // console.log(this.reviewInfo.userId," &&& ",response.data.data._id );
     },
   };
 </script>

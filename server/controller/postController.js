@@ -121,10 +121,14 @@ module.exports = {
     }
   },
   getReviewInfo: (req, res) => {
+    
     const reviewId = req.query.reviewId;
-    Review.findOne({ "reviewId": reviewId })
-    .then((reviews) => 
+    // console.log(reviewId);
+    Review.findOne({ "_id": reviewId })
+    .then((reviews) => {
+      console.log(reviews)
         ResHelper.success(res, {reviewInfo: reviews})
+      }
     ).catch((err) => ResHelper.error(res, err));
   },
   postComment: (req, res) => {

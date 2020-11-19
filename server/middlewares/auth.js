@@ -6,7 +6,6 @@ let auth = (req, res, next) => {
   // console.log(token);
   User.findByToken(token, (err, user) => {
     if (err) {
-      // console.log("!!!!!")
       ResHelper.error(res, err);
     } else {
       if (!user) {

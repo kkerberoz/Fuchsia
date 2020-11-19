@@ -49,10 +49,10 @@ const review = {
             context.commit("SET_REVIEW_COUNT",response.data.data);
             console.log("GET reviews count:", response.status);
         },
-        async setReviewInfo(context) {
-            const response = await axios.get(`${BASE_API_URL}`);
-            context.commit("SET_REVIEW_INFO", response.data);
-        },
+        // async setReviewInfo(context) {
+        //     const response = await axios.get(`${BASE_API_URL}`);
+        //     context.commit("SET_REVIEW_INFO", response.data);
+        // },
         async postReview(context, reviewData) {
             const jwt_token = JSON.parse(localStorage.getItem("jwt"));
             const response = await axios.post(`${BASE_API_URL}/postreview`, reviewData, {headers: {Authorization: jwt_token}});
@@ -97,8 +97,10 @@ const review = {
             
         },
         async getReviewInfo(context, reviewId) {
-            const params = { reviewId }
+            // console.log("id", reviewId)
+            const params = { reviewId: reviewId }
             const response = await axios.get(`${BASE_API_URL}/getreviewinfo`, {params});
+            // console.log("test:", response.data)
             context.commit("SET_REVIEW_INFO", response.data.data.reviewInfo);
             console.log("get Review Info:", response.status);
             console.log("data info",response.data.data.reviewInfo);
