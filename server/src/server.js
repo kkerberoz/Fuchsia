@@ -36,9 +36,9 @@ app.get("/", (req, res) => {
 app.use("/api", require("../routes/authRoutes"));
 app.use("/api", require("../routes/postRoutes"));
 
-app.use(function (req, res) {
-  res.send({ error: "Route is not found" }, 404);
-});
+// app.use(function (req, res) {
+//   res.send({ error: "Route is not found" }, 404);
+// });
 
 app.listen(port, () => {
   console.log(

@@ -41,7 +41,7 @@
                 />
               </div>
               <div class="field">
-                <label>Data of Birth </label>
+                <label>Date of Birth </label>
                 <b-datepicker
                   placeholder="Click to select..."
                   icon="calendar-today"
@@ -150,26 +150,79 @@
         if (this.formInput.password.length < 6) {
           this.errors.push("password length < 6");
           console.log("password length < 6 ");
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password length must be more than or equal 6 character.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
+          
         }
-        if (!isNaN(this.formInput.password))
+        else if (!isNaN(this.formInput.password))
         {
           this.errors.push("password is a number only");
           console.log ("password is a number only")
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password must be contain Capital letter , Number and small letter.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
         }
-        if (this.formInput.password.toLowerCase() === this.formInput.password )
+        else if (this.formInput.password.toLowerCase() === this.formInput.password )
         {
           this.errors.push("password is lowerCase");
           console.log ("password is lowerCase")
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password must be contain Capital letter , Number and small letter.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
         }
-        if (this.formInput.password.toUpperCase() === this.formInput.password )
+        else if (this.formInput.password.toUpperCase() === this.formInput.password )
         {
           this.errors.push("password is UpperCase");
           console.log ("password is UpperCase")
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password must be contain Capital letter , Number and small letter.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
         }
-        if (this.formInput.password !== this.formInput.conPassword )
+        else if (this.formInput.password !== this.formInput.conPassword )
         {
           this.errors.push("password doesn't match");
           console.log ("password doesn't match")
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password doesn't match.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
+        }
+        else if (this.formInput.dob === null)
+        {
+          this.errors.push("please fill date of birth");
+          console.log ("please fill date of birth")
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please fill your date of birth.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
+        }
+        else if (isNaN(this.formInput.tel))
+        {
+          this.errors.push("tel must be a number");
+          console.log ("tel must be a number")
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Telephone field must be a number.",
+            confirmButtonColor: " #c6007e"
+          }).then(() => {return});
         }
         this.count = 0;
         this.LowerCheck = 0 ;
@@ -196,11 +249,12 @@
             this.NumberCheck = 1;
           }
         }
+
         // console.log(this.count)
         // console.log("All char")
         // console.log(this.formInput.password)
         // console.log("--------")
-        if (this.errors.length === 0 && this.count == 3) {
+        if (this.errors.length === 0 && this.count === 3) {
           let data = {
             firstName: this.formInput.firstName,
             lastName: this.formInput.lastName,
@@ -213,11 +267,23 @@
             .dispatch("auth/register", data)
             .then(() => {
               this.dialog = true;
-              this.$router.push({ name: "Home" });
+              this.$swal.fire({
+                icon: "success",
+                title: "Welcome!",
+                text: "Registration is Complete.",
+                confirmButtonColor: " #c6007e"
+              }).then(() => {this.$router.push({ name: "Home" });});
+              
             })
             .catch((err) => {
               this.errMessage = err.message;
               console.log("Error", this.errMessage);
+              this.$swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: this.errMessage,
+                confirmButtonColor: " #c6007e"
+              }).then(() => {return});
             });
         }
       },

@@ -94,12 +94,14 @@ import CommentList from "../components/CommentList";
             // report status ---------------------------------------------------------------------------------------
             console.log(reason);
           },
+          confirmButtonColor: " #c6007e"
         })
         .then((result) => {
           if (result.isConfirmed) {
             this.$swal({
               title: "Reported to Admin.",
               icon: "success",
+              confirmButtonColor: " #c6007e"
             });
           }
         });
@@ -113,6 +115,7 @@ import CommentList from "../components/CommentList";
           showCancelButton: true,
           confirmButtonText: "Yes, delete it!",
           cancelButtonText: "Cancel!",
+          confirmButtonColor: " #c6007e"
         })
         .then((result) => {
           if (result.isConfirmed) {
@@ -121,6 +124,7 @@ import CommentList from "../components/CommentList";
                 this.$swal({
                   title: "Delete Complete.",
                   icon: "success",
+                  confirmButtonColor: " #c6007e"
                 }).then(() => {
                   this.$router.push({name: "Home"});
                 });
