@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-for="comment in comments" :key="comment.userId">
-            <comment-item :comment="comment" ></comment-item>   
+        <div v-for="comment in comments" :key="comment._id">
+            <comment-item :comment="comment" :isOwner="isOwner" :reviewId="reviewId"></comment-item>   
         </div>
         <div class="comment" v-if="hasData">
             <div class="columns">
@@ -48,6 +48,10 @@ export default {
         reviewId: {
             type: String,
             required: true
+        },
+        userId_in_review: {
+            type: String,
+            required: true
         }
     },
     data() {
@@ -65,6 +69,13 @@ export default {
         },
         comments() {
             return this.$store.getters["review/getCommentList"];
+        },
+        isOwner() {
+        console.log(this.userId_in_review)
+            if(this.userData != null) {
+                return this.userId_in_review === this.userData._id;
+            }
+            return false;
         }
     },
     mounted() {

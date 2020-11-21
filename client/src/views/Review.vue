@@ -17,7 +17,6 @@
           </div>
           <b-rate 
             v-model="score"
-            @change="rate"
             :show-score = "showScore"
             size="default"
             style="margin-top: 5%;"
@@ -39,7 +38,7 @@
       
     </div>
     <div class="comment-group">
-      <comment-list :userData="userData" :reviewId="reviewId"></comment-list>
+      <comment-list :userData="userData" :reviewId="reviewId" :userId_in_review="reviewInfo.userId"></comment-list>
     </div>
     
   </div>
@@ -149,28 +148,6 @@ import CommentList from "../components/CommentList";
         
         //Delete review API -------------------------------------------------------------------------------------------
       },
-      rate() {
-
-        console.log(this.score)
-        const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-        const data = {
-          reviewId: this.reviewId,
-          score: this.score
-        }
-        axios.post("http://localhost:5000/api/postfavorite", data, {headers: {Authorization: jwt_token}} )
-        .then((res) => {
-          console.log("POST status rate: ",res.status);
-          this.$buefy.toast.open({
-            message: 'Thanks for you Rate!',
-            type: 'is-success'
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-        
-      }
     },
     async mounted() {
       this.$store.dispatch("review/getReviewInfo", this.reviewId);
@@ -185,14 +162,32 @@ import CommentList from "../components/CommentList";
         reviewId: this.reviewId
       }
       const res = await axios.get("http://localhost:5000/api/getfavoritescore", {params});
-      // console.log(res.data.data.favoriteScore)
-      if(!isNaN(res.data.data.favoriteScore.score)) {
+      if(res.data.data.favoriteScore != null) {
         console.log("!", res.data.data.favoriteScore.score)
         this.score = res.data.data.favoriteScore.score;
       }
-      
-      // console.log(this.reviewInfo.userId," &&& ",response.data.data._id );
     },
+    watch: {
+      score() {
+        console.log(this.score)
+        const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        let data = {
+          reviewId: this.reviewId,
+          score: this.score
+        }
+        axios.post("http://localhost:5000/api/postfavorite", data, {headers: {Authorization: jwt_token}} )
+        .then((res) => {
+          console.log("POST status rate: ",res.status);
+          this.$buefy.toast.open({
+            message: 'Thanks for you Rate!',
+            type: 'is-success'
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+    }
   };
 </script>
 

@@ -68,15 +68,15 @@
             Home
           </router-link>
 
-          <router-link
+          <!-- <router-link
             to="/About"
             class="navbar-item"
             @click="showNav = !showNav"
           >
             About
-          </router-link>
+          </router-link> -->
 
-          <div class="navbar-item has-dropdown is-hoverable">
+          <!-- <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
               More
             </a>
@@ -92,7 +92,7 @@
                 Report an issue
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="navbar-end">
@@ -117,7 +117,7 @@
                 <div class="name-image">
                   <a class="button is-primary" id="userImage"></a>
                   <a class="button is-primary" id="userBanner">
-                    kkk
+                    {{username}}
                   </a>
                 </div>
 
@@ -138,11 +138,23 @@
 </template>
 
 <script>
+import axios from "axios";
   export default {
     data() {
       return {
         showNav: false,
+        username: ""
       };
+    },
+    mounted() {
+      const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+      axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}})
+      .then((res) => {
+        this.username = res.data.data.username;
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     },
     methods: {
       createReview() {
@@ -167,10 +179,25 @@
       },
     },
     computed: {
+      routeChange() {
+        return this.$route.name;
+      },
       loggedIn() {
         return this.$store.state.auth.status.loggedIn;
       },
     },
+    watch: {
+      routeChange() {
+        const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}})
+        .then((res) => {
+          this.username = res.data.data.username;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      }
+    }
   };
 </script>
 

@@ -1,5 +1,11 @@
 <template>
   <div class="comment" >
+    <div v-if="isOwner" style="margin:2% 3% 2% 3%;">
+      <b-dropdown aria-role="list" class="is-pulled-right" position="is-bottom-left">
+        <b-icon style="transform: rotate(90deg); cursor: pointer;" icon="dots-vertical" slot="trigger" ></b-icon>
+        <b-dropdown-item aria-role="listitem" @click="deleteComment">Delete comment</b-dropdown-item>
+      </b-dropdown>
+    </div>
     <div class="columns">
       <div class="column is-2" style="margin: 5% 0 0 4%">
         <div style="width: 17vh; height: 17vh;">
@@ -32,6 +38,14 @@ export default {
       type: Object,
       required: true,
     },
+    isOwner: {
+      type: Boolean,
+      required: true
+    },
+    reviewId: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
@@ -41,6 +55,29 @@ export default {
   computed: {
     date() {
       return this.comment.commentDatetime.replace("T"," ").slice(0,19);
+    }
+  },
+  methods: {
+    deleteComment() {
+      console.log("delete commment",this.comment._id);
+      axios.post("http://localhost:5000/api/deletecomment", {commentId: this.comment._id})
+      .then((res) => {
+        if(res.status === 200) {
+          console.log("status delete:",res);
+          this.$store.dispatch("review/setCommentList", this.reviewId);
+          this.$buefy.toast.open({
+            message: 'Comment was deleted.',
+            type: 'is-success'
+          });
+        }
+      })
+      .catch((err) => {
+        this.$buefy.toast.open({
+          message: 'Something went wrong!',
+          type: 'is-danger'
+        });
+        console.log(err);
+      })
     }
   },
   async mounted() {

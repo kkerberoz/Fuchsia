@@ -8,6 +8,7 @@ const PostController = require("../controller/postController");
 router.post("/postreview", auth, PostController.postReview);
 router.get("/getreview", PostController.getReviews);
 router.post("/deletereview", PostController.deleteReview);
+router.post("/deletecomment", PostController.deleteComment);
 router.get("/getreviewscount", PostController.getReviewsCount);
 router.get("/getreviewinfo", PostController.getReviewInfo);
 router.post("/postcomment", auth, PostController.postComment);
