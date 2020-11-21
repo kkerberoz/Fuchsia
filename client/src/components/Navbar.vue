@@ -109,6 +109,9 @@
               <a class="navbar-item button is-primary" @click="createReview">
                 Create review
               </a>
+              <a class="navbar-item button is-primary">
+                kkk
+              </a>
               <a class="navbar-item button is-primary" @click="logout">
                 Logout
               </a>
@@ -129,18 +132,25 @@
     },
     methods: {
       createReview() {
-        this.$router.push({name: "CreateReview"});
+        this.$router.push({ name: "CreateReview" });
       },
       logout() {
-        this.$store.dispatch("auth/logout");
-        this.$router.push({name: "Login"});
+        this.$store.dispatch("auth/logout").then(() => {
+          this.$swal({
+            title: "Logout Success!",
+            text: "Click the button to continue.",
+            icon: "success",
+            confirmButtonColor: " #c6007e",
+          }).then(() => {
+            this.$router.push({ name: "Login" });
+          });
+        });
       },
       Home() {
-        if(this.$route.name !== "Home"){
-          this.$router.push({name: "Home"});
+        if (this.$route.name !== "Home") {
+          this.$router.push({ name: "Home" });
         }
-          
-      }
+      },
     },
     computed: {
       loggedIn() {

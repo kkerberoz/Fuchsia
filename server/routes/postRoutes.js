@@ -14,7 +14,6 @@ router.post("/postcomment", PostController.postComment);
 router.get("/getcomments", PostController.getComments);
 // router.get("/getfollowed", PostController.getFolloweds);
 // router.get("/getfavorite", PostController.getFavorite);
-router.get("/violentregconition", PostController.violentRegconition);
-
+// router.get("/violentregconition", PostController.violentRegconition);
 
 module.exports = router;

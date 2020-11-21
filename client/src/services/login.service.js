@@ -11,6 +11,7 @@ class LoginService {
     const role = res.data.data.role;
     localStorage.setItem("jwt", JSON.stringify(token));
     localStorage.setItem("role", JSON.stringify(role));
+    return role;
   }
 
   // Removes JWT from local storage

@@ -63,7 +63,8 @@
     },
     watch: {
       dialog(val) {
-        if (!val) {
+        if (val) {
+          console.log("testtttsetst");
           this.formInput.email = "";
           this.formInput.password = "";
           this.errMessage = "";
@@ -78,12 +79,39 @@
           this.$store
             .dispatch("auth/login", { email, password })
             .then(() => {
-              this.dialog = true;
-              this.$router.push({name: "Home"});
+              if (this.$store.state.auth.role === "ADMIN") {
+                this.$swal({
+                  title: "Login Success!",
+                  text: "Click the button to continue.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                }).then(() => {
+                  this.dialog = true;
+                  this.$router.push({ name: "ContentVio" });
+                });
+              } else {
+                this.$swal({
+                  title: "Login Success!",
+                  text: "Click the button to continue.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                }).then(() => {
+                  this.dialog = true;
+                  this.$router.push({ name: "Home" });
+                });
+              }
             })
             .catch((err) => {
-              this.errMessage = err.message;
-              console.log("Error", this.errMessage);
+              this.$swal
+                .fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: err.message,
+                  confirmButtonColor: " #c6007e",
+                })
+                .then(() => {
+                  this.dialog = true;
+                });
             });
         }
       },

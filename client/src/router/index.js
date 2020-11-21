@@ -34,21 +34,32 @@ function guardMyadmin(to, from, next) {
 }
 
 function checkLogin(to, from, next) {
+  var isAuthenticated = false;
   const jwt_token = JSON.parse(localStorage.getItem("jwt"));
   const params = { token: jwt_token };
-  if (!jwt_token) {
-    next();
+  if (store.state.auth.status.loggedIn === true) isAuthenticated = true;
+  else isAuthenticated = false;
+  if (isAuthenticated) {
+    if (!jwt_token) {
+      next("/login");
+    } else {
+      axios
+        .get(`${BASE_API_URL}/checklogin`, { params })
+        .then((token) => {
+          const exp = token.data.data.decode.exp;
+          if (Date.now() >= exp * 1000) {
+            next("/login");
+          } else {
+            next();
+          }
+        })
+        .catch((err) => {
+          next("/login");
+          console.log("error", err);
+        });
+    }
   } else {
-    axios
-      .get(`${BASE_API_URL}/checklogin`, { params })
-      .then((token) => {
-        next();
-        console.log(token.data.data.decode);
-      })
-      .catch((err) => {
-        next("/login");
-        console.log("error", err);
-      });
+    next();
   }
 }
 
@@ -56,8 +67,8 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    beforeEnter: checkLogin,
     component: Home,
+    beforeEnter: checkLogin,
     meta: { layout: DefaultLayout },
   },
   {
@@ -102,9 +113,9 @@ const routes = [
     meta: { layout: AdminLayout },
     children: [
       {
-        path: "test",
-        name: "Testadmin",
-        component: () => import("../views/Admin/Testadmin.vue"),
+        path: "content",
+        name: "ContentVio",
+        component: () => import("../views/Admin/ContentVio.vue"),
         meta: { layout: AdminLayout },
       },
     ],

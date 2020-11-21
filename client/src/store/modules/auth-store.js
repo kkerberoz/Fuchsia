@@ -5,11 +5,15 @@ import RegisterService from "../../services/register.service";
 // If we have a jwt token we are logged in
 const state = {
   status: { loggedIn: !!JSON.parse(localStorage.getItem("jwt")) },
+  role: "",
 };
 
 // Actions
 const actions = {
   async register({ commit }, formInput) {
+    if (!formInput.username) {
+      throw new Error("Username required");
+    }
     if (!formInput.firstName) {
       throw new Error("First Name required");
     }
@@ -30,6 +34,7 @@ const actions = {
     }
     try {
       await RegisterService.register(
+        formInput.username,
         formInput.firstName,
         formInput.lastName,
         formInput.email,
@@ -51,8 +56,12 @@ const actions = {
     }
 
     try {
-      await LoginService.login(formInput.email, formInput.password);
+      const response = await LoginService.login(
+        formInput.email,
+        formInput.password
+      );
       commit("SET_LOGGED_IN", true);
+      commit("SET_ROLE", response);
     } catch (err) {
       throw new Error(err.response ? err.response.data.message : err.message);
     }
@@ -60,6 +69,7 @@ const actions = {
   logout({ commit }) {
     LoginService.logout();
     commit("SET_LOGGED_IN", false);
+    commit("SET_ROLE", "");
   },
 };
 
@@ -67,6 +77,9 @@ const actions = {
 const mutations = {
   SET_LOGGED_IN(state, loggedIn) {
     state.status = { loggedIn };
+  },
+  SET_ROLE(state, data) {
+    state.role = data;
   },
 };
 

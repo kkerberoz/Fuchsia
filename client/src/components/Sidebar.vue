@@ -36,13 +36,28 @@
       </router-link>
     </div>
     <div class="sidebar-item" style="margin-top:550px">
-      <i class="fas fa-sign-out-alt"></i>
+      <a @click="logout"> <i class="fas fa-sign-out-alt"></i></a>
     </div>
   </div>
 </template>
 
 <script>
-  export default {};
+  export default {
+    methods: {
+      logout() {
+        this.$store.dispatch("auth/logout").then(() => {
+          this.$swal({
+            title: "Logout Success!",
+            text: "Click the button to continue.",
+            icon: "success",
+            confirmButtonColor: " #c6007e",
+          }).then(() => {
+            this.$router.push({ name: "Login" });
+          });
+        });
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>

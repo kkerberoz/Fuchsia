@@ -4,10 +4,14 @@ const AuthHelper = require("../helpers/AuthHelper");
 
 module.exports = {
   register: (req, res) => {
-    const { firstName, lastName, password, dob, tel } = req.body;
+    // console.log(req.body.email);
+    const { username, firstName, lastName, password, dob, tel } = req.body;
     const email = req.body.email ? req.body.email.toLowerCase() : undefined;
 
     // Validation
+    if (!username) {
+      return ResHelper.fail(res, "Username is required");
+    }
     if (!firstName) {
       return ResHelper.fail(res, "First Name is required");
     }
@@ -39,6 +43,7 @@ module.exports = {
 
         // Save user
         const newUser = User({
+          username,
           firstName,
           lastName,
           email,
@@ -64,13 +69,19 @@ module.exports = {
     const email = req.body.email ? req.body.email.toLowerCase() : undefined;
 
     if (!email || !AuthHelper.validEmail(email)) {
-      return ResHelper.fail(res, "Please enter a valid email address");
+      return ResHelper.fail(
+        res,
+        "You have entered an invalid email or password"
+      );
     }
 
     User.findOne({ email })
       .then((user) => {
         if (!user) {
-          return ResHelper.fail(res, "No user found with that email");
+          return ResHelper.fail(
+            res,
+            "You have entered an invalid email or password"
+          );
         }
 
         if (user.isValidPassword(password)) {
@@ -78,7 +89,7 @@ module.exports = {
           const role = user.role;
           ResHelper.success(res, { message: "Login successful!", token, role });
         } else {
-          ResHelper.fail(res, "Wrong password");
+          ResHelper.fail(res, "You have entered an invalid email or password");
         }
       })
       .catch((err) => ResHelper.error(res, err));

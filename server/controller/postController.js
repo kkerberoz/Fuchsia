@@ -3,10 +3,16 @@ const Review = require("../models/Review");
 const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
-const violent = require("../../violent.json");
+// const violent = require("../../violent.json");
 module.exports = {
   postReview: (req, res) => {
-    const { reviewTitle, reviewDescription, reviewContent, category, imageLink } = req.body;
+    const {
+      reviewTitle,
+      reviewDescription,
+      reviewContent,
+      category,
+      imageLink,
+    } = req.body;
     if (!reviewTitle) {
       return ResHelper.fail(res, "review title is required!");
     }
@@ -31,106 +37,116 @@ module.exports = {
       .then((review) => {
         ResHelper.success(res, {
           message: "Post successful!",
-          review
+          review,
         });
       })
       .catch((err) => ResHelper.error(res, err));
   },
-  getReviewsCount: async (req, res) =>  {
+  getReviewsCount: async (req, res) => {
     Review.countDocuments()
-    .then((reviews) => ResHelper.success(res, reviews))
-    .catch((err) => ResHelper.error(res, err));
+      .then((reviews) => ResHelper.success(res, reviews))
+      .catch((err) => ResHelper.error(res, err));
   },
   getReviews: (req, res) => {
-    const { filter, word, category, sortBy, direction, offset } = req.query; 
+    const { filter, word, category, sortBy, direction, offset } = req.query;
     //console.log(filter);
 
     //no category
-    if(filter === ""){
+    if (filter === "") {
       // All review
-      if(word === "") {
+      if (word === "") {
         Review.find()
-        .sort({ "reviewDatetime": 1 })
-        .limit(20)
-        .skip(20 * (offset - 1))
-        .then((reviews) => {
-          ResHelper.success(res, {review: reviews, count: reviews.length})
-          }
-        ).catch((err) => ResHelper.error(res, err));
+          .sort({ reviewDatetime: 1 })
+          .limit(20)
+          .skip(20 * (offset - 1))
+          .then((reviews) => {
+            ResHelper.success(res, { review: reviews, count: reviews.length });
+          })
+          .catch((err) => ResHelper.error(res, err));
       }
       // search review & no category
       else {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ reviewTitle: { $regex: new RegExp('^' + word, 'i')} })
-          .sort({ reviewDatetime: direction })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) => 
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
+          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") } })
+            .sort({ reviewDatetime: direction })
+            .limit(20)
+            .skip(20 * (offset - 1))
+            .then((reviews) =>
+              ResHelper.success(res, { review: reviews, count: reviews.length })
+            )
+            .catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ reviewTitle: {$regex: new RegExp('^' + word, 'i')} })
+          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") } })
             .sort({ view: direction })
             .limit(20)
             .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
+            .then((reviews) =>
+              ResHelper.success(res, { review: reviews, count: reviews.length })
+            )
+            .catch((err) => ResHelper.error(res, err));
         }
       }
     }
     //category
-    else if(filter === "category"){
-      if(word === "") {
+    else if (filter === "category") {
+      if (word === "") {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ "category": category })
-            .sort({ "reviewDatetime": direction })
+          Review.find({ category: category })
+            .sort({ reviewDatetime: direction })
             .limit(20)
             .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
+            .then((reviews) =>
+              ResHelper.success(res, { review: reviews, count: reviews.length })
+            )
+            .catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ "category": category })
-            .sort({ "view": direction })
+          Review.find({ category: category })
+            .sort({ view: direction })
             .limit(20)
             .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
+            .then((reviews) =>
+              ResHelper.success(res, { review: reviews, count: reviews.length })
+            )
+            .catch((err) => ResHelper.error(res, err));
         }
-      }
-      else {
+      } else {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ "category": category, "reviewTitle": {$regex: new RegExp('^' + word, 'i') }})
-          .sort({ "reviewDatetime": direction })
-          .limit(20)
-          .skip(20 * (offset - 1))
-          .then((reviews) => 
-            ResHelper.success(res, {review: reviews, count: reviews.length})
-          ).catch((err) => ResHelper.error(res, err));
-        else if (!sortBy.localeCompare("view")) {
-          Review.find({ "category": category, "reviewTitle": {$regex: new RegExp('^' + word, 'i') }})
-            .sort({ "view": direction })
+          Review.find({
+            category: category,
+            reviewTitle: { $regex: new RegExp("^" + word, "i") },
+          })
+            .sort({ reviewDatetime: direction })
             .limit(20)
             .skip(20 * (offset - 1))
-            .then((reviews) => 
-              ResHelper.success(res, {review: reviews, count: reviews.length})
-            ).catch((err) => ResHelper.error(res, err));
+            .then((reviews) =>
+              ResHelper.success(res, { review: reviews, count: reviews.length })
+            )
+            .catch((err) => ResHelper.error(res, err));
+        else if (!sortBy.localeCompare("view")) {
+          Review.find({
+            category: category,
+            reviewTitle: { $regex: new RegExp("^" + word, "i") },
+          })
+            .sort({ view: direction })
+            .limit(20)
+            .skip(20 * (offset - 1))
+            .then((reviews) =>
+              ResHelper.success(res, { review: reviews, count: reviews.length })
+            )
+            .catch((err) => ResHelper.error(res, err));
         }
       }
     }
   },
   getReviewInfo: (req, res) => {
-    
     const reviewId = req.query.reviewId;
     // console.log(reviewId);
-    Review.findOne({ "_id": reviewId })
-    .then((reviews) => {
-      console.log(reviews)
-        ResHelper.success(res, {reviewInfo: reviews})
-      }
-    ).catch((err) => ResHelper.error(res, err));
+    Review.findOne({ _id: reviewId })
+      .then((reviews) => {
+        console.log(reviews);
+        ResHelper.success(res, { reviewInfo: reviews });
+      })
+      .catch((err) => ResHelper.error(res, err));
   },
   postComment: (req, res) => {
     const { reviewId, commentContent } = req.body;
@@ -144,62 +160,68 @@ module.exports = {
     const newComment = Comment({
       userId: req.user._id,
       reviewId,
-      commentContent
-    })
-    newComment.save()
-    .then(() => {
-      ResHelper.success(res, {
-        message: "Post successful!",
-      });
-    })
-    .catch((err) => ResHelper.error(res, err));
-  
+      commentContent,
+    });
+    newComment
+      .save()
+      .then(() => {
+        ResHelper.success(res, {
+          message: "Post successful!",
+        });
+      })
+      .catch((err) => ResHelper.error(res, err));
   },
   getComments: (req, res) => {
     const reviewId = req.query.reviewId;
-    console.log("HERE",reviewId)
-    Comment.find({"reviewId": reviewId})
-    .then((comments) => ResHelper.success(res, {comment: comments, count: comments.length})
-    ).catch((err) => ResHelper.error(res, err));
+    console.log("HERE", reviewId);
+    Comment.find({ reviewId: reviewId })
+      .then((comments) =>
+        ResHelper.success(res, { comment: comments, count: comments.length })
+      )
+      .catch((err) => ResHelper.error(res, err));
   },
   getFavorite: (req, res) => {
-    const reviewId = req.query.reviewId; 
-    Favorite.find({"_id": reviewId})
-    .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
-    ).catch((err) => ResHelper.error(res, err));
+    const reviewId = req.query.reviewId;
+    Favorite.find({ _id: reviewId })
+      .then((favorites) =>
+        ResHelper.success(res, { favorite: favorites, count: favorites.length })
+      )
+      .catch((err) => ResHelper.error(res, err));
   },
   getFolloweds: (req, res) => {
-    Followed.find({"userId": req.user._id})
-    .then((followeds) => ResHelper.success(res, {followed: followeds, count: followeds.length})
-    ).catch((err) => ResHelper.error(res, err));
+    Followed.find({ userId: req.user._id })
+      .then((followeds) =>
+        ResHelper.success(res, { followed: followeds, count: followeds.length })
+      )
+      .catch((err) => ResHelper.error(res, err));
   },
   deleteReview: (req, res) => {
-    const {reviewId} = req.body;
+    const { reviewId } = req.body;
     // console.log(reviewId)
-    Review.deleteOne( {"_id": reviewId} )
-    .then((reviews) => ResHelper.success(res, { review: reviews })
-    ).catch((err) => ResHelper.error(res, err));
+    Review.deleteOne({ _id: reviewId })
+      .then((reviews) => ResHelper.success(res, { review: reviews }))
+      .catch((err) => ResHelper.error(res, err));
   },
-  violentRegconition: (req, res) => {
-    const { reviewTitle, reviewDescription, reviewContent } = req.query;
-    console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
-    var i;
-    var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
-    // var engTitleReplace, engDescriptionReplace, engContentReplace;
-    for (i = 0; i < (violent.Thai.word).length; i++){
-      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
-      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], "[]");
-      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
-    }
-    console.log(thaiTitleReplace);
-    console.log(thaiDescriptionReplace);
-    console.log(thaiContentReplace);
-    console.log(res);
-    // for (i = 0; i < 10; i++){
-    //   engTitleReplace = reviewTitle.replace("", "[]");
-    //   engDescriptionReplace = reviewDescription.replace("", "[]");
-    //   engContentReplace = reviewContent.replace("", "[]");
-    // }
-    
-  }
+  // violentRegconition: (req, res) => {
+  //   const { reviewTitle, reviewDescription, reviewContent } = req.query;
+  //   console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
+  //   var i;
+  //   var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
+  //   // var engTitleReplace, engDescriptionReplace, engContentReplace;
+  //   for (i = 0; i < (violent.Thai.word).length; i++){
+  //     thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
+  //     thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], "[]");
+  //     thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
+  //   }
+  //   console.log(thaiTitleReplace);
+  //   console.log(thaiDescriptionReplace);
+  //   console.log(thaiContentReplace);
+  //   console.log(res);
+  //   // for (i = 0; i < 10; i++){
+  //   //   engTitleReplace = reviewTitle.replace("", "[]");
+  //   //   engDescriptionReplace = reviewDescription.replace("", "[]");
+  //   //   engContentReplace = reviewContent.replace("", "[]");
+  //   // }
+
+  // }
 };

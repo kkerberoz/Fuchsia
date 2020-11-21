@@ -4,7 +4,7 @@
       <div class="tabs">
         <ul>
           <li>
-            <router-link :to="{ name: 'Testadmin' }">
+            <router-link :to="{ name: 'ContentVio' }">
               Content
             </router-link>
           </li>
