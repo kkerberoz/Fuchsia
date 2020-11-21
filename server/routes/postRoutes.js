@@ -13,7 +13,9 @@ router.get("/getreviewinfo", PostController.getReviewInfo);
 // router.post("/postcomment", auth, PostController.postComment);
 // router.get("/getcomment", PostController.getComments);
 // router.get("/getfollowed", PostController.getFolloweds);
+router.post("/postfavorite", auth, PostController.postFavorite);
 // router.get("/getfavorite", PostController.getFavorite);
+router.post("/postreport", PostController.postReport);
 router.get("/violentregconition", PostController.violentRegconition);
 
 // for user

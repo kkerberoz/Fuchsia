@@ -5,7 +5,9 @@ const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
 const violent = require("../../violent.json");
 const User = require("../models/User");
+const Report = require("../models/Report");
 module.exports = {
+  // for review 
   postReview: (req, res) => {
     const { reviewTitle, reviewDescription, reviewContent, category, imageLink } = req.body;
     if (!reviewTitle) {
@@ -128,6 +130,13 @@ module.exports = {
         ResHelper.success(res, {reviewInfo: reviews})
     ).catch((err) => ResHelper.error(res, err));
   },
+  deleteReview: (req, res) => {
+    const reviewId = req.query.reviewId;
+    Review.deleteOne( { _id : reviewId} )
+    .then((reviews) => ResHelper.success(res, { review: reviews })
+    ).catch((err) => ResHelper.error(res, err));
+  },
+  // ---------- //
   postComment: (req, res) => {
     const { reviewId, commentContent } = req.body;
     if (!reviewId) {
@@ -148,7 +157,6 @@ module.exports = {
       });
     })
     .catch((err) => ResHelper.error(res, err));
-  
   },
   getComments: (req, res) => {
     const reviewId = req.query.reviewId;
@@ -156,23 +164,57 @@ module.exports = {
     .then((comments) => ResHelper.success(res, {comment: comments, count: comments.length})
     ).catch((err) => ResHelper.error(res, err));
   },
+  // favorite 
+  postFavorite: (req, res) => {
+    const { reviewId } = req.body;
+    if (!reviewId) {
+      return ResHelper.fail(res, "review ID is required!");
+    }
+    const newFavorite = Favorite({
+      userId: req.user._id,
+      reviewId,
+    })
+    newFavorite.save()
+      .then(() => {
+        ResHelper.success(res, {
+          message: "Post successful!",
+        });
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId; 
     Favorite.find({"reviewId": reviewId})
     .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
     ).catch((err) => ResHelper.error(res, err));
   },
+  // --------- //
   getFolloweds: (req, res) => {
     Followed.find({"userId": req.user._id})
     .then((followeds) => ResHelper.success(res, {followed: followeds, count: followeds.length})
     ).catch((err) => ResHelper.error(res, err));
   },
-  deleteReview: (req, res) => {
-    const reviewId = req.query.reviewId;
-    Review.deleteOne( { _id : reviewId} )
-    .then((reviews) => ResHelper.success(res, { review: reviews })
-    ).catch((err) => ResHelper.error(res, err));
+  postReport: (req, res) => {
+    const { reviewId, reportReason } = req.body;
+    if (!reviewId) {
+      return ResHelper.fail(res, "review ID is required!");
+    }
+    if (!reportReason) {
+      return ResHelper.fail(res, "report reason is required!");
+    }
+    const newReport = Report({
+      reviewId,
+      reportReason
+    })
+    newReport.save()
+    .then(() => {
+      ResHelper.success(res, {
+        message: "Post successful!",
+      });
+    })
+    .catch((err) => ResHelper.error(res, err));
   },
+
   // for admin 
   getReviwer: (req, res) => {
     const { name } = req.query;
