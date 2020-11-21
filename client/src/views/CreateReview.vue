@@ -366,7 +366,7 @@
       },
     },
 
- beforeDestroy() {
+    beforeDestroy() {
       this.editor.destroy();
     },
     methods: {
@@ -374,9 +374,7 @@
         const src = prompt("Enter the url of your image here");
         if (src !== null) {
           command({ src });
-          if (this.imageLink === " ") {
-            this.imageLink = src;
-          }
+          this.imageLink = src;
         }
       },
       selectCategory() {
@@ -399,15 +397,17 @@
             imageLink: this.imageLink,
             view: 0,
           };
-          this.$store.dispatch("review/postReview", data).then( (reviewId) => {
-            console.log("reviewID",reviewId)
-            if(reviewId) {
+          this.$store.dispatch("review/postReview", data).then((reviewId) => {
+            console.log("reviewID", reviewId);
+            if (reviewId) {
               this.$swal({
-                  title: "POST CREATED!", 
-                  text: "Click the button to continue.", 
-                  icon: "success",
-                  confirmButtonColor: " #c6007e"
-              }).then(() => this.$router.push({name: "Review", params: {reviewId}}));
+                title: "POST CREATED!",
+                text: "Click the button to continue.",
+                icon: "success",
+                confirmButtonColor: " #c6007e",
+              }).then(() =>
+                this.$router.push({ name: "Review", params: { reviewId } })
+              );
             }
           });
         } else {
