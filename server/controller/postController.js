@@ -166,13 +166,17 @@ module.exports = {
   },
   // favorite 
   postFavorite: (req, res) => {
-    const { reviewId } = req.body;
+    const { reviewId, score } = req.body;
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
+    }
+    if (!score) {
+      return ResHelper.fail(res, "score is required!");
     }
     const newFavorite = Favorite({
       userId: req.user._id,
       reviewId,
+      score,
     })
     newFavorite.save()
       .then(() => {
@@ -232,19 +236,17 @@ module.exports = {
   // ------- //
   violentRegconition: (req, res) => {
     const { reviewTitle, reviewDescription, reviewContent } = req.query;
-    console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
     var i;
     var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
     // var engTitleReplace, engDescriptionReplace, engContentReplace;
     for (i = 0; i < (violent.Thai.word).length; i++){
-      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
-      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], "[]");
-      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
+      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], ";;");
+      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], ";;");
+      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], ";;");
     }
     console.log(thaiTitleReplace);
     console.log(thaiDescriptionReplace);
     console.log(thaiContentReplace);
-    console.log(res);
     // for (i = 0; i < 10; i++){
     //   engTitleReplace = reviewTitle.replace("", "[]");
     //   engDescriptionReplace = reviewDescription.replace("", "[]");
