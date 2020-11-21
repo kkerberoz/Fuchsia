@@ -106,15 +106,29 @@
               </router-link>
             </div>
             <div class="buttons" v-if="loggedIn">
-              <a class="navbar-item button is-primary" @click="createReview">
-                Create review
+              <a
+                class="navbar-item button is-primary"
+                @click="createReview"
+                style="border-radius:20px;
+                padding-right:20px;padding-left:20px"
+                ><i class="fas fa-plus" style="margin-right:5px"></i>New post
               </a>
-              <a class="navbar-item button is-primary">
-                kkk
-              </a>
-              <a class="navbar-item button is-primary" @click="logout">
-                Logout
-              </a>
+              <div class="navbar-item">
+                <div class="name-image">
+                  <a class="button is-primary" id="userImage"></a>
+                  <a class="button is-primary" id="userBanner">
+                    kkk
+                  </a>
+                </div>
+
+                <a
+                  class="button is-white has-text-primary"
+                  id="logout"
+                  @click="logout"
+                >
+                  Logout
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -160,4 +174,36 @@
   };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .navbar {
+    height: 100px;
+  }
+  .name-image {
+    z-index: 1;
+  }
+  #userImage {
+    border-width: 5px;
+    position: relative;
+    z-index: 1;
+    border-radius: 40px;
+    background-image: url("https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg");
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+    margin-right: -20px;
+    border-color: $primary;
+  }
+  #userBanner {
+    margin-top: 10px;
+    position: relative;
+    z-index: 0;
+    margin-right: -30px;
+    border-radius: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  #logout {
+    padding-left: 40px;
+    border-radius: 20px;
+  }
+</style>
