@@ -192,6 +192,12 @@ module.exports = {
     .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
     ).catch((err) => ResHelper.error(res, err));
   },
+  getFavoriteScore: (req, res) => {
+    const { userId, reviewId } = req.query;
+    Favorite.findOne({ "userId": userId, "reviewId": reviewId }, { _id: 0, score: 1 })
+    .then((favorites) => ResHelper.success(res, { favoriteScore: favorites })
+    ).catch((err) => ResHelper.error(res, err));
+  },
   // --------- //
   getFolloweds: (req, res) => {
     Followed.find({"userId": req.user._id})
