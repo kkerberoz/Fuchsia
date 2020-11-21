@@ -366,7 +366,7 @@
       },
     },
 
-    beforeDestroy() {
+ beforeDestroy() {
       this.editor.destroy();
     },
     methods: {
