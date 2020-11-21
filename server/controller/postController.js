@@ -193,16 +193,25 @@ module.exports = {
   },
   // favorite
   postFavorite: (req, res) => {
-    const { reviewId } = req.body;
+    const { reviewId, score } = req.body;
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
+    }
+    if (!score) {
+      return ResHelper.fail(res, "score is required!");
     }
     const newFavorite = Favorite({
       userId: req.user._id,
       reviewId,
+<<<<<<< HEAD
     });
     newFavorite
       .save()
+=======
+      score,
+    })
+    newFavorite.save()
+>>>>>>> f865f21b4eb2ac06adb27d464b037c1cb70a18c5
       .then(() => {
         ResHelper.success(res, {
           message: "Post successful!",
@@ -217,6 +226,12 @@ module.exports = {
         ResHelper.success(res, { favorite: favorites, count: favorites.length })
       )
       .catch((err) => ResHelper.error(res, err));
+  },
+  getFavoriteScore: (req, res) => {
+    const { userId, reviewId } = req.query;
+    Favorite.findOne({ "userId": userId, "reviewId": reviewId }, { _id: 0, score: 1 })
+    .then((favorites) => ResHelper.success(res, { favoriteScore: favorites })
+    ).catch((err) => ResHelper.error(res, err));
   },
   // --------- //
   getFolloweds: (req, res) => {
@@ -267,17 +282,13 @@ module.exports = {
   // ------- //
   violentRegconition: (req, res) => {
     const { reviewTitle, reviewDescription, reviewContent } = req.query;
-    console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
     var i;
     var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
     // var engTitleReplace, engDescriptionReplace, engContentReplace;
-    for (i = 0; i < violent.Thai.word.length; i++) {
-      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
-      thaiDescriptionReplace = reviewDescription.replace(
-        violent.Thai.word[i],
-        "[]"
-      );
-      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
+    for (i = 0; i < (violent.Thai.word).length; i++){
+      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], ";;");
+      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], ";;");
+      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], ";;");
     }
     console.log(thaiTitleReplace);
     console.log(thaiDescriptionReplace);
