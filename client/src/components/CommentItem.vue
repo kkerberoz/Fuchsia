@@ -1,6 +1,6 @@
 <template>
   <div class="comment" >
-    <div v-if="isOwner" style="margin:2% 3% 2% 3%;">
+    <div v-if="isOwner || isOwner2" style="margin:2% 3% 2% 3%;">
       <b-dropdown aria-role="list" class="is-pulled-right" position="is-bottom-left">
         <b-icon style="transform: rotate(90deg); cursor: pointer;" icon="dots-vertical" slot="trigger" ></b-icon>
         <b-dropdown-item aria-role="listitem" @click="deleteComment">Delete comment</b-dropdown-item>
@@ -45,6 +45,10 @@ export default {
     reviewId: {
       type: String,
       required: true
+    },
+    userData: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -55,6 +59,10 @@ export default {
   computed: {
     date() {
       return this.comment.commentDatetime.replace("T"," ").slice(0,19);
+    },
+    isOwner2() {
+        return this.userData._id === this.comment.userId;
+      
     }
   },
   methods: {

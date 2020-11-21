@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-for="comment in comments" :key="comment._id">
-            <comment-item :comment="comment" :isOwner="isOwner" :reviewId="reviewId"></comment-item>   
+            <comment-item :comment="comment" :isOwner="isOwner" :reviewId="reviewId" :userData="userData"></comment-item>   
         </div>
         <div class="comment" v-if="hasData">
             <div class="columns">
