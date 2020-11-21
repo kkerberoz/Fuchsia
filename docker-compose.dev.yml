@@ -23,10 +23,10 @@ services:
     volumes:
       - ./server/src:/app/server/src
     # Run command
-
     command: npm run dev
     # Restart action
     restart: always
+
   ##########################
   ### SETUP CLIENT CONTAINER
   ##########################
@@ -44,6 +44,7 @@ services:
     volumes:
       - ./client/src:/app/client/src
       - ./client/public:/app/client/public
-
+    links:
+      - server
     command: npm run serve
     restart: always

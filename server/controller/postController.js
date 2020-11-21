@@ -3,7 +3,7 @@ const Review = require("../models/Review");
 const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
-const violent = require("../../violent.json");
+const violent = require("../violent.json");
 const User = require("../models/User");
 const Report = require("../models/Report");
 module.exports = {
@@ -204,8 +204,9 @@ module.exports = {
       userId: req.user._id,
       reviewId,
       score,
-    })
-    newFavorite.save()
+    });
+    newFavorite
+      .save()
       .then(() => {
         ResHelper.success(res, {
           message: "Post successful!",
@@ -223,9 +224,12 @@ module.exports = {
   },
   getFavoriteScore: (req, res) => {
     const { userId, reviewId } = req.query;
-    Favorite.findOne({ "userId": userId, "reviewId": reviewId }, { _id: 0, score: 1 })
-    .then((favorites) => ResHelper.success(res, { favoriteScore: favorites })
-    ).catch((err) => ResHelper.error(res, err));
+    Favorite.findOne(
+      { userId: userId, reviewId: reviewId },
+      { _id: 0, score: 1 }
+    )
+      .then((favorites) => ResHelper.success(res, { favoriteScore: favorites }))
+      .catch((err) => ResHelper.error(res, err));
   },
   // --------- //
   getFolloweds: (req, res) => {
@@ -279,9 +283,12 @@ module.exports = {
     var i;
     var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
     // var engTitleReplace, engDescriptionReplace, engContentReplace;
-    for (i = 0; i < (violent.Thai.word).length; i++){
+    for (i = 0; i < violent.Thai.word.length; i++) {
       thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], ";;");
-      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], ";;");
+      thaiDescriptionReplace = reviewDescription.replace(
+        violent.Thai.word[i],
+        ";;"
+      );
       thaiContentReplace = reviewContent.replace(violent.Thai.word[i], ";;");
     }
     console.log(thaiTitleReplace);
