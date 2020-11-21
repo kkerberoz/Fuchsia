@@ -1,6 +1,9 @@
 <template>
     <div>
-        <div class="comment">
+        <div v-for="comment in comments" :key="comment.userId">
+            <comment-item :comment="comment" ></comment-item>   
+        </div>
+        <div class="comment" v-if="hasData">
             <div class="columns">
                 <div class="column is-2" style="margin: 5% 0 0 4%">
                     <div style="width: 17vh; height: 17vh;">
@@ -9,7 +12,7 @@
                 </div>
                 <div class="column is-9">
                     <b-field 
-                        :label="userData"
+                        :label="username"
                         style="margin: 3% 3% 0 0;"
                     >
                         <b-input v-model="commentContent" maxlength="200" type="textarea"></b-input>
@@ -26,9 +29,6 @@
                 </div>
             </div>
             
-        </div>
-        <div v-for="comment in comments" :key="comment.userId">
-            <comment-item :comment="comment" ></comment-item>   
         </div>
     </div>
 </template>
@@ -48,23 +48,32 @@ export default {
     data() {
         return {
             commentContent: "",
-            username: "DIVE"
+            // username: "DIVE"
         }
     },
     computed: {
+        hasData() {
+            return this.userData != null;
+        },
+        username() {
+            return this.userData.firstName;
+        },
         comments() {
             return this.$store.getters["review/getCommentList"];
         }
     },
     mounted() {
-        console.log("SSS",this.userData);
+        console.log("userData",this.userData);
     },
     methods: {
         postComment() {
-
+            console.log("post comment method;")
         }
     },
     watch: {
+        userData() {
+            console.log("userData",this.userData);
+        },
         comments() {
             console.log("!!!!",this.comments);
         }

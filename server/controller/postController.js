@@ -203,6 +203,7 @@ module.exports = {
   },
   postReport: (req, res) => {
     const { reviewId, reportReason } = req.body;
+    console.log(reportReason)
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }

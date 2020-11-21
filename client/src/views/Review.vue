@@ -39,7 +39,7 @@
       
     </div>
     <div class="comment-group">
-      <comment-list :userData="user"></comment-list>
+      <comment-list :userData="userData"></comment-list>
     </div>
     
   </div>
@@ -63,7 +63,7 @@ import CommentList from "../components/CommentList";
         isOwner: false,
         showScore: true,
         score: 0,
-        userData: {}
+        userData: null
       }
     },
     computed: {
@@ -79,7 +79,7 @@ import CommentList from "../components/CommentList";
       },
     },
     methods: {
-      report() {
+      async report() {
         this.$swal({
           title: "Are you sure?",
           text: "Determine the reason of reporting.",
@@ -92,18 +92,33 @@ import CommentList from "../components/CommentList";
           confirmButtonText: "Yes, report it!",
           cancelButtonText: "Cancel!",
           preConfirm: (reason) => {
-            // report status ---------------------------------------------------------------------------------------
-            console.log(reason);
+            const params = {
+              reportReason: reason,
+              reviewId: this.reviewId
+            }
+            axios.post("http://localhost:5000/api/postreport", params)
+            .then(() => {
+              this.$swal({
+                title: "Reported to Admin.",
+                icon: "success",
+                confirmButtonColor: " #c6007e"
+              });
+            })
+            .catch(() => {
+              this.$swal({
+                title: "Something wrong!",
+                text: "Please fill the reason",
+                icon: "error",
+                confirmButtonColor: " #c6007e"
+              });
+            })
+            
           },
           confirmButtonColor: " #c6007e"
         })
         .then((result) => {
           if (result.isConfirmed) {
-            this.$swal({
-              title: "Reported to Admin.",
-              icon: "success",
-              confirmButtonColor: " #c6007e"
-            });
+            //
           }
         });
       },
