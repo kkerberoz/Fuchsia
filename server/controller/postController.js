@@ -261,6 +261,7 @@ module.exports = {
     console.log(thaiTitleReplace);
     console.log(thaiDescriptionReplace);
     console.log(thaiContentReplace);
+    console.log(res);
     // for (i = 0; i < 10; i++){
     //   engTitleReplace = reviewTitle.replace("", "[]");
     //   engDescriptionReplace = reviewDescription.replace("", "[]");
