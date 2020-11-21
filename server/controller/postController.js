@@ -203,15 +203,10 @@ module.exports = {
     const newFavorite = Favorite({
       userId: req.user._id,
       reviewId,
-<<<<<<< HEAD
+      score,
     });
     newFavorite
       .save()
-=======
-      score,
-    })
-    newFavorite.save()
->>>>>>> f865f21b4eb2ac06adb27d464b037c1cb70a18c5
       .then(() => {
         ResHelper.success(res, {
           message: "Post successful!",
@@ -229,9 +224,12 @@ module.exports = {
   },
   getFavoriteScore: (req, res) => {
     const { userId, reviewId } = req.query;
-    Favorite.findOne({ "userId": userId, "reviewId": reviewId }, { _id: 0, score: 1 })
-    .then((favorites) => ResHelper.success(res, { favoriteScore: favorites })
-    ).catch((err) => ResHelper.error(res, err));
+    Favorite.findOne(
+      { userId: userId, reviewId: reviewId },
+      { _id: 0, score: 1 }
+    )
+      .then((favorites) => ResHelper.success(res, { favoriteScore: favorites }))
+      .catch((err) => ResHelper.error(res, err));
   },
   // --------- //
   getFolloweds: (req, res) => {
@@ -285,9 +283,12 @@ module.exports = {
     var i;
     var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
     // var engTitleReplace, engDescriptionReplace, engContentReplace;
-    for (i = 0; i < (violent.Thai.word).length; i++){
+    for (i = 0; i < violent.Thai.word.length; i++) {
       thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], ";;");
-      thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], ";;");
+      thaiDescriptionReplace = reviewDescription.replace(
+        violent.Thai.word[i],
+        ";;"
+      );
       thaiContentReplace = reviewContent.replace(violent.Thai.word[i], ";;");
     }
     console.log(thaiTitleReplace);
