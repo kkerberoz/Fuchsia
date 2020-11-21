@@ -194,10 +194,11 @@ module.exports = {
   // favorite
   postFavorite: (req, res) => {
     const { reviewId, score } = req.body;
+    // console.log(req.body)
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
-    if (!score) {
+    if (isNaN(score)) {
       return ResHelper.fail(res, "score is required!");
     }
     const newFavorite = Favorite({
@@ -224,6 +225,7 @@ module.exports = {
   },
   getFavoriteScore: (req, res) => {
     const { userId, reviewId } = req.query;
+    // console.log(req.query)
     Favorite.findOne(
       { userId: userId, reviewId: reviewId },
       { _id: 0, score: 1 }

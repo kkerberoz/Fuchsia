@@ -2,7 +2,7 @@
   <div class="card-container">
     <div class="card">
 
-      <div v-if="hasImage" @click="goToReview" class="card-image" style="cursor: pointer;">
+      <div v-if="hasImage" @click="goToReview(reviewItem._id)" class="card-image" style="cursor: pointer;">
         <figure class="image is-4by3">
           <img
             :src="reviewItem.imageLink"
@@ -22,6 +22,7 @@
                     v-for="category in reviewItem.category" 
                     :key="category"
                     style="margin-right: 2%;"
+                    @click="goToCategory(category)"
                 >
                     {{category}}
                 </span>
@@ -52,6 +53,9 @@ export default {
     methods: {
       goToReview(reviewId) {
         this.$router.push({name: "Review", params: {reviewId}});
+      },
+      goToCategory(category) {
+        console.log(category);
       }
     }
 }

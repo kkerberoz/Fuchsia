@@ -150,10 +150,26 @@ import CommentList from "../components/CommentList";
         //Delete review API -------------------------------------------------------------------------------------------
       },
       rate() {
-        this.$buefy.toast.open({
-          message: 'Thanks for you Rate!',
-          type: 'is-success'
+
+        console.log(this.score)
+        const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        const data = {
+          reviewId: this.reviewId,
+          score: this.score
+        }
+        axios.post("http://localhost:5000/api/postfavorite", data, {headers: {Authorization: jwt_token}} )
+        .then((res) => {
+          console.log("POST status rate: ",res.status);
+          this.$buefy.toast.open({
+            message: 'Thanks for you Rate!',
+            type: 'is-success'
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
+
+        
       }
     },
     async mounted() {
@@ -164,6 +180,17 @@ import CommentList from "../components/CommentList";
       console.log("this is res" ,response.data)
       this.userData = response.data.data;
       this.isOwner = (this.reviewInfo.userId === response.data.data._id) ? true : false;
+      const params = {
+        userId: this.userData._id,
+        reviewId: this.reviewId
+      }
+      const res = await axios.get("http://localhost:5000/api/getfavoritescore", {params});
+      // console.log(res.data.data.favoriteScore)
+      if(!isNaN(res.data.data.favoriteScore.score)) {
+        console.log("!", res.data.data.favoriteScore.score)
+        this.score = res.data.data.favoriteScore.score;
+      }
+      
       // console.log(this.reviewInfo.userId," &&& ",response.data.data._id );
     },
   };
