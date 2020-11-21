@@ -1,6 +1,8 @@
 const BASE_API_URL = "http://localhost:5000/api";
 import axios from "axios";
-
+import Vue from "vue";
+import VueSweetalert2 from "vue-sweetalert2";
+Vue.use(VueSweetalert2);
 const review = {
     namespaced: true,
     state: {
@@ -15,13 +17,16 @@ const review = {
             imageLink: "",
             view: 0
         },
-        comments: [],
+        commentList: [],
         searchKey: "",
         reviewList: [],
         searchKeyword: "",
         reviewCount: 0
     },
     mutations: {
+        SET_COMMENT_LIST(state, data) {
+            state.commentList = data;
+        },
         SET_SEARCH_KEY(state, key) {
             state.searchKey = key;
         },
@@ -39,6 +44,15 @@ const review = {
         }
     },
     actions: {
+        async setCommentList(context, reviewId) {
+            const params = {
+                reviewId
+            }
+            const response = await axios.get(`${BASE_API_URL}/getcomments`, {params});
+            context.commit("SET_COMMENT_LIST", response.data.data.comment);
+            console.log("comment list: ", response.data.data.comment);
+            console.log("GET comment list:", response.status);
+        },
         setSearchKey(context, key) {
             context.commit("SET_SEARCH_KEY", key);
         },
@@ -47,17 +61,18 @@ const review = {
             context.commit("SET_REVIEW_COUNT",response.data.data);
             console.log("GET reviews count:", response.status);
         },
-        async setReviewInfo(context) {
-            const response = await axios.get(`${BASE_API_URL}`);
-            context.commit("SET_REVIEW_INFO", response.data);
-        },
+        // async setReviewInfo(context) {
+        //     const response = await axios.get(`${BASE_API_URL}`);
+        //     context.commit("SET_REVIEW_INFO", response.data);
+        // },
         async postReview(context, reviewData) {
             const jwt_token = JSON.parse(localStorage.getItem("jwt"));
             const response = await axios.post(`${BASE_API_URL}/postreview`, reviewData, {headers: {Authorization: jwt_token}});
             console.log("POST review object:", response.status);
+            return response.data.data.review._id;
         },
         async getReviewList(context, keyObject) {
-            console.log("#$#",keyObject.category)
+            // console.log("#$#",keyObject.category)
             const params = {
                 filter: keyObject.filter,
                 category: keyObject.category,
@@ -69,11 +84,11 @@ const review = {
             const response = await axios.get(`${BASE_API_URL}/getreview`,{params});
             
             context.commit("SET_REVIEW_LIST", response.data.data.review);
-            console.log("get Review List:", response.status);
+            console.log("GET Review List:", response.status);
             console.log("data list",response.data.data.review);
         },
         async getSearchReviewList(context, keyObject) {
-            console.log("#$#",keyObject.category)
+            // console.log("#$#",keyObject.category)
             if(keyObject.word === context.getters.getSearchKey) {
                 // console.log("word : ", keyObject.word)
                 const params = {
@@ -92,13 +107,23 @@ const review = {
                 console.log("data list",response.data.data.review);
             }
             
+        },
+        async getReviewInfo(context, reviewId) {
+            // console.log("id", reviewId)
+            const params = { reviewId: reviewId }
+            const response = await axios.get(`${BASE_API_URL}/getreviewinfo`, {params});
+            // console.log("test:", response.data)
+            context.commit("SET_REVIEW_INFO", response.data.data.reviewInfo);
+            console.log("get Review Info:", response.status);
+            console.log("data info",response.data.data.reviewInfo);
         }
     },
     getters: {
         getReviewInfo: (state) => state.reviewInfo,
         getReviewList: (state) => state.reviewList,
         getReviewCount: (state) => state.reviewCount,
-        getSearchKey: (state) => state.searchKey
+        getSearchKey: (state) => state.searchKey,
+        getCommentList: (state) => state.commentList
     },
 };
 export default review;

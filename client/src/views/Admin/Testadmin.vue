@@ -7,7 +7,7 @@
 
 <style scoped>
   .error-style-page {
-    color: white;
+    color: black;
     text-align: center;
     font-size: 300%;
   }

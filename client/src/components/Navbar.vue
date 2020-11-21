@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar is-black" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item">
+        <a @click="Home" class="navbar-item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="125"
@@ -135,6 +135,12 @@
         this.$store.dispatch("auth/logout");
         this.$router.push({name: "Login"});
       },
+      Home() {
+        if(this.$route.name !== "Home"){
+          this.$router.push({name: "Home"});
+        }
+          
+      }
     },
     computed: {
       loggedIn() {

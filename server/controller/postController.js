@@ -31,9 +31,10 @@ module.exports = {
 
     newReview
       .save()
-      .then(() => {
+      .then((review) => {
         ResHelper.success(res, {
           message: "Post successful!",
+          review
         });
       })
       .catch((err) => ResHelper.error(res, err));
@@ -124,10 +125,14 @@ module.exports = {
     }
   },
   getReviewInfo: (req, res) => {
+    
     const reviewId = req.query.reviewId;
-    Review.findOne({ "reviewId": reviewId })
-    .then((reviews) => 
+    // console.log(reviewId);
+    Review.findOne({ "_id": reviewId })
+    .then((reviews) => {
+      console.log(reviews)
         ResHelper.success(res, {reviewInfo: reviews})
+      }
     ).catch((err) => ResHelper.error(res, err));
   },
   deleteReview: (req, res) => {
@@ -147,6 +152,7 @@ module.exports = {
     }
 
     const newComment = Comment({
+      userId: req.user._id,
       reviewId,
       commentContent
     })
@@ -160,6 +166,7 @@ module.exports = {
   },
   getComments: (req, res) => {
     const reviewId = req.query.reviewId;
+    console.log("HERE",reviewId)
     Comment.find({"reviewId": reviewId})
     .then((comments) => ResHelper.success(res, {comment: comments, count: comments.length})
     ).catch((err) => ResHelper.error(res, err));
@@ -188,7 +195,7 @@ module.exports = {
   },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId; 
-    Favorite.find({"reviewId": reviewId})
+    Favorite.find({"_id": reviewId})
     .then((favorites) => ResHelper.success(res, {favorite: favorites, count: favorites.length})
     ).catch((err) => ResHelper.error(res, err));
   },
@@ -206,6 +213,7 @@ module.exports = {
   },
   postReport: (req, res) => {
     const { reviewId, reportReason } = req.body;
+    console.log(reportReason)
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }

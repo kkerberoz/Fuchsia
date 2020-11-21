@@ -75,9 +75,48 @@ module.exports = {
 
         if (user.isValidPassword(password)) {
           const token = AuthHelper.createToken(user);
-          ResHelper.success(res, { message: "Login successful!", token });
+          const role = user.role;
+          ResHelper.success(res, { message: "Login successful!", token, role });
         } else {
           ResHelper.fail(res, "Wrong password");
+        }
+      })
+      .catch((err) => ResHelper.error(res, err));
+  },
+  checkLogin: (req, res, next) => {
+    const token = req.query.token;
+    if (!token) {
+      ResHelper.fail(res, "Invalid token");
+    }
+    AuthHelper.verifyToken(token, (err, decode) => {
+      if (err) {
+        ResHelper.error(res, err);
+      } else {
+        if (!decode) {
+          return ResHelper.unauth(res, "You need to logged in");
+        } else {
+          ResHelper.success(res, { decode });
+          next();
+        }
+      }
+    });
+  },
+  getUser: (req, res) => {
+    const id_user = req.user._id;
+    User.findOne({ _id: id_user })
+      .then((user) => {
+        if (!user) {
+          return ResHelper.fail(res, "No user found with that email");
+        } else {
+          const data = {
+            _id: user._id,
+            firstName: user.firstName,
+            lastname: user.lastName,
+            email: user.email,
+            dob: user.dob,
+            tel: user.tel,
+          };
+          return ResHelper.success(res, data);
         }
       })
       .catch((err) => ResHelper.error(res, err));

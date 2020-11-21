@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import store from "../store/index";
 import DefaultLayout from "../Layouts/DefaultLayout";
 import AdminLayout from "../Layouts/AdminLayout";
+import axios from "axios";
+const BASE_API_URL = "http://localhost:5000/api";
 Vue.use(VueRouter);
 
 //guard router
@@ -18,11 +20,43 @@ function guardMyroute(to, from, next) {
   }
 }
 
+function guardMyadmin(to, from, next) {
+  var isAuthenticated = false;
+  const role = JSON.parse(localStorage.getItem("role"));
+  if (store.state.auth.status.loggedIn === true && role === "ADMIN")
+    isAuthenticated = true;
+  else isAuthenticated = false;
+  if (isAuthenticated) {
+    next();
+  } else {
+    next("/login");
+  }
+}
+
+function checkLogin(to, from, next) {
+  const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+  const params = { token: jwt_token };
+  if (!jwt_token) {
+    next();
+  } else {
+    axios
+      .get(`${BASE_API_URL}/checklogin`, { params })
+      .then((token) => {
+        next();
+        console.log(token.data.data.decode);
+      })
+      .catch((err) => {
+        next("/login");
+        console.log("error", err);
+      });
+  }
+}
+
 const routes = [
   {
     path: "/",
     name: "Home",
-    beforeEnter: guardMyroute,
+    beforeEnter: checkLogin,
     component: Home,
     meta: { layout: DefaultLayout },
   },
@@ -61,9 +95,24 @@ const routes = [
     meta: { layout: DefaultLayout },
   },
   {
-    path: "/Admin",
+    path: "/admin",
     name: "Admin",
+    beforeEnter: guardMyadmin,
     component: () => import("../views/Admin/AdminIndex.vue"),
+    meta: { layout: AdminLayout },
+    children: [
+      {
+        path: "test",
+        name: "Testadmin",
+        component: () => import("../views/Admin/Testadmin.vue"),
+        meta: { layout: AdminLayout },
+      },
+    ],
+  },
+  {
+    path: "/adminreport",
+    name: "AdminReport",
+    component: () => import("../views/Admin/AdminReport.vue"),
     meta: { layout: AdminLayout },
   },
 ];
