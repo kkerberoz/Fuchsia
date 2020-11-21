@@ -121,6 +121,7 @@ module.exports = {
         } else {
           const data = {
             _id: user._id,
+            username: user.username,
             firstName: user.firstName,
             lastname: user.lastName,
             email: user.email,
