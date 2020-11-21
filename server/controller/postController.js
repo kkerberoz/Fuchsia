@@ -214,7 +214,14 @@ module.exports = {
     })
     .catch((err) => ResHelper.error(res, err));
   },
-
+  // for manager 
+  getReport: (req, res) => {
+    Report.find()
+    .sort({ reportDatetime: -1 })
+    .then((reports) => ResHelper.success(res, {report: reports })
+    ).catch((err) => ResHelper.error(res, err));
+  },
+  // -------- //
   // for admin 
   getReviwer: (req, res) => {
     const { name } = req.query;

@@ -16,6 +16,7 @@ router.get("/getreviewinfo", PostController.getReviewInfo);
 router.post("/postfavorite", auth, PostController.postFavorite);
 // router.get("/getfavorite", PostController.getFavorite);
 router.post("/postreport", PostController.postReport);
+router.get("/getreport", PostController.getReport);
 router.get("/violentregconition", PostController.violentRegconition);
 
 // for user
