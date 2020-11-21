@@ -133,4 +133,26 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
+  getUserById: (req, res) => {
+    // console.log("HEHE",req.query)
+    const userId = req.query.userId;
+    User.findOne({ _id: userId })
+      .then((user) => {
+        if (!user) {
+          return ResHelper.fail(res, "No user found with that email");
+        } else {
+          const data = {
+            _id: user._id,
+            username: user.username,
+            firstName: user.firstName,
+            lastname: user.lastName,
+            email: user.email,
+            dob: user.dob,
+            tel: user.tel,
+          };
+          return ResHelper.success(res, data);
+        }
+      })
+      .catch((err) => ResHelper.error(res, err));
+  },
 };

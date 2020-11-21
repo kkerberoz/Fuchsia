@@ -12,9 +12,9 @@
                 </div>
                 <div class="column is-9">
                     <b-field 
-                        :label="username"
-                        style="margin: 3% 3% 0 0;"
+                        style="margin: 3% 3% 0 0; font-size: 3vh; color: #c6007e;"
                     >
+                        {{username}}
                         <b-input v-model="commentContent" maxlength="200" type="textarea"></b-input>
                     </b-field>
                 </div>
@@ -61,7 +61,7 @@ export default {
             return this.userData != null;
         },
         username() {
-            return this.userData.firstName;
+            return this.userData.username;
         },
         comments() {
             return this.$store.getters["review/getCommentList"];

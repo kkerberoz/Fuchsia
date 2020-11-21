@@ -27,7 +27,7 @@
       </div>
       <div class="columns">
         <div class="column">
-          <h1 style="margin-left: 7%; color: #c6007e;">Post By: ......  {{datetime}}</h1>
+          <h1 v-if="hasUserData" style="margin-left: 7%; color: #c6007e;">Post By: {{userData.username}}  {{datetime}}</h1>
         </div>
         <div class="column" style="margin-right: 5%; cursor:pointer;">
           <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
@@ -77,6 +77,9 @@ import CommentList from "../components/CommentList";
       reviewInfo() {
         return this.$store.getters["review/getReviewInfo"];
       },
+      hasUserData() {
+        return this.userData != null;
+      }
     },
     methods: {
       async report() {

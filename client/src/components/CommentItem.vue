@@ -6,14 +6,26 @@
           <div class="profile"></div>
         </div>
       </div>
-      <div class="column is-9" style="top: 50%;">
-        {{comment.commentContent}}
+      <div class="column is-9" style="position: relative;">
+        <div style="font-size: 3vh; color: #c6007e;">{{username}}</div>
+        <div style="margin: 0;
+                    position: absolute;
+                    top: 50%;
+                    -ms-transform: translateY(-50%);
+                    transform: translateY(-50%);" 
+        >
+          {{comment.commentContent}}
+        </div>
+        <div style="color: #c6007e; display: flex; width: 100%; justify-content: flex-end; margin: 0; position: absolute; top: 85%;">
+          {{date}}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: {
     comment: {
@@ -21,16 +33,42 @@ export default {
       required: true,
     },
   },
-  mounted() {
+  data() {
+    return {
+      username: ""
+    }
+  },
+  computed: {
+    date() {
+      return this.comment.commentDatetime.replace("T"," ").slice(0,19);
+    }
+  },
+  async mounted() {
+    const params = {
+      userId: this.comment.userId
+    }
+    // console.log("@@",this.comment.userId)
+    const response = await axios.get("http://localhost:5000/api/getuserbyid", {params});
+    this.username = response.data.data.username;
     console.log("this is comment data",this.comment);
   }
 };
 </script>
 
 <style lang="scss">
-.comment {
-  margin-top: 2%;
-  background-color: white;
-  border-radius: 20px;
-}
+  .comment {
+    margin-top: 2%;
+    background-color: white;
+    border-radius: 20px;
+  }
+
+  .profile {
+      border-radius: 50%; 
+      background-image: url("../assets/profile.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 130% 100%;
+      width: 70%; 
+      height: 70%;
+  }
 </style>
