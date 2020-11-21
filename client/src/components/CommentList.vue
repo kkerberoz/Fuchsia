@@ -9,7 +9,7 @@
                 </div>
                 <div class="column is-9">
                     <b-field 
-                        :label="username"
+                        :label="userData"
                         style="margin: 3% 3% 0 0;"
                     >
                         <b-input v-model="commentContent" maxlength="200" type="textarea"></b-input>
@@ -39,6 +39,12 @@ export default {
     components: {
         CommentItem
     },
+    props: {
+        userData: {
+            type: Object,
+            require: true
+        }
+    },
     data() {
         return {
             commentContent: "",
@@ -49,6 +55,9 @@ export default {
         comments() {
             return this.$store.getters["review/getCommentList"];
         }
+    },
+    mounted() {
+        console.log("SSS",this.userData);
     },
     methods: {
         postComment() {
@@ -67,7 +76,10 @@ export default {
 <style lang="scss" scoped>
     .profile {
         border-radius: 50%; 
-        background-image: url(../assets/profile.png);
+        background-image: url("../assets/profile.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 130% 100%;
         width: 70%; 
         height: 70%;
     }

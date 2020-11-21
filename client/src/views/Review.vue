@@ -39,7 +39,7 @@
       
     </div>
     <div class="comment-group">
-      <comment-list></comment-list>
+      <comment-list :userData="user"></comment-list>
     </div>
     
   </div>
@@ -63,6 +63,7 @@ import CommentList from "../components/CommentList";
         isOwner: false,
         showScore: true,
         score: 0,
+        userData: {}
       }
     },
     computed: {
@@ -148,7 +149,8 @@ import CommentList from "../components/CommentList";
       this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
       const response = await axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}});
-      // console.log("this is res" ,response.data)
+      console.log("this is res" ,response.data)
+      this.userData = response.data.data;
       this.isOwner = (this.reviewInfo.userId === response.data.data._id) ? true : false;
       // console.log(this.reviewInfo.userId," &&& ",response.data.data._id );
     },
