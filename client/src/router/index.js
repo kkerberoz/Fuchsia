@@ -47,8 +47,11 @@ function checkLogin(to, from, next) {
         .get(`${BASE_API_URL}/checklogin`, { params })
         .then((token) => {
           const exp = token.data.data.decode.exp;
+          console.log(exp);
           if (Date.now() >= exp * 1000) {
-            next("/login");
+            this.$store.dispatch("auth/logout").then(() => {
+              next("/login");
+            });
           } else {
             next();
           }
