@@ -3,8 +3,11 @@ const Review = require("../models/Review");
 const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
-// const violent = require("../../violent.json");
+const violent = require("../../violent.json");
+const User = require("../models/User");
+const Report = require("../models/Report");
 module.exports = {
+  // for review
   postReview: (req, res) => {
     const {
       reviewTitle,
@@ -148,6 +151,13 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
+  deleteReview: (req, res) => {
+    const reviewId = req.query.reviewId;
+    Review.deleteOne({ _id: reviewId })
+      .then((reviews) => ResHelper.success(res, { review: reviews }))
+      .catch((err) => ResHelper.error(res, err));
+  },
+  // ---------- //
   postComment: (req, res) => {
     const { reviewId, commentContent } = req.body;
     if (!reviewId) {
@@ -180,6 +190,25 @@ module.exports = {
       )
       .catch((err) => ResHelper.error(res, err));
   },
+  // favorite
+  postFavorite: (req, res) => {
+    const { reviewId } = req.body;
+    if (!reviewId) {
+      return ResHelper.fail(res, "review ID is required!");
+    }
+    const newFavorite = Favorite({
+      userId: req.user._id,
+      reviewId,
+    });
+    newFavorite
+      .save()
+      .then(() => {
+        ResHelper.success(res, {
+          message: "Post successful!",
+        });
+      })
+      .catch((err) => ResHelper.error(res, err));
+  },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId;
     Favorite.find({ _id: reviewId })
@@ -188,6 +217,7 @@ module.exports = {
       )
       .catch((err) => ResHelper.error(res, err));
   },
+  // --------- //
   getFolloweds: (req, res) => {
     Followed.find({ userId: req.user._id })
       .then((followeds) =>
@@ -195,33 +225,67 @@ module.exports = {
       )
       .catch((err) => ResHelper.error(res, err));
   },
-  deleteReview: (req, res) => {
-    const { reviewId } = req.body;
-    // console.log(reviewId)
-    Review.deleteOne({ _id: reviewId })
-      .then((reviews) => ResHelper.success(res, { review: reviews }))
+  postReport: (req, res) => {
+    const { reviewId, reportReason } = req.body;
+    console.log(reportReason);
+    if (!reviewId) {
+      return ResHelper.fail(res, "review ID is required!");
+    }
+    if (!reportReason) {
+      return ResHelper.fail(res, "report reason is required!");
+    }
+    const newReport = Report({
+      reviewId,
+      reportReason,
+    });
+    newReport
+      .save()
+      .then(() => {
+        ResHelper.success(res, {
+          message: "Post successful!",
+        });
+      })
       .catch((err) => ResHelper.error(res, err));
   },
-  // violentRegconition: (req, res) => {
-  //   const { reviewTitle, reviewDescription, reviewContent } = req.query;
-  //   console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
-  //   var i;
-  //   var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
-  //   // var engTitleReplace, engDescriptionReplace, engContentReplace;
-  //   for (i = 0; i < (violent.Thai.word).length; i++){
-  //     thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
-  //     thaiDescriptionReplace = reviewDescription.replace(violent.Thai.word[i], "[]");
-  //     thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
-  //   }
-  //   console.log(thaiTitleReplace);
-  //   console.log(thaiDescriptionReplace);
-  //   console.log(thaiContentReplace);
-  //   console.log(res);
-  //   // for (i = 0; i < 10; i++){
-  //   //   engTitleReplace = reviewTitle.replace("", "[]");
-  //   //   engDescriptionReplace = reviewDescription.replace("", "[]");
-  //   //   engContentReplace = reviewContent.replace("", "[]");
-  //   // }
-
-  // }
+  // for manager
+  getReport: (req, res) => {
+    Report.find()
+      .sort({ reportDatetime: -1 })
+      .then((reports) => ResHelper.success(res, { report: reports }))
+      .catch((err) => ResHelper.error(res, err));
+  },
+  // -------- //
+  // for admin
+  getReviwer: (req, res) => {
+    const { name } = req.query;
+    var allUser = User.find({
+      firstName: { $regex: new RegExp("^" + name, "i") },
+    });
+    console.log(allUser + res);
+  },
+  // ------- //
+  violentRegconition: (req, res) => {
+    const { reviewTitle, reviewDescription, reviewContent } = req.query;
+    console.log(reviewTitle + " " + reviewDescription + " " + reviewContent);
+    var i;
+    var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
+    // var engTitleReplace, engDescriptionReplace, engContentReplace;
+    for (i = 0; i < violent.Thai.word.length; i++) {
+      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], "[]");
+      thaiDescriptionReplace = reviewDescription.replace(
+        violent.Thai.word[i],
+        "[]"
+      );
+      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], "[]");
+    }
+    console.log(thaiTitleReplace);
+    console.log(thaiDescriptionReplace);
+    console.log(thaiContentReplace);
+    console.log(res);
+    // for (i = 0; i < 10; i++){
+    //   engTitleReplace = reviewTitle.replace("", "[]");
+    //   engDescriptionReplace = reviewDescription.replace("", "[]");
+    //   engContentReplace = reviewContent.replace("", "[]");
+    // }
+  },
 };

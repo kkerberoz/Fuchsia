@@ -13,7 +13,14 @@ router.get("/getreviewinfo", PostController.getReviewInfo);
 router.post("/postcomment", PostController.postComment);
 router.get("/getcomments", PostController.getComments);
 // router.get("/getfollowed", PostController.getFolloweds);
+router.post("/postfavorite", auth, PostController.postFavorite);
 // router.get("/getfavorite", PostController.getFavorite);
-// router.get("/violentregconition", PostController.violentRegconition);
+router.post("/postreport", PostController.postReport);
+router.get("/getreport", PostController.getReport);
+router.get("/violentregconition", PostController.violentRegconition);
+
+// for user
+router.get("/getreviewer", PostController.getReviwer);
+// ------- //
 
 module.exports = router;

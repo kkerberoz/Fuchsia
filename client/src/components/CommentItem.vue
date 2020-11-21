@@ -17,6 +17,7 @@ export default {
 
 <style lang="scss">
     .comment {
+        margin-top: 2%;
         background-color: white;
         border-radius: 20px;
     }
