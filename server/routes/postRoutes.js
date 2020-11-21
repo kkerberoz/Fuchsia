@@ -10,7 +10,7 @@ router.get("/getreview", PostController.getReviews);
 router.post("/deletereview", PostController.deleteReview);
 router.get("/getreviewscount", PostController.getReviewsCount);
 router.get("/getreviewinfo", PostController.getReviewInfo);
-router.post("/postcomment", PostController.postComment);
+router.post("/postcomment", auth, PostController.postComment);
 router.get("/getcomments", PostController.getComments);
 // router.get("/getfollowed", PostController.getFolloweds);
 router.post("/postfavorite", auth, PostController.postFavorite);

@@ -35,6 +35,7 @@
 
 <script>
 import CommentItem from "./CommentItem";
+import axios from "axios";
 export default {
     components: {
         CommentItem
@@ -43,6 +44,10 @@ export default {
         userData: {
             type: Object,
             require: true
+        },
+        reviewId: {
+            type: String,
+            required: true
         }
     },
     data() {
@@ -67,7 +72,26 @@ export default {
     },
     methods: {
         postComment() {
-            console.log("post comment method;")
+            const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+            const data = {
+                reviewId: this.reviewId,
+                commentContent: this.commentContent
+            }
+            axios.post("http://localhost:5000/api/postcomment", data, {headers: {Authorization: jwt_token}})
+            .then(() => {
+                this.$store.dispatch("review/setCommentList", this.reviewId);
+                this.commentContent = "";
+                this.$buefy.toast.open({
+                    message: 'Thanks for the comment.',
+                    type: 'is-success'
+                });
+            })
+            .catch(() => {
+                this.$buefy.toast.open({
+                    message: 'Something went wrong.',
+                    type: 'is-danger'
+                });
+            })
         }
     },
     watch: {

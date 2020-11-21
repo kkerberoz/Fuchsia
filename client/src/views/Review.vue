@@ -39,7 +39,7 @@
       
     </div>
     <div class="comment-group">
-      <comment-list :userData="userData"></comment-list>
+      <comment-list :userData="userData" :reviewId="reviewId"></comment-list>
     </div>
     
   </div>
@@ -116,14 +116,8 @@ import CommentList from "../components/CommentList";
           },
           confirmButtonColor: " #c6007e"
         })
-        .then((result) => {
-          if (result.isConfirmed) {
-            //
-          }
-        });
       },
       async deleteReview() {
-
         this.$swal({
           title: "Are you sure?",
           text: "This review will be deleted!",

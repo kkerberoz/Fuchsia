@@ -167,7 +167,7 @@ module.exports = {
     if (!commentContent) {
       return ResHelper.fail(res, "comment content is required!");
     }
-
+    console.log(req.user);
     const newComment = Comment({
       userId: req.user._id,
       reviewId,
