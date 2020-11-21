@@ -161,7 +161,7 @@ import CommentList from "../components/CommentList";
   }
 
   .comment-group {
-    margin-top: 5%;
+    margin-top: 4%;
     padding: 0 40px 40px 0;
     width: 100%;
     height: auto;
