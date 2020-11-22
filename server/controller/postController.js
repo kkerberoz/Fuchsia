@@ -207,19 +207,33 @@ module.exports = {
     if (isNaN(score)) {
       return ResHelper.fail(res, "score is required!");
     }
-    const newFavorite = Favorite({
-      userId: req.user._id,
-      reviewId,
-      score,
-    });
-    newFavorite
-      .save()
-      .then(() => {
-        ResHelper.success(res, {
-          message: "Post successful!",
+    Favorite.findOne({ "userId": req.user._id, "reviewId": reviewId})
+    .then((favorites) => {
+      if(favorites.length){
+        Favorite.update_one({ "score": score, "favoriteDatetime": Date.now() })
+        .then(() => {
+          ResHelper.success(res, {
+                  message: "Update successful!",
+          });
+        })
+        .catch((err) => ResHelper.error(res, err)); 
+      }
+      else {
+        const newFavorite = Favorite({
+          userId: req.user._id,
+          reviewId,
+          score,
         });
-      })
-      .catch((err) => ResHelper.error(res, err));
+        newFavorite
+          .save()
+          .then(() => {
+            ResHelper.success(res, {
+              message: "Post successful!",
+            });
+          })
+          .catch((err) => ResHelper.error(res, err));
+      }
+    })
   },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId;
