@@ -26,7 +26,7 @@
     </div>
 
     <div class="sidebar-item">
-      <router-link :to="{ name: 'Admin' }">
+      <router-link :to="{ name: 'ContentVio' }">
         <i class="fa fa-fw fa-home"></i>
       </router-link>
     </div>

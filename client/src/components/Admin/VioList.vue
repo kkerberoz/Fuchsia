@@ -11,10 +11,10 @@
       VioItem,
     },
     props: {
-      currentPage: {
-        type: Number,
-        required: true,
-      },
+      // currentPage: {
+      //   type: Number,
+      //   required: true,
+      // },
     },
     computed: {},
   };

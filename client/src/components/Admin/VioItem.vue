@@ -50,10 +50,10 @@
 <script>
   export default {
     props: {
-      VioItem: {
-        type: Object,
-        required: true,
-      },
+      // VioItem: {
+      //   type: Object,
+      //   required: true,
+      // },
     },
   };
 </script>
