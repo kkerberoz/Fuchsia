@@ -59,7 +59,17 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    computed: {
+      reportList() {
+        return this.$store.getters["report/getReportList"];
+      }
+    },
+    async mounted() {
+      this.$store.dispatch("report/setReportList");
+      console.log(this.$store.getters["report/getReportList"]);
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
