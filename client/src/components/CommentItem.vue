@@ -61,8 +61,10 @@ export default {
       return this.comment.commentDatetime.replace("T"," ").slice(0,19);
     },
     isOwner2() {
+      if(this.userData != null && this.comment != null){
         return this.userData._id === this.comment.userId;
-      
+      }
+        return false;
     }
   },
   methods: {
