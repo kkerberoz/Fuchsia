@@ -124,7 +124,7 @@
 <style lang="scss">
   .comment {
     padding: 40px;
-    background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
+    background-image: url("../assets/svg/commentBox.svg#svgView(preserveAspectRatio(none))");
     background-size: cover;
     width: 100%;
     height: auto;
