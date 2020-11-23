@@ -1,32 +1,49 @@
 <template>
   <div class="container">
     <div id="postBlog" class="container">
-      
       <div class="columns">
         <div id="reviewContent" class="column">
           <div v-if="isOwner" style="margin:2% 3% 2% 3%;">
-            <b-dropdown aria-role="list" class="is-pulled-right" position="is-bottom-left">
-              <b-icon style="transform: rotate(90deg); cursor: pointer;" icon="dots-vertical" slot="trigger" ></b-icon>
-              <b-dropdown-item aria-role="listitem" @click="deleteReview">Delete review</b-dropdown-item>
+            <b-dropdown
+              aria-role="list"
+              class="is-pulled-right"
+              position="is-bottom-left"
+            >
+              <b-icon
+                style="transform: rotate(90deg); cursor: pointer;"
+                icon="dots-vertical"
+                slot="trigger"
+              ></b-icon>
+              <b-dropdown-item aria-role="listitem" @click="deleteReview"
+                >Delete review</b-dropdown-item
+              >
             </b-dropdown>
           </div>
-          <h1 style="font-size: 5vh;">{{reviewInfo.reviewTitle}}</h1>
-          <hr class="pink-line">
-          <div style="margin-top: 5%;" v-html="reviewInfo.reviewContent">
+          <h1 style="font-size: 5vh;">{{ reviewInfo.reviewTitle }}</h1>
+          <hr class="pink-line" />
+
+          <div
+            style="margin-top: 5%;"
+            v-html="reviewInfo.reviewContent"
+            class="contentReview"
+          >
             <!-- content -->
           </div>
-          <b-rate 
+
+          <b-rate
             v-model="score"
-            :show-score = "showScore"
+            :show-score="showScore"
             size="default"
             style="margin-top: 5%;"
           ></b-rate>
-          <hr class="pink-line">
+          <hr class="pink-line" />
         </div>
       </div>
       <div class="columns">
         <div class="column">
-          <h1 v-if="hasUserData" style="margin-left: 7%; color: #c6007e;">Post By: {{userData.username}}  {{datetime}}</h1>
+          <h1 v-if="hasUserData" style="margin-left: 7%; color: #c6007e;">
+            Post By: {{ userData.username }} {{ datetime }}
+          </h1>
         </div>
         <div class="column" style="margin-right: 5%; cursor:pointer;">
           <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
@@ -35,35 +52,37 @@
           </h1>
         </div>
       </div>
-      
     </div>
     <div class="comment-group">
-      <comment-list :userData="userData" :reviewId="reviewId" :userId_in_review="reviewInfo.userId"></comment-list>
+      <comment-list
+        :userData="userData"
+        :reviewId="reviewId"
+        :userId_in_review="reviewInfo.userId"
+      ></comment-list>
     </div>
-    
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import CommentList from "../components/CommentList";
+  import axios from "axios";
+  import CommentList from "../components/CommentList";
   export default {
     components: {
-      CommentList
+      CommentList,
     },
     props: {
       reviewId: {
         type: String,
-        required: true
-      }
+        required: true,
+      },
     },
     data() {
       return {
         isOwner: false,
         showScore: true,
         score: 0,
-        userData: null
-      }
+        userData: null,
+      };
     },
     computed: {
       datetime() {
@@ -78,7 +97,7 @@ import CommentList from "../components/CommentList";
       },
       hasUserData() {
         return this.userData != null;
-      }
+      },
     },
     methods: {
       async report() {
@@ -88,7 +107,7 @@ import CommentList from "../components/CommentList";
           icon: "warning",
           input: "text",
           inputAttributes: {
-            autocapitalize: "off"
+            autocapitalize: "off",
           },
           showCancelButton: true,
           confirmButtonText: "Yes, report it!",
@@ -96,28 +115,28 @@ import CommentList from "../components/CommentList";
           preConfirm: (reason) => {
             const params = {
               reportReason: reason,
-              reviewId: this.reviewId
-            }
-            axios.post("http://localhost:5000/api/postreport", params)
-            .then(() => {
-              this.$swal({
-                title: "Reported to Admin.",
-                icon: "success",
-                confirmButtonColor: " #c6007e"
+              reviewId: this.reviewId,
+            };
+            axios
+              .post("http://localhost:5000/api/postreport", params)
+              .then(() => {
+                this.$swal({
+                  title: "Reported to Admin.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                });
+              })
+              .catch(() => {
+                this.$swal({
+                  title: "Something wrong!",
+                  text: "Please fill the reason",
+                  icon: "error",
+                  confirmButtonColor: " #c6007e",
+                });
               });
-            })
-            .catch(() => {
-              this.$swal({
-                title: "Something wrong!",
-                text: "Please fill the reason",
-                icon: "error",
-                confirmButtonColor: " #c6007e"
-              });
-            })
-            
           },
-          confirmButtonColor: " #c6007e"
-        })
+          confirmButtonColor: " #c6007e",
+        });
       },
       async deleteReview() {
         this.$swal({
@@ -127,25 +146,27 @@ import CommentList from "../components/CommentList";
           showCancelButton: true,
           confirmButtonText: "Yes, delete it!",
           cancelButtonText: "Cancel!",
-          confirmButtonColor: " #c6007e"
-        })
-        .then((result) => {
+          confirmButtonColor: " #c6007e",
+        }).then((result) => {
           if (result.isConfirmed) {
-            axios.post("http://localhost:5000/api/deletereview", {reviewId: this.reviewId}).then((response) => {
-              if(response.status === 200) {
-                this.$swal({
-                  title: "Delete Complete.",
-                  icon: "success",
-                  confirmButtonColor: " #c6007e"
-                }).then(() => {
-                  this.$router.push({name: "Home"});
-                });
-              }
-            });
+            axios
+              .post("http://localhost:5000/api/deletereview", {
+                reviewId: this.reviewId,
+              })
+              .then((response) => {
+                if (response.status === 200) {
+                  this.$swal({
+                    title: "Delete Complete.",
+                    icon: "success",
+                    confirmButtonColor: " #c6007e",
+                  }).then(() => {
+                    this.$router.push({ name: "Home" });
+                  });
+                }
+              });
           }
         });
 
-        
         //Delete review API -------------------------------------------------------------------------------------------
       },
     },
@@ -153,45 +174,59 @@ import CommentList from "../components/CommentList";
       this.$store.dispatch("review/getReviewInfo", this.reviewId);
       this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      const response = await axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}});
-      console.log("this is res" ,response.data)
+      const response = await axios.get("http://localhost:5000/api/getuser", {
+        headers: { Authorization: jwt_token },
+      });
+      console.log("this is res", response.data);
       this.userData = response.data.data;
-      this.isOwner = (this.reviewInfo.userId === response.data.data._id) ? true : false;
+      this.isOwner =
+        this.reviewInfo.userId === response.data.data._id ? true : false;
       const params = {
         userId: this.userData._id,
-        reviewId: this.reviewId
-      }
-      const res = await axios.get("http://localhost:5000/api/getfavoritescore", {params});
-      if(res.data.data.favoriteScore != null) {
-        console.log("!", res.data.data.favoriteScore.score)
+        reviewId: this.reviewId,
+      };
+      const res = await axios.get(
+        "http://localhost:5000/api/getfavoritescore",
+        { params }
+      );
+      if (res.data.data.favoriteScore != null) {
+        console.log("!", res.data.data.favoriteScore.score);
         this.score = res.data.data.favoriteScore.score;
       }
     },
     watch: {
       score() {
-        console.log(this.score)
+        console.log(this.score);
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
         let data = {
           reviewId: this.reviewId,
-          score: this.score
-        }
-        axios.post("http://localhost:5000/api/postfavorite", data, {headers: {Authorization: jwt_token}} )
-        .then((res) => {
-          console.log("POST status rate: ",res.status);
-          this.$buefy.toast.open({
-            message: 'Thanks for you Rate!',
-            type: 'is-success'
+          score: this.score,
+        };
+        axios
+          .post("http://localhost:5000/api/postfavorite", data, {
+            headers: { Authorization: jwt_token },
+          })
+          .then((res) => {
+            console.log("POST status rate: ", res.status);
+            this.$buefy.toast.open({
+              message: "Thanks for you Rate!",
+              type: "is-success",
+            });
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      }
-    }
+      },
+    },
   };
 </script>
 
 <style lang="scss" scoped>
+  .contentReview p > img {
+    width: 100%;
+    height: 100px;
+  }
+
   hr {
     margin: 0;
   }
@@ -203,9 +238,8 @@ import CommentList from "../components/CommentList";
     height: auto;
   }
 
-
   .pink-line {
-      border-top: 1px solid $secondary;
+    border-top: 1px solid $secondary;
   }
 
   .buttonGroup {
@@ -225,6 +259,11 @@ import CommentList from "../components/CommentList";
 
   #reviewContent {
     margin: 3% 3% 0 3%;
+  }
+
+  #reviewContent p > img {
+    width: 100%;
+    height: 100px;
   }
 
   #postBlog {

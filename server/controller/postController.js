@@ -201,7 +201,7 @@ module.exports = {
   // favorite
   postFavorite: (req, res) => {
     const { reviewId, score } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
