@@ -74,7 +74,10 @@
         return this.comment.commentDatetime.replace("T", " ").slice(0, 19);
       },
       isOwner2() {
-        return this.userData._id === this.comment.userId;
+        if (this.userData != null && this.comment != null) {
+          return this.userData._id === this.comment.userId;
+        }
+        return false;
       },
     },
     methods: {
@@ -121,7 +124,7 @@
 <style lang="scss">
   .comment {
     padding: 40px;
-    background-image: url("../assets/svg/commentBox.svg#svgView(preserveAspectRatio(none))");
+    background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
     background-size: cover;
     width: 100%;
     height: auto;

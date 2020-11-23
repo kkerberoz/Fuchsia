@@ -153,7 +153,7 @@ module.exports = {
       .catch((err) => ResHelper.error(res, err));
   },
   deleteReview: (req, res) => {
-    const reviewId = req.query.reviewId;
+    const reviewId = req.body.reviewId;
     Review.deleteOne({ _id: reviewId })
       .then((reviews) => ResHelper.success(res, { review: reviews }))
       .catch((err) => ResHelper.error(res, err));
@@ -200,7 +200,7 @@ module.exports = {
   // favorite
   postFavorite: (req, res) => {
     const { reviewId, score } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
