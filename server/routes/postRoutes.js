@@ -19,8 +19,10 @@ router.get("/getfavorite", PostController.getFavorite);
 router.get("/getfavoritescore", PostController.getFavoriteScore);
 
 router.post("/postreport", PostController.postReport);
+    // routes for manager
 router.get("/getreport", PostController.getReport);
-router.get("/violentregconition", PostController.violentRegconition);
+router.get("/getviolentregconition", PostController.getViolentRegconition);
+router.post("/actionviolent", PostController.actionViolent);
 
 // for user
 router.get("/getreviewer", PostController.getReviwer);

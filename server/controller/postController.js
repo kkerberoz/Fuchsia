@@ -4,6 +4,7 @@ const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
 const violent = require("../violent.json");
+const Violent = require("../models/Violent");
 const User = require("../models/User");
 const Report = require("../models/Report");
 module.exports = {
@@ -25,20 +26,35 @@ module.exports = {
     if (!category) {
       return ResHelper.fail(res, "category is required!");
     }
-
-    console.log(req.user);
+    var status, allViolent = violentRegconition(reviewTitle, reviewDescription, reviewContent);
+    if(allViolent.length){
+      status = "PENDING";
+    }
+    else status = "NORMAL"
     const newReview = Review({
       userId: req.user._id,
       reviewTitle,
       reviewDescription,
       reviewContent,
       category,
+      status,
       imageLink,
     });
 
     newReview
       .save()
       .then((review) => {
+        if(allViolent.length){
+          const newViolent = Violent({
+            reviewId: review._id,
+            violentContent: allViolent
+          });
+          newViolent.save()
+          .then((violent) => {
+            console.log(violent._id);
+          })
+          .catch((err) => ResHelper.error(res, err));
+        }
         ResHelper.success(res, {
           message: "Post successful!",
           review,
@@ -210,7 +226,7 @@ module.exports = {
     Favorite.findOne({ "userId": req.user._id, "reviewId": reviewId})
     .then((favorites) => {
       if(favorites.length){
-        Favorite.update_one({ "score": score, "favoriteDatetime": Date.now() })
+        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": Date.now()}})
         .then(() => {
           ResHelper.success(res, {
                   message: "Update successful!",
@@ -290,6 +306,46 @@ module.exports = {
       .then((reports) => ResHelper.success(res, { report: reports }))
       .catch((err) => ResHelper.error(res, err));
   },
+  getViolentRegconition: (req, res) => {
+    var violentDetails = [];
+    Violent.find()
+    .then( async (violents) => {
+      for(var i = 0; i < violents.length; ++i){
+        try {
+          const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1 })
+          violentDetails.push( { "reviewDetails": reviews, "violentContent": violents[i]});
+        } catch (err) {
+          ResHelper.error(res, err)
+        }
+      }
+      ResHelper.success(res, { violent: violentDetails })
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
+  actionViolent: async (req, res) => {
+    const { action, reviewId, violentId } = req.body;
+    if(!(action.toLowerCase()).localeCompare("accept")){
+      try {
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
+      } catch (err) {
+        ResHelper.error(res, err)
+      }
+    }
+    else if(!(action.toLowerCase()).localeCompare("decline")){
+      try {
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
+      } catch (err) {
+        ResHelper.error(res, err)
+      }
+    }
+    Violent.deleteOne({_id: violentId})
+    .then(() => {
+      ResHelper.success(res, {
+        message: "successful!",
+      });
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
   // -------- //
   // for admin
   getReviwer: (req, res) => {
@@ -300,27 +356,29 @@ module.exports = {
     console.log(allUser + res);
   },
   // ------- //
-  violentRegconition: (req, res) => {
-    const { reviewTitle, reviewDescription, reviewContent } = req.query;
-    var i;
-    var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
-    // var engTitleReplace, engDescriptionReplace, engContentReplace;
-    for (i = 0; i < violent.Thai.word.length; i++) {
-      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], ";;");
-      thaiDescriptionReplace = reviewDescription.replace(
-        violent.Thai.word[i],
-        ";;"
-      );
-      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], ";;");
-    }
-    console.log(thaiTitleReplace);
-    console.log(thaiDescriptionReplace);
-    console.log(thaiContentReplace);
-    console.log(res);
-    // for (i = 0; i < 10; i++){
-    //   engTitleReplace = reviewTitle.replace("", "[]");
-    //   engDescriptionReplace = reviewDescription.replace("", "[]");
-    //   engContentReplace = reviewContent.replace("", "[]");
-    // }
-  },
 };
+
+function violentRegconition(reviewTitle, reviewDescription, reviewContent){
+  var i, allViolent = [];
+    var thaiTitleCheck, thaiDescriptionCheck, thaiContentCheck;
+    var engTitleCheck, engDescriptionCheck, engContentCheck;
+    for (i = 0; i < violent.Thai.word.length; i++) {
+      var thaiWord = violent.Thai.word[i];
+      thaiTitleCheck = (reviewTitle.toLowerCase()).includes(thaiWord);
+      thaiDescriptionCheck = (reviewDescription.toLowerCase()).includes(thaiWord);
+      thaiContentCheck = (reviewContent.toLowerCase()).includes(thaiWord);
+      if(thaiTitleCheck || thaiDescriptionCheck || thaiContentCheck){
+        allViolent.push(thaiWord);
+      }
+    }
+    for (i = 0; i < violent.English.word.length; i++) {
+      var engWord = violent.English.word[i];
+      engTitleCheck = (reviewTitle.toLowerCase()).includes(engWord);
+      engDescriptionCheck = (reviewDescription.toLowerCase()).includes(engWord);
+      engContentCheck = (reviewContent.toLowerCase()).includes(engWord);
+      if(engTitleCheck || engDescriptionCheck || engContentCheck){
+        allViolent.push(engWord);
+      }
+    }
+    return allViolent;
+}
