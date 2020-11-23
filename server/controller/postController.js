@@ -51,12 +51,16 @@ module.exports = {
           });
           newViolent.save()
           .then((violent) => {
-            console.log(violent._id);
+            ResHelper.success(res, {
+              message: "Post with violent!! successful!",
+              review,
+              violent,
+            });
           })
           .catch((err) => ResHelper.error(res, err));
         }
         ResHelper.success(res, {
-          message: "Post successful!",
+          message: "Post without violent successful!",
           review,
         });
       })
