@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1563.385 433.075">
+  <g id="Group_11" data-name="Group 11" transform="translate(-197.615 -181.63)">
+    <path id="Rectangle_19" data-name="Rectangle 19" d="M10,0H1469a50,50,0,0,1,50,50V304a50,50,0,0,1-50,50H50A50,50,0,0,1,0,304V10A10,10,0,0,1,10,0Z" transform="translate(242 260.704)" fill="#fff"/>
+    <path id="Rectangle_18" data-name="Rectangle 18" d="M10,0H1469a50,50,0,0,1,50,50V304a50,50,0,0,1-50,50H50A50,50,0,0,1,0,304V10A10,10,0,0,1,10,0Z" transform="translate(198 225.704)" fill="#fff"/>
+  </g>
+  <path id="Path_3" data-name="Path 3" d="M53.922,0h160.6c11.912,0,21.569,11.163,21.569,24.934V37.4c0,13.771-9.657,24.934-21.569,24.934H0C0,27.908,24.142,0,53.922,0Z" fill="#e10f98"/>
+  <text id="Comment" transform="translate(119.385 41.075)" fill="#fff" font-size="30" font-family="Kanit-Bold, Kanit" font-weight="700"><tspan x="-66.975" y="0">Comment</tspan></text>
+</svg>
