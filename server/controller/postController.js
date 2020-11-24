@@ -4,6 +4,7 @@ const Comment = require("../models/Comment");
 const Favorite = require("../models/Favorite");
 const Followed = require("../models/Followed");
 const violent = require("../violent.json");
+const Violent = require("../models/Violent");
 const User = require("../models/User");
 const Report = require("../models/Report");
 module.exports = {
@@ -25,22 +26,41 @@ module.exports = {
     if (!category) {
       return ResHelper.fail(res, "category is required!");
     }
-
-    console.log(req.user);
+    var status, allViolent = violentRegconition(reviewTitle, reviewDescription, reviewContent);
+    if(allViolent.length){
+      status = "PENDING";
+    }
+    else status = "NORMAL"
     const newReview = Review({
       userId: req.user._id,
       reviewTitle,
       reviewDescription,
       reviewContent,
       category,
+      status,
       imageLink,
     });
 
     newReview
       .save()
       .then((review) => {
+        if(allViolent.length){
+          const newViolent = Violent({
+            reviewId: review._id,
+            violentContent: allViolent
+          });
+          newViolent.save()
+          .then((violent) => {
+            ResHelper.success(res, {
+              message: "Post with violent!! successful!",
+              review,
+              violent,
+            });
+          })
+          .catch((err) => ResHelper.error(res, err));
+        }
         ResHelper.success(res, {
-          message: "Post successful!",
+          message: "Post without violent successful!",
           review,
         });
       })
@@ -59,7 +79,7 @@ module.exports = {
     if (filter === "") {
       // All review
       if (word === "") {
-        Review.find()
+        Review.find({ status: "NORMAL" })
           .sort({ reviewDatetime: 1 })
           .limit(20)
           .skip(20 * (offset - 1))
@@ -71,7 +91,7 @@ module.exports = {
       // search review & no category
       else {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") } })
+          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") }, status: "NORMAL" })
             .sort({ reviewDatetime: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -80,7 +100,7 @@ module.exports = {
             )
             .catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") } })
+          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") }, status: "NORMAL" })
             .sort({ view: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -95,7 +115,7 @@ module.exports = {
     else if (filter === "category") {
       if (word === "") {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ category: category })
+          Review.find({ category: category, status: "NORMAL" })
             .sort({ reviewDatetime: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -104,7 +124,7 @@ module.exports = {
             )
             .catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ category: category })
+          Review.find({ category: category, status: "NORMAL" })
             .sort({ view: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -118,6 +138,7 @@ module.exports = {
           Review.find({
             category: category,
             reviewTitle: { $regex: new RegExp("^" + word, "i") },
+            status: "NORMAL"
           })
             .sort({ reviewDatetime: direction })
             .limit(20)
@@ -130,6 +151,7 @@ module.exports = {
           Review.find({
             category: category,
             reviewTitle: { $regex: new RegExp("^" + word, "i") },
+            status: "NORMAL"
           })
             .sort({ view: direction })
             .limit(20)
@@ -207,19 +229,33 @@ module.exports = {
     if (isNaN(score)) {
       return ResHelper.fail(res, "score is required!");
     }
-    const newFavorite = Favorite({
-      userId: req.user._id,
-      reviewId,
-      score,
-    });
-    newFavorite
-      .save()
-      .then(() => {
-        ResHelper.success(res, {
-          message: "Post successful!",
+    Favorite.findOne({ "userId": req.user._id, "reviewId": reviewId})
+    .then((favorites) => {
+      if(favorites.length){
+        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": Date.now()}})
+        .then(() => {
+          ResHelper.success(res, {
+                  message: "Update successful!",
+          });
+        })
+        .catch((err) => ResHelper.error(res, err)); 
+      }
+      else {
+        const newFavorite = Favorite({
+          userId: req.user._id,
+          reviewId,
+          score,
         });
-      })
-      .catch((err) => ResHelper.error(res, err));
+        newFavorite
+          .save()
+          .then(() => {
+            ResHelper.success(res, {
+              message: "Post successful!",
+            });
+          })
+          .catch((err) => ResHelper.error(res, err));
+      }
+    })
   },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId;
@@ -276,6 +312,46 @@ module.exports = {
       .then((reports) => ResHelper.success(res, { report: reports }))
       .catch((err) => ResHelper.error(res, err));
   },
+  getViolentRegconition: (req, res) => {
+    var violentDetails = [];
+    Violent.find()
+    .then( async (violents) => {
+      for(var i = 0; i < violents.length; ++i){
+        try {
+          const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1 })
+          violentDetails.push( { "reviewDetails": reviews, "violentContent": violents[i]});
+        } catch (err) {
+          ResHelper.error(res, err)
+        }
+      }
+      ResHelper.success(res, { violent: violentDetails })
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
+  actionViolent: async (req, res) => {
+    const { action, reviewId, violentId } = req.body;
+    if(!(action.toLowerCase()).localeCompare("accept")){
+      try {
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
+      } catch (err) {
+        ResHelper.error(res, err)
+      }
+    }
+    else if(!(action.toLowerCase()).localeCompare("decline")){
+      try {
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
+      } catch (err) {
+        ResHelper.error(res, err)
+      }
+    }
+    Violent.deleteOne({_id: violentId})
+    .then(() => {
+      ResHelper.success(res, {
+        message: "successful!",
+      });
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
   // -------- //
   // for admin
   getReviwer: (req, res) => {
@@ -286,27 +362,29 @@ module.exports = {
     console.log(allUser + res);
   },
   // ------- //
-  violentRegconition: (req, res) => {
-    const { reviewTitle, reviewDescription, reviewContent } = req.query;
-    var i;
-    var thaiTitleReplace, thaiDescriptionReplace, thaiContentReplace;
-    // var engTitleReplace, engDescriptionReplace, engContentReplace;
-    for (i = 0; i < violent.Thai.word.length; i++) {
-      thaiTitleReplace = reviewTitle.replace(violent.Thai.word[i], ";;");
-      thaiDescriptionReplace = reviewDescription.replace(
-        violent.Thai.word[i],
-        ";;"
-      );
-      thaiContentReplace = reviewContent.replace(violent.Thai.word[i], ";;");
-    }
-    console.log(thaiTitleReplace);
-    console.log(thaiDescriptionReplace);
-    console.log(thaiContentReplace);
-    console.log(res);
-    // for (i = 0; i < 10; i++){
-    //   engTitleReplace = reviewTitle.replace("", "[]");
-    //   engDescriptionReplace = reviewDescription.replace("", "[]");
-    //   engContentReplace = reviewContent.replace("", "[]");
-    // }
-  },
 };
+
+function violentRegconition(reviewTitle, reviewDescription, reviewContent){
+  var i, allViolent = [];
+    var thaiTitleCheck, thaiDescriptionCheck, thaiContentCheck;
+    var engTitleCheck, engDescriptionCheck, engContentCheck;
+    for (i = 0; i < violent.Thai.word.length; i++) {
+      var thaiWord = violent.Thai.word[i];
+      thaiTitleCheck = (reviewTitle.toLowerCase()).includes(thaiWord);
+      thaiDescriptionCheck = (reviewDescription.toLowerCase()).includes(thaiWord);
+      thaiContentCheck = (reviewContent.toLowerCase()).includes(thaiWord);
+      if(thaiTitleCheck || thaiDescriptionCheck || thaiContentCheck){
+        allViolent.push(thaiWord);
+      }
+    }
+    for (i = 0; i < violent.English.word.length; i++) {
+      var engWord = violent.English.word[i];
+      engTitleCheck = (reviewTitle.toLowerCase()).includes(engWord);
+      engDescriptionCheck = (reviewDescription.toLowerCase()).includes(engWord);
+      engContentCheck = (reviewContent.toLowerCase()).includes(engWord);
+      if(engTitleCheck || engDescriptionCheck || engContentCheck){
+        allViolent.push(engWord);
+      }
+    }
+    return allViolent;
+}
