@@ -28,7 +28,7 @@ module.exports = {
     }
     var status, allViolent = violentRegconition(reviewTitle, reviewDescription, reviewContent);
     if(allViolent.length){
-      status = "PENDING";
+      status = "ALERT";
     }
     else status = "NORMAL"
     const newReview = Review({
@@ -79,7 +79,7 @@ module.exports = {
     if (filter === "") {
       // All review
       if (word === "") {
-        Review.find({ status: "NORMAL" })
+        Review.find({ "$or" : [ {status: "NORMAL"}, {status: "ALERT"}] })
           .sort({ reviewDatetime: 1 })
           .limit(20)
           .skip(20 * (offset - 1))
@@ -289,7 +289,6 @@ module.exports = {
   },
   postReport: (req, res) => {
     const { reviewId, reportReason } = req.body;
-    console.log(reportReason);
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
@@ -298,6 +297,7 @@ module.exports = {
     }
     const newReport = Report({
       reviewId,
+      userId: req.user._id,
       reportReason,
     });
     newReport
@@ -311,9 +311,20 @@ module.exports = {
   },
   // for manager
   getReport: (req, res) => {
+    const allReports = [];
     Report.find()
       .sort({ reportDatetime: -1 })
-      .then((reports) => ResHelper.success(res, { report: reports }))
+      .then((reports) => {
+        reports.forEach(async (element) => {
+          try {
+            const user = await User.findOne({ _id: element.userId }, {username: 1});
+            allReports.push({ reportInfo: element, userInfo: user[0]})
+          } catch (err) {
+            ResHelper.error(res, err);
+          }
+        });
+        ResHelper.success(res, allReports)   
+      })
       .catch((err) => ResHelper.error(res, err));
   },
   getViolentRegconition: (req, res) => {
@@ -366,8 +377,20 @@ module.exports = {
     });
     console.log(allUser + res);
   },
+  banUser: (req, res) => {
+    const userId = req.body.userId;
+    User.updateOne( { _id: userId }, { "$set": {status: "BAN"} } )
+    .then()
+    .catch((err) => ResHelper.error(res, err));
+  },
+  banReview: (req, res) => {
+    const reviewId = req.body.reviewId;
+    Review.updateOne( { _id: reviewId }, { "$set": {status: "BAN"} } )
+    .then()
+    .catch((err) => ResHelper.error(res, err));
+  },
   // ------- //
-  // for dasdboard // จำนวนโพสทั้งหมด, จำนวนโพสที่โดน vio จำนวน user, ที่สมัครใหม่ 1 เดือน role ที่เป็น user
+  // for dasdboard //
   getViolentPendingCount: (req, res) => {
     Violent.countDocuments()
     .then((violents) => {
