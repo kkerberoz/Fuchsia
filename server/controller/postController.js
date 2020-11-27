@@ -380,16 +380,24 @@ module.exports = {
     const { action, reviewId, violentId } = req.body;
     if (!action.toLowerCase().localeCompare("accept")) {
       try {
+<<<<<<< HEAD
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
+=======
         await Review.updateOne(
           { _id: reviewId },
           { $set: { status: "NORMAL" } }
         );
+>>>>>>> 756a5873e9f3b007918187bafecfe127a477dd2c
       } catch (err) {
         ResHelper.error(res, err);
       }
     } else if (!action.toLowerCase().localeCompare("decline")) {
       try {
+<<<<<<< HEAD
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
+=======
         await Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } });
+>>>>>>> 756a5873e9f3b007918187bafecfe127a477dd2c
       } catch (err) {
         ResHelper.error(res, err);
       }
