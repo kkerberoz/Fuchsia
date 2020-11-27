@@ -415,7 +415,11 @@ module.exports = {
     const userId = req.body.userId;
     console.log(userId);
     User.updateOne({ _id: userId }, { $set: { status: "BAN" } })
-      .then()
+      .then(() => {
+        ResHelper.success(res, {
+          message: "successful!",
+        });
+      })
       .catch((err) => ResHelper.error(res, err));
   },
   banReview: (req, res) => {
@@ -425,12 +429,10 @@ module.exports = {
     Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } })
       .then(() => {
         Report.deleteOne({ _id: reportId })
-        .then((reports) => ResHelper.success(res, { report: reports }))
-        .catch((err) => ResHelper.error(res, err));
+          .then((reports) => ResHelper.success(res, { report: reports }))
+          .catch((err) => ResHelper.error(res, err));
       })
       .catch((err) => ResHelper.error(res, err));
-
-    
   },
   // ------- //
   // for dasdboard //

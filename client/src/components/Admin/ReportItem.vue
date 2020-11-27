@@ -1,64 +1,75 @@
 <template>
-  <div class="card-container" v-if="hasData">
-    <div class="card" style="border-radius:20px;width:403; height:272;">
-      <div class="card-content">
-        <br />
-        <div class="content ">
-          <div class="columns">
-            <div class="column" style="padding:20px">
-              <p class="has-text-grey">PostID:</p>
-              <p>
-                {{ ReportItem.reportInfo.reviewId }}
-              </p>
-              <p class="has-text-grey">Post Date:</p>
-              <p>
-                {{ date }}
-              </p>
-              <p class="has-text-grey">Reason:</p>
-              <p>
-                {{ ReportItem.reportInfo.reportReason }}
-              </p>
-              <p class="has-text-grey">Post By:</p>
-              <p>
-                {{ ReportItem.userInfo.username }}
-              </p>
-            </div>
-            <div class="column">
-              <div class="btn-container">
-                <button class="button" style="margin-left:80px" @click="alert">
-                  Alert User
-                </button>
-
-                <button
-                  class=" button"
-                  style="margin-left:80px"
-                  @click="banPost"
-                >
-                  Ban Post
-                </button>
-
-                <button
-                  class="button"
-                  style="margin-left:80px"
-                  @click="banUser"
-                >
-                  Ban User
-                </button>
+  <div>
+    <div class="card-container" v-if="hasData">
+      <div class="card" style="border-radius:20px;width:403; height:272;">
+        <div class="card-content">
+          <br />
+          <div class="content ">
+            <div class="columns">
+              <div class="column" style="padding:20px">
+                <p class="has-text-grey">PostID:</p>
+                <p>
+                  {{ ReportItem.reportInfo.reviewId }}
+                </p>
+                <p class="has-text-grey">Post Date:</p>
+                <p>
+                  {{ date }}
+                </p>
+                <p class="has-text-grey">Reason:</p>
+                <p>
+                  {{ ReportItem.reportInfo.reportReason }}
+                </p>
+                <p class="has-text-grey">Post By:</p>
+                <p>
+                  {{ ReportItem.userInfo.username }}
+                </p>
               </div>
+              <div class="column">
+                <div class="btn-container">
+                  <button
+                    class="button"
+                    style="margin-left:80px"
+                    @click="alert"
+                  >
+                    Alert User
+                  </button>
 
-              <p>
-                <label
-                  class="has-text-secondary"
-                  style="margin-left:80px; cursor: pointer;"
-                  @click="gotoPost(ReportItem.reportInfo.reviewId)"
-                >
-                  View Post >>
-                </label>
-              </p>
+                  <button
+                    class=" button"
+                    style="margin-left:80px"
+                    @click="banPost"
+                  >
+                    Ban Post
+                  </button>
+
+                  <button
+                    class="button"
+                    style="margin-left:80px"
+                    @click="banUser"
+                  >
+                    Ban User
+                  </button>
+                </div>
+
+                <p>
+                  <label
+                    class="has-text-secondary"
+                    style="margin-left:80px; cursor: pointer;"
+                    @click="gotoPost(ReportItem.reportInfo.reviewId)"
+                  >
+                    View Post >>
+                  </label>
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="container" v-if="!hasData">
+      <h1 class="title has-text-primary">
+        Don't have Report Review yet !
+      </h1>
     </div>
   </div>
 </template>
@@ -108,6 +119,7 @@
             userId: this.ReportItem.reportInfo.userId,
           })
           .then(() => {
+            this.$store.dispatch("report/setReportList");
             this.$buefy.toast.open({
               message: "Ban Reviewer Success",
               type: "is-success",
@@ -118,7 +130,7 @@
         axios
           .post(`${API}/banreview`, {
             reviewId: this.ReportItem.reportInfo.reviewId,
-            reportId: this.ReportItem.reportInfo._id
+            reportId: this.ReportItem.reportInfo._id,
           })
           .then(() => {
             this.$store.dispatch("report/setReportList");

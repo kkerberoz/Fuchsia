@@ -1,62 +1,69 @@
 <template>
-  <div class="card-container" v-if="hasData">
-    <div class="card" style="border-radius:20px">
-      <div class="card-content">
-        <p>
-          <label class="title is-4">
-            {{ VioItem.userDetails.username }}
-          </label>
-          <label
-            class="has-text-secondary"
-            style="margin-left:80px; cursor: pointer;"
-            @click="gotoPost(VioItem.violentContent.reviewId)"
-          >
-            View Post >>
-          </label>
-        </p>
-
-        <br />
-        <div class="content ">
-          <label class="has-text-grey">Category: </label>
-          <span v-for="item in VioItem.reviewDetails.category" :key="item">
-            <span>{{ item }} </span>
-          </span>
-
+  <div>
+    <div class="card-container" v-if="hasData">
+      <div class="card" style="border-radius:20px">
+        <div class="card-content">
           <p>
-            <label class="has-text-grey">Title: </label>
-            {{ VioItem.reviewDetails.reviewTitle }}
+            <label class="title is-4">
+              {{ VioItem.userDetails.username }}
+            </label>
+            <label
+              class="has-text-secondary"
+              style="margin-left:80px; cursor: pointer;"
+              @click="gotoPost(VioItem.violentContent.reviewId)"
+            >
+              View Post >>
+            </label>
           </p>
 
-          <label class="has-text-grey">Violence Text: </label>
-          <span
-            v-for="violentWord in VioItem.violentContent.violentContent"
-            :key="violentWord"
-          >
-            <span>{{ violentWord }} </span>
-          </span>
+          <br />
+          <div class="content ">
+            <label class="has-text-grey">Category: </label>
+            <span v-for="item in VioItem.reviewDetails.category" :key="item">
+              <span>{{ item }} </span>
+            </span>
 
-          <p>
-            <label class="has-text-grey">Date: </label>
-            {{ date }}
-            <label class="has-text-grey">Time: </label>
-            {{ time }}
-          </p>
-          <hr />
+            <p>
+              <label class="has-text-grey">Title: </label>
+              {{ VioItem.reviewDetails.reviewTitle }}
+            </p>
 
-          <div class="columns bottom-card" style="margin-top: -20px">
-            <div class="column">
-              <p style="cursor: pointer;" @click="violentAction('accept')">
-                Accept
-              </p>
-            </div>
-            <div class="column">
-              <p style="cursor: pointer;" @click="violentAction('decline')">
-                Decline
-              </p>
+            <label class="has-text-grey">Violence Text: </label>
+            <span
+              v-for="violentWord in VioItem.violentContent.violentContent"
+              :key="violentWord"
+            >
+              <span>{{ violentWord }} </span>
+            </span>
+
+            <p>
+              <label class="has-text-grey">Date: </label>
+              {{ date }}
+              <label class="has-text-grey">Time: </label>
+              {{ time }}
+            </p>
+            <hr />
+
+            <div class="columns bottom-card" style="margin-top: -20px">
+              <div class="column">
+                <p style="cursor: pointer;" @click="violentAction('accept')">
+                  Accept
+                </p>
+              </div>
+              <div class="column">
+                <p style="cursor: pointer;" @click="violentAction('decline')">
+                  Decline
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="container" v-if="!hasData">
+      <h1 class="title has-text-primary">
+        Don't have Violence Content yet !
+      </h1>
     </div>
   </div>
 </template>
