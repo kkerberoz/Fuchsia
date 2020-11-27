@@ -156,17 +156,19 @@
     },
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      axios
-        .get("/api/getuser", {
-          headers: { Authorization: jwt_token },
-        })
-        .then((res) => {
-          this.username = res.data.data.username;
-        })
-        .catch((err) => {
-          throw err;
-          //console.log(err);
-        });
+      if (jwt_token) {
+        axios
+          .get("/api/getuser", {
+            headers: { Authorization: jwt_token },
+          })
+          .then((res) => {
+            this.username = res.data.data.username;
+          })
+          .catch((err) => {
+            throw err;
+            //console.log(err);
+          });
+      }
     },
     methods: {
       createReview() {
