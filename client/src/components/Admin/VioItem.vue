@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container">
+  <div class="card-container" v-if="hasData">
     <div class="card" style="border-radius:20px">
       <div class="card-content">
         <p>
@@ -52,9 +52,14 @@
     props: {
       VioItem: {
         type: Object,
-        required: true,
+        required: false,
       },
     },
+    computed: {
+      hasData() {
+        return this.VioItem != null;
+      }
+    }
   };
 </script>
 

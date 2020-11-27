@@ -1,5 +1,5 @@
 <template>
-  <div class="columns is-mobile is-multiline is-centered">
+  <div class="columns is-mobile is-multiline is-centered" v-if="hasData">
     <div v-for="violence in violenceList" :key="violence.title" class="column is-narrow">
         <vio-item :VioItem = "violence"></vio-item>
     </div>
@@ -22,6 +22,9 @@
     computed: {
       violenceList() {
         return this.$store.getters["report/getViolenceList"];
+      },
+      hasData() {
+        return this.violenceList != null;
       }
     },
     async mounted() {
