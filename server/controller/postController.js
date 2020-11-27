@@ -311,18 +311,18 @@ module.exports = {
   },
   // for manager
   getReport: (req, res) => {
-    const allReports = [];
+    var allReports = [];
     Report.find()
       .sort({ reportDatetime: -1 })
-      .then((reports) => {
-        reports.forEach(async (element) => {
+      .then(async (reports) => {
+        for(var i=0; i<reports.length; ++i){
           try {
-            const user = await User.findOne({ _id: element.userId }, {username: 1});
-            allReports.push({ reportInfo: element, userInfo: user[0]})
+            const user = await User.findOne({ _id: reports[i].userId }, {username: 1});
+            allReports.push({ reportInfo: reports[i], userInfo: user});
           } catch (err) {
             ResHelper.error(res, err);
           }
-        });
+        }
         ResHelper.success(res, allReports)   
       })
       .catch((err) => ResHelper.error(res, err));
