@@ -348,14 +348,14 @@ module.exports = {
     const { action, reviewId, violentId } = req.body;
     if(!(action.toLowerCase()).localeCompare("accept")){
       try {
-        await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
       } catch (err) {
         ResHelper.error(res, err)
       }
     }
     else if(!(action.toLowerCase()).localeCompare("decline")){
       try {
-        await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
+        await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
       } catch (err) {
         ResHelper.error(res, err)
       }

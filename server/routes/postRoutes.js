@@ -18,7 +18,7 @@ router.post("/postfavorite", auth, PostController.postFavorite);
 router.get("/getfavorite", PostController.getFavorite);
 router.get("/getfavoritescore", PostController.getFavoriteScore);
 
-router.post("/postreport", PostController.postReport);
+router.post("/postreport",auth, PostController.postReport);
     // routes for manager
 router.get("/getreport", PostController.getReport);
 router.get("/getviolentregconition", PostController.getViolentRegconition);
@@ -34,3 +34,4 @@ router.get("/getuserscountlastmonth", PostController.getUsersCountLastMonth);
 // ------- //
 
 module.exports = router;
+

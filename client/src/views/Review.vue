@@ -123,8 +123,9 @@
               reportReason: reason,
               reviewId: this.reviewId,
             };
+            const jwt_token = JSON.parse(localStorage.getItem("jwt"));
             axios
-              .post("http://localhost:5000/api/postreport", params)
+              .post("http://localhost:5000/api/postreport", params,{headers: {Authorization: jwt_token}})
               .then(() => {
                 this.$swal({
                   title: "Reported to Admin.",
