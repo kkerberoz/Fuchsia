@@ -46,7 +46,6 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
-          @click="showNav = !showNav"
         >
           <span></span>
           <span></span>
@@ -54,19 +53,11 @@
         </a>
       </div>
 
-      <div
-        id="navbarBasicExample"
-        class="navbar-menu"
-        :class="{ 'is-active': showNav }"
-      >
+      <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-          <router-link
-            :to="{ name: 'Home' }"
-            class="navbar-item"
-            @click="showNav = !showNav"
-          >
+          <a @click="Home" class="navbar-item">
             Home
-          </router-link>
+          </a>
 
           <!-- <router-link
             to="/About"
@@ -97,7 +88,7 @@
 
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons" v-if="!isLoggedin">
+            <div class="buttons" v-if="!loggedIn">
               <router-link to="/Register" class="navbar-item button is-primary">
                 Register
               </router-link>
@@ -105,14 +96,17 @@
                 Login
               </router-link>
             </div>
-            <div class="buttons" v-if="isLoggedin">
-              <a
-                class="navbar-item button is-primary"
-                @click="createReview"
-                style="border-radius:20px;
+            <div class="buttons" v-if="loggedIn">
+              <div v-show="this.role != 'ADMIN'">
+                <a
+                  class="navbar-item button is-primary"
+                  @click="createReview"
+                  style="border-radius:20px;
                 padding-right:20px;padding-left:20px"
-                ><i class="fas fa-plus" style="margin-right:5px"></i>New post
-              </a>
+                  ><i class="fas fa-plus" style="margin-right:5px"></i>New post
+                </a>
+              </div>
+
               <div class="navbar-item">
                 <div class="name-image">
                   <a class="button is-primary" id="userImage"></a>
@@ -142,9 +136,8 @@
   export default {
     data() {
       return {
-        showNav: false,
         username: "",
-        isLoggedin: false,
+        isRole: "",
       };
     },
     mounted() {
@@ -178,7 +171,11 @@
       },
       Home() {
         if (this.$route.name !== "Home") {
-          this.$router.push({ name: "Home" });
+          if (this.role === "ADMIN") {
+            this.$router.push({ name: "ContentVio" });
+          } else {
+            this.$router.push({ name: "Home" });
+          }
         }
       },
     },
@@ -188,6 +185,10 @@
       },
       loggedIn() {
         return this.$store.state.auth.status.loggedIn;
+      },
+      role() {
+        const role = JSON.parse(localStorage.getItem("role"));
+        return role;
       },
     },
     watch: {
@@ -203,9 +204,6 @@
           .catch((err) => {
             console.log(err);
           });
-      },
-      loggedIn() {
-        this.isLoggedin = this.loggedIn;
       },
     },
   };

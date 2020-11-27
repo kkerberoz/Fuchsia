@@ -6,11 +6,12 @@
         <div class="card">
           <div class="card-content">
             <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+              <h4>
+                Total Post:
+              </h4>
+              <h1 style="has-text-primary">
+                {{ totalPost }}
+              </h1>
             </div>
           </div>
         </div>
@@ -19,11 +20,12 @@
         <div class="card">
           <div class="card-content">
             <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+              <h4>
+                Pending Approval:
+              </h4>
+              <h1 style="has-text-primary; color:red">
+                {{ pendingCount }}
+              </h1>
             </div>
           </div>
         </div>
@@ -32,11 +34,12 @@
         <div class="card">
           <div class="card-content">
             <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+              <h4>
+                New Client in this month:
+              </h4>
+              <h1 style="has-text-primary">
+                {{ userLast }}
+              </h1>
             </div>
           </div>
         </div>
@@ -45,11 +48,12 @@
         <div class="card">
           <div class="card-content">
             <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+              <h4>
+                Earning:
+              </h4>
+              <h1 style="has-text-primary">
+                1.1 K $
+              </h1>
             </div>
           </div>
         </div>
@@ -69,8 +73,25 @@
 <script>
   import Menubar from "../../components/Menubar";
   export default {
+    data() {
+      return {
+        totalPost: 0,
+        pendingCount: 0,
+        userLast: 0,
+      };
+    },
     components: {
       Menubar,
+    },
+    async mounted() {
+      await this.$store.dispatch("review/setReviewCount");
+      this.totalPost = this.$store.getters["review/getReviewCount"];
+
+      await this.$store.dispatch("review/setPendingCount");
+      this.pendingCount = this.$store.getters["review/getReviewPendingCount"];
+
+      await this.$store.dispatch("review/setUserCount");
+      this.userLast = this.$store.getters["review/getUserLastMonth"];
     },
   };
 </script>

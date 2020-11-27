@@ -5,6 +5,7 @@ import store from "../store/index";
 import DefaultLayout from "../Layouts/DefaultLayout";
 import AdminLayout from "../Layouts/AdminLayout";
 import axios from "axios";
+import multiguard from "vue-router-multiguard";
 const BASE_API_URL = "http://localhost:5000/api";
 Vue.use(VueRouter);
 
@@ -93,13 +94,14 @@ const routes = [
     path: "/review/:reviewId",
     name: "Review",
     props: true,
+    beforeEnter: checkLogin,
     component: () => import("../views/Review.vue"),
     meta: { layout: DefaultLayout },
   },
   {
     path: "/createreview",
     name: "CreateReview",
-    beforeEnter: guardMyroute,
+    beforeEnter: multiguard([guardMyroute, checkLogin]),
     component: () => import("../views/CreateReview.vue"),
     meta: { layout: DefaultLayout },
   },
@@ -111,13 +113,14 @@ const routes = [
   {
     path: "/admin",
     name: "Admin",
-    beforeEnter: guardMyadmin,
+    beforeEnter: multiguard([guardMyadmin, checkLogin]),
     component: () => import("../views/Admin/AdminIndex.vue"),
     meta: { layout: AdminLayout },
     children: [
       {
         path: "content",
         name: "ContentVio",
+        beforeEnter: multiguard([guardMyadmin, checkLogin]),
         component: () => import("../views/Admin/ContentVio.vue"),
         meta: { layout: AdminLayout },
       },
@@ -126,12 +129,14 @@ const routes = [
   {
     path: "/adminreport",
     name: "AdminReport",
+    beforeEnter: multiguard([guardMyadmin, checkLogin]),
     component: () => import("../views/Admin/AdminReport.vue"),
     meta: { layout: AdminLayout },
     children: [
       {
         path: "report",
         name: "ReportPost",
+        beforeEnter: multiguard([guardMyadmin, checkLogin]),
         component: () => import("../views/Admin/ReportPost.vue"),
         meta: { layout: AdminLayout },
       },

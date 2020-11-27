@@ -20,6 +20,7 @@
 
     computed: {
       reportList() {
+        console.log(this.$store.getters["report/getReportList"]);
         return this.$store.getters["report/getReportList"];
       },
       hasData() {

@@ -1,44 +1,52 @@
 <template>
   <div class="card-container" v-if="hasData">
-    <div class="card" style="border-radius:20px">
+    <div class="card" style="border-radius:20px;width:403; height:272;">
       <div class="card-content">
-        <p>
-          <label class="title is-4">
-            Helloooo
-          </label>
-          <label class="has-text-secondary" style="margin-left:80px">
-            View Post >>
-          </label>
-        </p>
-
         <br />
         <div class="content ">
-          <p>
-            <label class="has-text-grey">Category: </label>
-            Food
-          </p>
-          <p>
-            <label class="has-text-grey">Title: </label>
-            Padthai
-          </p>
-          <p>
-            <label class="has-text-grey">Violence Text: </label>
-            FUCK!
-          </p>
-          <p>
-            <label class="has-text-grey">Date: </label>
-            3030
-            <label class="has-text-grey">Time: </label>
-            20202
-          </p>
-          <hr />
-
-          <div class="columns bottom-card" style="margin-top: -20px">
-            <div class="column">
-              Accept
+          <div class="columns">
+            <div class="column" style="padding:20px">
+              <p class="has-text-grey">PostID:</p>
+              <p>
+                {{ ReportItem.reviewId }}
+              </p>
+              <p class="has-text-grey">Post Date:</p>
+              <p>
+                {{ date }}
+              </p>
+              <p class="has-text-grey">Reason:</p>
+              <p>
+                {{ ReportItem.reportReason }}
+              </p>
+              <p class="has-text-grey">Post By:</p>
+              <p>
+                {{ ReportItem.reportReason }}
+              </p>
             </div>
             <div class="column">
-              Decline
+              <div class="btn-container">
+                <button class="button" style="margin-left:80px">
+                  Alert User
+                </button>
+
+                <button class=" button" style="margin-left:80px">
+                  Ban Post
+                </button>
+
+                <button class="button" style="margin-left:80px">
+                  Ban User
+                </button>
+              </div>
+
+              <p>
+                <label
+                  class="has-text-secondary"
+                  style="margin-left:80px; cursor: pointer;"
+                  @click="gotoPost(ReportItem.reviewId)"
+                >
+                  View Post >>
+                </label>
+              </p>
             </div>
           </div>
         </div>
@@ -59,6 +67,25 @@
       hasData() {
         return this.ReportItem != null;
       },
+      date() {
+        const date = new Date(this.ReportItem.reportDatetime);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      },
+      time() {
+        const date = new Date(this.ReportItem.reportDatetime);
+        const hour = date.getHours();
+        const minute = date.getMinutes();
+        const second = date.getSeconds();
+        return `${hour}:${minute}:${second}`;
+      },
+    },
+    methods: {
+      gotoPost(reviewId) {
+        this.$router.push({ name: "Review", params: { reviewId } });
+      },
     },
   };
 </script>
@@ -68,6 +95,19 @@
     width: 290;
     height: 208;
   }
+  .btn-container {
+    margin-top: 40%;
+    display: flex;
+    flex-direction: column;
+  }
+  .btn-container > button {
+    color: $white;
+    border-radius: 20px;
+    background-color: $primary;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
   .pink-line {
     border-top: 1px solid $secondary;
   }
