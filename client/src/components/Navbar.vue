@@ -46,6 +46,7 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
+          @click="showNav = !showNav"
         >
           <span></span>
           <span></span>
@@ -53,7 +54,11 @@
         </a>
       </div>
 
-      <div id="navbarBasicExample" class="navbar-menu">
+      <div
+        id="navbarBasicExample"
+        class="navbar-menu"
+        :class="{ 'is-active': showNav }"
+      >
         <div class="navbar-start">
           <a @click="Home" class="navbar-item">
             Home
@@ -89,10 +94,18 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons" v-if="!loggedIn">
-              <router-link to="/Register" class="navbar-item button is-primary">
+              <router-link
+                to="/Register"
+                class="navbar-item button is-primary"
+                @click="showNav = !showNav"
+              >
                 Register
               </router-link>
-              <router-link to="/Login" class="navbar-item button is-light">
+              <router-link
+                to="/Login"
+                class="navbar-item button is-light"
+                @click="showNav = !showNav"
+              >
                 Login
               </router-link>
             </div>
@@ -136,6 +149,7 @@
   export default {
     data() {
       return {
+        showNav: false,
         username: "",
         isRole: "",
       };
