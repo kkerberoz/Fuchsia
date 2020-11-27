@@ -116,7 +116,7 @@
       },
       banPost() {
         axios
-          .post(`${API}/banuser`, {
+          .post(`${API}/banreview`, {
             reviewId: this.ReportItem.reportInfo.reviewId,
           })
           .then(() => {
