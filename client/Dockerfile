@@ -7,13 +7,13 @@ WORKDIR /app/client
 
 COPY package.json /app/client/
 
-RUN npm install @vue/cli -g
 
-RUN npm install --only=production
+RUN npm install
 
 # Bundle app source
 COPY . .
 
-RUN npm run build
+ARG ENV
+RUN npm run build:${ENV}
 
 CMD ["npm","run","serve"]
