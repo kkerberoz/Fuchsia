@@ -26,11 +26,15 @@ module.exports = {
     if (!category) {
       return ResHelper.fail(res, "category is required!");
     }
-    var status, allViolent = violentRegconition(reviewTitle, reviewDescription, reviewContent);
-    if(allViolent.length){
+    var status,
+      allViolent = violentRegconition(
+        reviewTitle,
+        reviewDescription,
+        reviewContent
+      );
+    if (allViolent.length) {
       status = "ALERT";
-    }
-    else status = "NORMAL"
+    } else status = "NORMAL";
     const newReview = Review({
       userId: req.user._id,
       reviewTitle,
@@ -44,20 +48,21 @@ module.exports = {
     newReview
       .save()
       .then((review) => {
-        if(allViolent.length){
+        if (allViolent.length) {
           const newViolent = Violent({
             reviewId: review._id,
-            violentContent: allViolent
+            violentContent: allViolent,
           });
-          newViolent.save()
-          .then((violent) => {
-            ResHelper.success(res, {
-              message: "Post with violent!! successful!",
-              review,
-              violent,
-            });
-          })
-          .catch((err) => ResHelper.error(res, err));
+          newViolent
+            .save()
+            .then((violent) => {
+              ResHelper.success(res, {
+                message: "Post with violent!! successful!",
+                review,
+                violent,
+              });
+            })
+            .catch((err) => ResHelper.error(res, err));
         }
         ResHelper.success(res, {
           message: "Post without violent successful!",
@@ -79,7 +84,7 @@ module.exports = {
     if (filter === "") {
       // All review
       if (word === "") {
-        Review.find({ "$or" : [ {status: "NORMAL"}, {status: "ALERT"}] })
+        Review.find({ $or: [{ status: "NORMAL" }, { status: "ALERT" }] })
           .sort({ reviewDatetime: 1 })
           .limit(20)
           .skip(20 * (offset - 1))
@@ -91,7 +96,10 @@ module.exports = {
       // search review & no category
       else {
         if (!sortBy.localeCompare("reviewDatetime"))
-          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") }, status: "NORMAL" })
+          Review.find({
+            reviewTitle: { $regex: new RegExp("^" + word, "i") },
+            status: "NORMAL",
+          })
             .sort({ reviewDatetime: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -100,7 +108,10 @@ module.exports = {
             )
             .catch((err) => ResHelper.error(res, err));
         else if (!sortBy.localeCompare("view")) {
-          Review.find({ reviewTitle: { $regex: new RegExp("^" + word, "i") }, status: "NORMAL" })
+          Review.find({
+            reviewTitle: { $regex: new RegExp("^" + word, "i") },
+            status: "NORMAL",
+          })
             .sort({ view: direction })
             .limit(20)
             .skip(20 * (offset - 1))
@@ -138,7 +149,7 @@ module.exports = {
           Review.find({
             category: category,
             reviewTitle: { $regex: new RegExp("^" + word, "i") },
-            status: "NORMAL"
+            status: "NORMAL",
           })
             .sort({ reviewDatetime: direction })
             .limit(20)
@@ -151,7 +162,7 @@ module.exports = {
           Review.find({
             category: category,
             reviewTitle: { $regex: new RegExp("^" + word, "i") },
-            status: "NORMAL"
+            status: "NORMAL",
           })
             .sort({ view: direction })
             .limit(20)
@@ -169,11 +180,11 @@ module.exports = {
     Review.findOne({ _id: reviewId })
       .then((reviews) => {
         console.log(reviews.userId);
-        User.findOne({ _id: reviews.userId }, {_id: 0, username: 1})
-        .then((users) => {
-          ResHelper.success(res, { reviewInfo: reviews, userInfo: users });
-        })
-        .catch((err) => ResHelper.error(res, err));
+        User.findOne({ _id: reviews.userId }, { _id: 0, username: 1 })
+          .then((users) => {
+            ResHelper.success(res, { reviewInfo: reviews, userInfo: users });
+          })
+          .catch((err) => ResHelper.error(res, err));
       })
       .catch((err) => ResHelper.error(res, err));
   },
@@ -182,7 +193,6 @@ module.exports = {
     Review.deleteOne({ _id: reviewId })
       .then((reviews) => ResHelper.success(res, { review: reviews }))
       .catch((err) => ResHelper.error(res, err));
-      
   },
   deleteComment: (req, res) => {
     const commentId = req.body.commentId;
@@ -233,33 +243,36 @@ module.exports = {
     if (isNaN(score)) {
       return ResHelper.fail(res, "score is required!");
     }
-    Favorite.findOne({ "userId": req.user._id, "reviewId": reviewId})
-    .then((favorites) => {
-      if(favorites.length){
-        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": new Date()}})
-        .then(() => {
-          ResHelper.success(res, {
-                  message: "Update successful!",
+    Favorite.findOne({ userId: req.user._id, reviewId: reviewId }).then(
+      (favorites) => {
+        if (favorites.length) {
+          Favorite.update_one(
+            { _id: favorites._id },
+            { $set: { score: score, favoriteDatetime: new Date() } }
+          )
+            .then(() => {
+              ResHelper.success(res, {
+                message: "Update successful!",
+              });
+            })
+            .catch((err) => ResHelper.error(res, err));
+        } else {
+          const newFavorite = Favorite({
+            userId: req.user._id,
+            reviewId,
+            score,
           });
-        })
-        .catch((err) => ResHelper.error(res, err)); 
+          newFavorite
+            .save()
+            .then(() => {
+              ResHelper.success(res, {
+                message: "Post successful!",
+              });
+            })
+            .catch((err) => ResHelper.error(res, err));
+        }
       }
-      else {
-        const newFavorite = Favorite({
-          userId: req.user._id,
-          reviewId,
-          score,
-        });
-        newFavorite
-          .save()
-          .then(() => {
-            ResHelper.success(res, {
-              message: "Post successful!",
-            });
-          })
-          .catch((err) => ResHelper.error(res, err));
-      }
-    })
+    );
   },
   getFavorite: (req, res) => {
     const reviewId = req.query.reviewId;
@@ -311,62 +324,91 @@ module.exports = {
   },
   // for manager
   getReport: (req, res) => {
-    const allReports = [];
+    var allReports = [];
     Report.find()
       .sort({ reportDatetime: -1 })
-      .then((reports) => {
-        reports.forEach(async (element) => {
+      .then(async (reports) => {
+        for (var i = 0; i < reports.length; ++i) {
           try {
-            const user = await User.findOne({ _id: element.userId }, {username: 1});
-            allReports.push({ reportInfo: element, userInfo: user[0]})
+            const user = await User.findOne(
+              { _id: reports[i].userId },
+              { username: 1 }
+            );
+            allReports.push({ reportInfo: reports[i], userInfo: user });
           } catch (err) {
             ResHelper.error(res, err);
           }
-        });
-        ResHelper.success(res, allReports)   
+        }
+        ResHelper.success(res, allReports);
       })
       .catch((err) => ResHelper.error(res, err));
   },
   getViolentRegconition: (req, res) => {
     var violentDetails = [];
     Violent.find()
-    .then( async (violents) => {
-      for(var i = 0; i < violents.length; ++i){
-        try {
-          const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1, userId: 1 })
-          const users = await User.find({ _id: reviews[0].userId }, { _id: 0, username: 1 })
-          violentDetails.push( { "userDetails": users[0], "reviewDetails": reviews[0], "violentContent": violents[i]});
-        } catch (err) {
-          ResHelper.error(res, err)
+      .then(async (violents) => {
+        for (var i = 0; i < violents.length; ++i) {
+          try {
+            const reviews = await Review.find(
+              { _id: violents[i].reviewId },
+              {
+                _id: 0,
+                reviewTitle: 1,
+                category: 1,
+                reviewDatetime: 1,
+                userId: 1,
+              }
+            );
+            const users = await User.find(
+              { _id: reviews[0].userId },
+              { _id: 0, username: 1 }
+            );
+            violentDetails.push({
+              userDetails: users[0],
+              reviewDetails: reviews[0],
+              violentContent: violents[i],
+            });
+          } catch (err) {
+            ResHelper.error(res, err);
+          }
         }
-      }
-      ResHelper.success(res, violentDetails)
-    })
-    .catch((err) => ResHelper.error(res, err));
+        ResHelper.success(res, violentDetails);
+      })
+      .catch((err) => ResHelper.error(res, err));
   },
   actionViolent: async (req, res) => {
     const { action, reviewId, violentId } = req.body;
-    if(!(action.toLowerCase()).localeCompare("accept")){
+    if (!action.toLowerCase().localeCompare("accept")) {
       try {
+<<<<<<< HEAD
         await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
+=======
+        await Review.updateOne(
+          { _id: reviewId },
+          { $set: { status: "NORMAL" } }
+        );
+>>>>>>> 756a5873e9f3b007918187bafecfe127a477dd2c
       } catch (err) {
-        ResHelper.error(res, err)
+        ResHelper.error(res, err);
       }
-    }
-    else if(!(action.toLowerCase()).localeCompare("decline")){
+    } else if (!action.toLowerCase().localeCompare("decline")) {
       try {
+<<<<<<< HEAD
         await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
+=======
+        await Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } });
+>>>>>>> 756a5873e9f3b007918187bafecfe127a477dd2c
       } catch (err) {
-        ResHelper.error(res, err)
+        ResHelper.error(res, err);
       }
     }
-    Violent.deleteOne({_id: violentId})
-    .then(() => {
-      ResHelper.success(res, {
-        message: "successful!",
-      });
-    })
-    .catch((err) => ResHelper.error(res, err));
+    Violent.deleteOne({ _id: violentId })
+      .then(() => {
+        ResHelper.success(res, {
+          message: "successful!",
+        });
+      })
+      .catch((err) => ResHelper.error(res, err));
   },
   // -------- //
   // for admin
@@ -379,57 +421,58 @@ module.exports = {
   },
   banUser: (req, res) => {
     const userId = req.body.userId;
-    User.updateOne( { _id: userId }, { "$set": {status: "BAN"} } )
-    .then()
-    .catch((err) => ResHelper.error(res, err));
+    User.updateOne({ _id: userId }, { $set: { status: "BAN" } })
+      .then()
+      .catch((err) => ResHelper.error(res, err));
   },
   banReview: (req, res) => {
     const reviewId = req.body.reviewId;
-    Review.updateOne( { _id: reviewId }, { "$set": {status: "BAN"} } )
-    .then()
-    .catch((err) => ResHelper.error(res, err));
+    Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } })
+      .then()
+      .catch((err) => ResHelper.error(res, err));
   },
   // ------- //
   // for dasdboard //
   getViolentPendingCount: (req, res) => {
     Violent.countDocuments()
-    .then((violents) => {
-      ResHelper.success(res, violents)
-    })
-    .catch((err) => ResHelper.error(res, err));
+      .then((violents) => {
+        ResHelper.success(res, violents);
+      })
+      .catch((err) => ResHelper.error(res, err));
   },
   getUsersCountLastMonth: (req, res) => {
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
-    User.countDocuments({ createdAt: { $gte: lastMonth}, role: "USER" })
-    .then((users) => {
-      ResHelper.success(res, users)
-    })
-    .catch((err) => ResHelper.error(res, err));
+    User.countDocuments({ createdAt: { $gte: lastMonth }, role: "USER" })
+      .then((users) => {
+        ResHelper.success(res, users);
+      })
+      .catch((err) => ResHelper.error(res, err));
   },
 };
 
-function violentRegconition(reviewTitle, reviewDescription, reviewContent){
-  var i, allViolent = [];
-    var thaiTitleCheck, thaiDescriptionCheck, thaiContentCheck;
-    var engTitleCheck, engDescriptionCheck, engContentCheck;
-    for (i = 0; i < violent.Thai.word.length; i++) {
-      var thaiWord = violent.Thai.word[i];
-      thaiTitleCheck = (reviewTitle.toLowerCase()).includes(thaiWord);
-      thaiDescriptionCheck = (reviewDescription.toLowerCase()).includes(thaiWord);
-      thaiContentCheck = (reviewContent.toLowerCase()).includes(thaiWord);
-      if(thaiTitleCheck || thaiDescriptionCheck || thaiContentCheck){
-        allViolent.push(thaiWord);
-      }
+function violentRegconition(reviewTitle, reviewDescription, reviewContent) {
+  var i,
+    allViolent = [];
+  var thaiTitleCheck, thaiDescriptionCheck, thaiContentCheck;
+  var engTitleCheck, engDescriptionCheck, engContentCheck;
+  for (i = 0; i < violent.Thai.word.length; i++) {
+    var thaiWord = violent.Thai.word[i];
+    thaiTitleCheck = reviewTitle.toLowerCase().includes(thaiWord);
+    thaiDescriptionCheck = reviewDescription.toLowerCase().includes(thaiWord);
+    thaiContentCheck = reviewContent.toLowerCase().includes(thaiWord);
+    if (thaiTitleCheck || thaiDescriptionCheck || thaiContentCheck) {
+      allViolent.push(thaiWord);
     }
-    for (i = 0; i < violent.English.word.length; i++) {
-      var engWord = violent.English.word[i];
-      engTitleCheck = (reviewTitle.toLowerCase()).includes(engWord);
-      engDescriptionCheck = (reviewDescription.toLowerCase()).includes(engWord);
-      engContentCheck = (reviewContent.toLowerCase()).includes(engWord);
-      if(engTitleCheck || engDescriptionCheck || engContentCheck){
-        allViolent.push(engWord);
-      }
+  }
+  for (i = 0; i < violent.English.word.length; i++) {
+    var engWord = violent.English.word[i];
+    engTitleCheck = reviewTitle.toLowerCase().includes(engWord);
+    engDescriptionCheck = reviewDescription.toLowerCase().includes(engWord);
+    engContentCheck = reviewContent.toLowerCase().includes(engWord);
+    if (engTitleCheck || engDescriptionCheck || engContentCheck) {
+      allViolent.push(engWord);
     }
-    return allViolent;
+  }
+  return allViolent;
 }

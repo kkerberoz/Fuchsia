@@ -9,7 +9,7 @@ const ReportSchema = new mongoose.Schema(
     },
     userId: {
       type: String,
-      required: true,
+      required: true
     },
     reportReason:{
       type: String,

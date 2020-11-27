@@ -46,7 +46,6 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
-          @click="showNav = !showNav"
         >
           <span></span>
           <span></span>
@@ -54,19 +53,11 @@
         </a>
       </div>
 
-      <div
-        id="navbarBasicExample"
-        class="navbar-menu"
-        :class="{ 'is-active': showNav }"
-      >
+      <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-          <router-link
-            :to="{ name: 'Home' }"
-            class="navbar-item"
-            @click="showNav = !showNav"
-          >
+          <a @click="Home" class="navbar-item">
             Home
-          </router-link>
+          </a>
 
           <!-- <router-link
             to="/About"
@@ -106,18 +97,21 @@
               </router-link>
             </div>
             <div class="buttons" v-if="loggedIn">
-              <a
-                class="navbar-item button is-primary"
-                @click="createReview"
-                style="border-radius:20px;
+              <div v-show="this.role != 'ADMIN'">
+                <a
+                  class="navbar-item button is-primary"
+                  @click="createReview"
+                  style="border-radius:20px;
                 padding-right:20px;padding-left:20px"
-                ><i class="fas fa-plus" style="margin-right:5px"></i>New post
-              </a>
+                  ><i class="fas fa-plus" style="margin-right:5px"></i>New post
+                </a>
+              </div>
+
               <div class="navbar-item">
                 <div class="name-image">
                   <a class="button is-primary" id="userImage"></a>
                   <a class="button is-primary" id="userBanner">
-                    {{username}}
+                    {{ username }}
                   </a>
                 </div>
 
@@ -138,23 +132,26 @@
 </template>
 
 <script>
-import axios from "axios";
+  import axios from "axios";
   export default {
     data() {
       return {
-        showNav: false,
-        username: ""
+        username: "",
+        isRole: "",
       };
     },
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}})
-      .then((res) => {
-        this.username = res.data.data.username;
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      axios
+        .get("http://localhost:5000/api/getuser", {
+          headers: { Authorization: jwt_token },
+        })
+        .then((res) => {
+          this.username = res.data.data.username;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     methods: {
       createReview() {
@@ -174,7 +171,11 @@ import axios from "axios";
       },
       Home() {
         if (this.$route.name !== "Home") {
-          this.$router.push({ name: "Home" });
+          if (this.role === "ADMIN") {
+            this.$router.push({ name: "ContentVio" });
+          } else {
+            this.$router.push({ name: "Home" });
+          }
         }
       },
     },
@@ -185,19 +186,26 @@ import axios from "axios";
       loggedIn() {
         return this.$store.state.auth.status.loggedIn;
       },
+      role() {
+        const role = JSON.parse(localStorage.getItem("role"));
+        return role;
+      },
     },
     watch: {
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-        axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}})
-        .then((res) => {
-          this.username = res.data.data.username;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-      }
-    }
+        axios
+          .get("http://localhost:5000/api/getuser", {
+            headers: { Authorization: jwt_token },
+          })
+          .then((res) => {
+            this.username = res.data.data.username;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+    },
   };
 </script>
 
