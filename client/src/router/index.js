@@ -128,6 +128,14 @@ const routes = [
     name: "AdminReport",
     component: () => import("../views/Admin/AdminReport.vue"),
     meta: { layout: AdminLayout },
+    children: [
+      {
+        path: "report",
+        name: "ReportPost",
+        component: () => import("../views/Admin/ReportPost.vue"),
+        meta: { layout: AdminLayout },
+      },
+    ],
   },
 ];
 

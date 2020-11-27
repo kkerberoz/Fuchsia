@@ -31,7 +31,7 @@
       </router-link>
     </div>
     <div class="sidebar-item">
-      <router-link :to="{ name: 'AdminReport' }">
+      <router-link :to="{ name: 'ReportPost' }">
         <i class="fa fa-fw fa-wrench"></i>
       </router-link>
     </div>
