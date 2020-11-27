@@ -8,7 +8,7 @@
             <div class="column" style="padding:20px">
               <p class="has-text-grey">PostID:</p>
               <p>
-                {{ ReportItem.reviewId }}
+                {{ ReportItem.reportInfo.reviewId }}
               </p>
               <p class="has-text-grey">Post Date:</p>
               <p>
@@ -16,24 +16,32 @@
               </p>
               <p class="has-text-grey">Reason:</p>
               <p>
-                {{ ReportItem.reportReason }}
+                {{ ReportItem.reportInfo.reportReason }}
               </p>
               <p class="has-text-grey">Post By:</p>
               <p>
-                {{ ReportItem.reportReason }}
+                {{ ReportItem.userInfo.username }}
               </p>
             </div>
             <div class="column">
               <div class="btn-container">
-                <button class="button" style="margin-left:80px">
+                <button class="button" style="margin-left:80px" @click="alert">
                   Alert User
                 </button>
 
-                <button class=" button" style="margin-left:80px">
+                <button
+                  class=" button"
+                  style="margin-left:80px"
+                  @click="banPost"
+                >
                   Ban Post
                 </button>
 
-                <button class="button" style="margin-left:80px">
+                <button
+                  class="button"
+                  style="margin-left:80px"
+                  @click="banUser"
+                >
                   Ban User
                 </button>
               </div>
@@ -42,7 +50,7 @@
                 <label
                   class="has-text-secondary"
                   style="margin-left:80px; cursor: pointer;"
-                  @click="gotoPost(ReportItem.reviewId)"
+                  @click="gotoPost(ReportItem.reportInfo.reviewId)"
                 >
                   View Post >>
                 </label>
@@ -56,6 +64,8 @@
 </template>
 
 <script>
+  const API = "http://localhost:5000/api";
+  import axios from "axios";
   export default {
     props: {
       ReportItem: {
@@ -68,14 +78,14 @@
         return this.ReportItem != null;
       },
       date() {
-        const date = new Date(this.ReportItem.reportDatetime);
+        const date = new Date(this.ReportItem.reportInfo.reportDatetime);
         const day = date.getDate();
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
       },
       time() {
-        const date = new Date(this.ReportItem.reportDatetime);
+        const date = new Date(this.ReportItem.reportInfo.reportDatetime);
         const hour = date.getHours();
         const minute = date.getMinutes();
         const second = date.getSeconds();
@@ -85,6 +95,37 @@
     methods: {
       gotoPost(reviewId) {
         this.$router.push({ name: "Review", params: { reviewId } });
+      },
+      alert() {
+        this.$buefy.toast.open({
+          message: "Alert Reviewer Success",
+          type: "is-success",
+        });
+      },
+      banUser() {
+        axios
+          .post(`${API}/banuser`, {
+            userId: this.ReportItem.reportInfo.userId,
+          })
+          .then(() => {
+            this.$buefy.toast.open({
+              message: "Ban Reviewer Success",
+              type: "is-success",
+            });
+          });
+      },
+      banPost() {
+        axios
+          .post(`${API}/banuser`, {
+            reviewId: this.ReportItem.reportInfo.reviewId,
+          })
+          .then(() => {
+            this.$store.dispatch("report/setReportList");
+            this.$buefy.toast.open({
+              message: "Ban Review Success",
+              type: "is-success",
+            });
+          });
       },
     },
   };

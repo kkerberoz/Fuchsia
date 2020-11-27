@@ -82,6 +82,8 @@ module.exports = {
             res,
             "You have entered an invalid email or password"
           );
+        } else if (user.status === "BAN") {
+          return ResHelper.fail(res, "You have banned from Fuchsia !!!!!!!");
         }
 
         if (user.isValidPassword(password)) {
