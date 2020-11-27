@@ -28,7 +28,7 @@ module.exports = {
     }
     var status, allViolent = violentRegconition(reviewTitle, reviewDescription, reviewContent);
     if(allViolent.length){
-      status = "PENDING";
+      status = "ALERT";
     }
     else status = "NORMAL"
     const newReview = Review({
@@ -79,7 +79,7 @@ module.exports = {
     if (filter === "") {
       // All review
       if (word === "") {
-        Review.find({ status: "NORMAL" })
+        Review.find({ "$or" : [ {status: "NORMAL"}, {status: "ALERT"}] })
           .sort({ reviewDatetime: 1 })
           .limit(20)
           .skip(20 * (offset - 1))
@@ -311,9 +311,15 @@ module.exports = {
   },
   // for manager
   getReport: (req, res) => {
+    //const allReports = [];
     Report.find()
       .sort({ reportDatetime: -1 })
-      .then((reports) => ResHelper.success(res, { report: reports }))
+      .then((reports) => {
+        // reports.forEach(element => {
+          
+        // });
+        ResHelper.success(res, { report: reports })   
+      })
       .catch((err) => ResHelper.error(res, err));
   },
   getViolentRegconition: (req, res) => {
@@ -366,8 +372,20 @@ module.exports = {
     });
     console.log(allUser + res);
   },
+  banUser: (req, res) => {
+    const userId = req.body.userId;
+    User.updateOne( { _id: userId }, { "$set": {status: "BAN"} } )
+    .then()
+    .catch((err) => ResHelper.error(res, err));
+  },
+  banReview: (req, res) => {
+    const reviewId = req.body.reviewId;
+    User.updateOne( { _id: reviewId }, { "$set": {status: "BAN"} } )
+    .then()
+    .catch((err) => ResHelper.error(res, err));
+  },
   // ------- //
-  // for dasdboard // จำนวนโพสทั้งหมด, จำนวนโพสที่โดน vio จำนวน user, ที่สมัครใหม่ 1 เดือน role ที่เป็น user
+  // for dasdboard //
   getViolentPendingCount: (req, res) => {
     Violent.countDocuments()
     .then((violents) => {

@@ -29,7 +29,7 @@ const ReviewSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["NORMAL", "BAN", "PENDING"],
+      enum: ["NORMAL", "BAN", "ALERT"],
       default: "NORMAL",
     },
     view: {
