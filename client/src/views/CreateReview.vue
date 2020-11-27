@@ -397,19 +397,29 @@
             imageLink: this.imageLink,
             view: 0,
           };
-          this.$store.dispatch("review/postReview", data).then((reviewId) => {
-            console.log("reviewID", reviewId);
-            if (reviewId) {
-              this.$swal({
-                title: "POST CREATED!",
+          if(this.reviewTitle.trim() !== "" && this.content.trim() !== ""){
+            this.$store.dispatch("review/postReview", data).then((reviewId) => {
+              console.log("reviewID", reviewId);
+              if (reviewId) {
+                this.$swal({
+                  title: "POST CREATED!",
+                  text: "Click the button to continue.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                }).then(() =>
+                  this.$router.push({ name: "Review", params: { reviewId } })
+                );
+              }
+            });
+          }
+          else {
+            this.$swal({
+                title: "Please fill the Title and Content!",
                 text: "Click the button to continue.",
-                icon: "success",
+                icon: "warning",
                 confirmButtonColor: " #c6007e",
-              }).then(() =>
-                this.$router.push({ name: "Review", params: { reviewId } })
-              );
-            }
-          });
+              }).then(() => {this.tabStage = 2});
+          }
         } else {
           this.tabStage += 1;
           //next step
