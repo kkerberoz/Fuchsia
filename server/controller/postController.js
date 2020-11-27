@@ -166,11 +166,14 @@ module.exports = {
   },
   getReviewInfo: (req, res) => {
     const reviewId = req.query.reviewId;
-    // console.log(reviewId);
     Review.findOne({ _id: reviewId })
       .then((reviews) => {
-        // console.log(reviews);
-        ResHelper.success(res, { reviewInfo: reviews });
+        console.log(reviews.userId);
+        User.findOne({ _id: reviews.userId }, {_id: 0, username: 1})
+        .then((users) => {
+          ResHelper.success(res, { reviewInfo: reviews, userInfo: users });
+        })
+        .catch((err) => ResHelper.error(res, err));
       })
       .catch((err) => ResHelper.error(res, err));
   },
