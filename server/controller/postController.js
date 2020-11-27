@@ -320,7 +320,7 @@ module.exports = {
       for(var i = 0; i < violents.length; ++i){
         try {
           const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1 })
-          violentDetails.push( { "reviewDetails": reviews, "violentContent": violents[i]});
+          violentDetails.push( { "reviewDetails": reviews[0], "violentContent": violents[i]});
         } catch (err) {
           ResHelper.error(res, err)
         }
@@ -374,7 +374,7 @@ module.exports = {
   getUsersCountLastMonth: (req, res) => {
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
-    User.countDocuments({ createdAt: { $gte: lastMonth} })
+    User.countDocuments({ createdAt: { $gte: lastMonth}, role: "USER" })
     .then((users) => {
       ResHelper.success(res, users)
     })
