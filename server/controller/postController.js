@@ -320,8 +320,7 @@ module.exports = {
         try {
           const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1, userId: 1 })
           const users = await User.find({ _id: reviews[0].userId }, { _id: 0, username: 1 })
-          Object.assign(reviews[0], {username: users[0].username})
-          violentDetails.push( { "reviewDetails": reviews[0], "violentContent": violents[i]});
+          violentDetails.push( { "userDetails": users[0], "reviewDetails": reviews[0], "violentContent": violents[i]});
         } catch (err) {
           ResHelper.error(res, err)
         }
