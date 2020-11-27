@@ -97,7 +97,7 @@
 
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons" v-if="!loggedIn">
+            <div class="buttons" v-if="!isLoggedin">
               <router-link to="/Register" class="navbar-item button is-primary">
                 Register
               </router-link>
@@ -105,7 +105,7 @@
                 Login
               </router-link>
             </div>
-            <div class="buttons" v-if="loggedIn">
+            <div class="buttons" v-if="isLoggedin">
               <a
                 class="navbar-item button is-primary"
                 @click="createReview"
@@ -117,7 +117,7 @@
                 <div class="name-image">
                   <a class="button is-primary" id="userImage"></a>
                   <a class="button is-primary" id="userBanner">
-                    {{username}}
+                    {{ username }}
                   </a>
                 </div>
 
@@ -138,23 +138,27 @@
 </template>
 
 <script>
-import axios from "axios";
+  import axios from "axios";
   export default {
     data() {
       return {
         showNav: false,
-        username: ""
+        username: "",
+        isLoggedin: false,
       };
     },
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}})
-      .then((res) => {
-        this.username = res.data.data.username;
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      axios
+        .get("http://localhost:5000/api/getuser", {
+          headers: { Authorization: jwt_token },
+        })
+        .then((res) => {
+          this.username = res.data.data.username;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     methods: {
       createReview() {
@@ -189,15 +193,21 @@ import axios from "axios";
     watch: {
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-        axios.get("http://localhost:5000/api/getuser", {headers: {Authorization: jwt_token}})
-        .then((res) => {
-          this.username = res.data.data.username;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-      }
-    }
+        axios
+          .get("http://localhost:5000/api/getuser", {
+            headers: { Authorization: jwt_token },
+          })
+          .then((res) => {
+            this.username = res.data.data.username;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+      loggedIn() {
+        this.isLoggedin = this.loggedIn;
+      },
+    },
   };
 </script>
 

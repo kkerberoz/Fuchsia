@@ -1,20 +1,14 @@
-FROM node
+FROM node:14-slim
 
 RUN mkdir -p /app/server
 
 WORKDIR /app/server
 
-COPY package.json * /app/server/
+COPY package.json /app/server/
 
-ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
-
-RUN if [ "$NODE_ENV" = "development" ]; \
-    then npm install;  \
-    else npm install --only=production; \
-    fi
+RUN npm install --only=production
 
 # Bundle app source
-COPY . /app/server/
+COPY . .
 
-CMD  ["npm", "run", "dev"]
+CMD  ["npm", "run", "start"]

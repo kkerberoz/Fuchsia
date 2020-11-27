@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const bodyparser = require("body-parser");
 require("dotenv").config();
 
-
 const { NODE_ENV, PORT, ATLAS_URI } = process.env;
 const port = PORT || 5000;
 const mongoUri = ATLAS_URI || "mongodb://localhost:27017/fuchsia";
