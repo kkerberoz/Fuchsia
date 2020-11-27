@@ -8,14 +8,14 @@ const ViolentSchema = new mongoose.Schema(
       required: true,
     },
     violentContent: {
-      type: String,
+      type: Array,
       required: true,
     },
   },
   {
     timestamps: true,
   }
-);
+); 
 
 
 module.exports = mongoose.model("Violent", ViolentSchema);
