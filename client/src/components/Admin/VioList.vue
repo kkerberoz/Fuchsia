@@ -1,8 +1,8 @@
 <template>
-  <div class="columns is-mobile is-multiline is-centered">
-    <!-- <div v-for="violence in violenceList" :key="violence.title" class="column is-narrow">
+  <div class="columns is-mobile is-multiline is-centered" v-if="hasData">
+    <div v-for="violence in violenceList" :key="violence.title" class="column is-narrow">
         <vio-item :VioItem = "violence"></vio-item>
-    </div> -->
+    </div>
     <vio-item></vio-item>
   </div>
 </template>
@@ -20,9 +20,12 @@
       // },
     },
     computed: {
-      // violenceList() {
-      //   return this.$store.getters["report/getViolenceList"];
-      // }
+      violenceList() {
+        return this.$store.getters["report/getViolenceList"];
+      },
+      hasData() {
+        return this.violenceList != null;
+      }
     },
     async mounted() {
       await this.$store.dispatch("report/setViolenceList" /* maybe something?*/);

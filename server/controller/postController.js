@@ -179,6 +179,7 @@ module.exports = {
     Review.deleteOne({ _id: reviewId })
       .then((reviews) => ResHelper.success(res, { review: reviews }))
       .catch((err) => ResHelper.error(res, err));
+      
   },
   deleteComment: (req, res) => {
     const commentId = req.body.commentId;
