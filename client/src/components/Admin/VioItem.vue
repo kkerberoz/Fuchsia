@@ -4,27 +4,30 @@
       <div class="card-content">
         <p>
           <label class="title is-4">
-            {{VioItem.reviewDetails.reviewTitle}}
+            {{VioItem.userDetails.username}}
           </label>
-          <label class="has-text-secondary" style="margin-left:80px">
+          <label class="has-text-secondary" style="margin-left:80px; cursor: pointer;" @click="gotoPost(VioItem.violentContent.reviewId)">
             View Post >>
           </label>
         </p>
 
         <br />
         <div class="content ">
-          <p>
-            <label class="has-text-grey">Category: </label>
-            {{VioItem.reviewDetails.category}}
-          </p>
+          <label class="has-text-grey">Category: </label>
+          <span v-for="item in VioItem.reviewDetails.category" :key="item">
+            <span>{{item}} </span>
+          </span>
+
           <p>
             <label class="has-text-grey">Title: </label>
             {{VioItem.reviewDetails.reviewTitle}}
           </p>
-          <p>
-            <label class="has-text-grey">Violence Text: </label>
-            FUCK!
-          </p>
+          
+          <label class="has-text-grey">Violence Text: </label>
+          <span v-for="violentWord in VioItem.violentContent.violentContent" :key="violentWord">
+            <span>{{violentWord}} </span>
+          </span>
+          
           <p>
             <label class="has-text-grey">Date: </label>
               {{date}}
@@ -72,6 +75,11 @@
       },
       hasData() {
         return this.VioItem != null;
+      }
+    },
+    methods: {
+      gotoPost(reviewId) {
+        this.$router.push({name: "Review", params: {reviewId}});
       }
     }
   };

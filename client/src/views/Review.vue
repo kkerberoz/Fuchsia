@@ -93,6 +93,7 @@
         return `${date}-${month}-${year}`;
       },
       reviewInfo() {
+        console.log(this.$store.getters["review/getReviewInfo"])
         return this.$store.getters["review/getReviewInfo"];
       },
       hasUserData() {
