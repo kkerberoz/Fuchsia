@@ -118,6 +118,7 @@
         axios
           .post(`${API}/banreview`, {
             reviewId: this.ReportItem.reportInfo.reviewId,
+            reportId: this.ReportItem.reportInfo._id
           })
           .then(() => {
             this.$store.dispatch("report/setReportList");
