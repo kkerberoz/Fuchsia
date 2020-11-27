@@ -4,7 +4,7 @@ class LoginService {
   // Gets token, stores in local storage
 
   static async login(email, password) {
-    const res = await axios.post(`${process.env.BASE_API}/login`, {
+    const res = await axios.post("/api/login", {
       email,
       password,
     });

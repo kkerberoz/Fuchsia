@@ -55,45 +55,37 @@ const review = {
       const params = {
         reviewId,
       };
-      const response = await axios.get(`${process.env.BASE_API}/getcomments`, {
+      const response = await axios.get("/api/getcomments", {
         params,
       });
       context.commit("SET_COMMENT_LIST", response.data.data.comment);
-      console.log("comment list: ", response.data.data.comment);
-      console.log("GET comment list:", response.status);
+      //console.log("comment list: ", response.data.data.comment);
+      //console.log("GET comment list:", response.status);
     },
     setSearchKey(context, key) {
       context.commit("SET_SEARCH_KEY", key);
     },
     async setReviewCount(context) {
-      const response = await axios.get(
-        `${process.env.BASE_API}/getreviewscount`
-      );
+      const response = await axios.get("/api/getreviewscount");
       context.commit("SET_REVIEW_COUNT", response.data.data);
-      console.log("GET reviews count:", response.status);
+      //console.log("GET reviews count:", response.status);
     },
     async setPendingCount(context) {
-      const response = await axios.get(
-        `${process.env.BASE_API}/getviolentpendingcount`
-      );
+      const response = await axios.get("/api/getviolentpendingcount");
       context.commit("SET_PENDING_COUNT", response.data.data);
-      console.log("GET pendding count:", response.status);
+      //console.log("GET pendding count:", response.status);
     },
     async setUserCount(context) {
-      const response = await axios.get(
-        `${process.env.BASE_API}/getuserscountlastmonth`
-      );
+      const response = await axios.get("/api/getuserscountlastmonth");
       context.commit("SET_USER_COUNT", response.data.data);
-      console.log("GET user count:", response.status);
+      //console.log("GET user count:", response.status);
     },
     async postReview(context, reviewData) {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      const response = await axios.post(
-        `${process.env.BASE_API}/postreview`,
-        reviewData,
-        { headers: { Authorization: jwt_token } }
-      );
-      console.log("POST review object:", response.status);
+      const response = await axios.post("/api/postreview", reviewData, {
+        headers: { Authorization: jwt_token },
+      });
+      //console.log("POST review object:", response.status);
       return response.data.data.review._id;
     },
     async getReviewList(context, keyObject) {
@@ -105,18 +97,18 @@ const review = {
         direction: 1,
         offset: keyObject.page,
       };
-      const response = await axios.get(`${process.env.BASE_API}/getreview`, {
+      const response = await axios.get("/api/getreview", {
         params,
       });
 
       context.commit("SET_REVIEW_LIST", response.data.data.review);
-      console.log("GET Review List:", response.status);
-      console.log("data list", response.data.data.review);
+      //console.log("GET Review List:", response.status);
+      //console.log("data list", response.data.data.review);
     },
     async getSearchReviewList(context, keyObject) {
-      // console.log("#$#",keyObject.category)
+      // //console.log("#$#",keyObject.category)
       if (keyObject.word === context.getters.getSearchKey) {
-        // console.log("word : ", keyObject.word)
+        // //console.log("word : ", keyObject.word)
         const params = {
           filter: keyObject.filter,
           word: context.getters.getSearchKey,
@@ -125,29 +117,26 @@ const review = {
           offset: keyObject.page,
           category: keyObject.category,
         };
-        console.log("in the get search");
-        const response = await axios.get(`${process.env.BASE_API}/getreview`, {
+        //console.log("in the get search");
+        const response = await axios.get("/api/getreview", {
           params,
         });
 
         context.commit("SET_REVIEW_LIST", response.data.data.review);
-        console.log("get Review List:", response.status);
-        console.log("data list", response.data.data.review);
+        //console.log("get Review List:", response.status);
+        //console.log("data list", response.data.data.review);
       }
     },
     async getReviewInfo(context, reviewId) {
-      // console.log("id", reviewId)
+      // //console.log("id", reviewId)
       const params = { reviewId: reviewId };
-      const response = await axios.get(
-        `${process.env.BASE_API}/getreviewinfo`,
-        {
-          params,
-        }
-      );
-      // console.log("test:", response.data)
+      const response = await axios.get("/api/getreviewinfo", {
+        params,
+      });
+      // //console.log("test:", response.data)
       context.commit("SET_REVIEW_INFO", response.data.data);
-      console.log("get Review Info:", response.status);
-      console.log("data info", response.data.data);
+      //console.log("get Review Info:", response.status);
+      //console.log("data info", response.data.data);
     },
   },
   getters: {

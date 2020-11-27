@@ -4,7 +4,7 @@ const AuthHelper = require("../helpers/AuthHelper");
 
 module.exports = {
   register: (req, res) => {
-    // console.log(req.body.email);
+    // //console.log(req.body.email);
     const { username, firstName, lastName, password, dob, tel } = req.body;
     const email = req.body.email ? req.body.email.toLowerCase() : undefined;
 
@@ -136,7 +136,7 @@ module.exports = {
       .catch((err) => ResHelper.error(res, err));
   },
   getUserById: (req, res) => {
-    // console.log("HEHE",req.query)
+    // //console.log("HEHE",req.query)
     const userId = req.query.userId;
     User.findOne({ _id: userId })
       .then((user) => {

@@ -114,7 +114,7 @@
       },
       banUser() {
         axios
-          .post(`${process.env.BASE_API}/banuser`, {
+          .post("/api/banuser", {
             userId: this.ReportItem.reportInfo.userId,
           })
           .then(() => {
@@ -127,7 +127,7 @@
       },
       banPost() {
         axios
-          .post(`${process.env.BASE_API}/banreview`, {
+          .post("/api/banreview", {
             reviewId: this.ReportItem.reportInfo.reviewId,
             reportId: this.ReportItem.reportInfo._id,
           })

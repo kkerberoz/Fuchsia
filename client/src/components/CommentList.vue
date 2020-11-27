@@ -77,7 +77,7 @@
         return this.$store.getters["review/getCommentList"];
       },
       isOwner() {
-        console.log(this.userId_in_review);
+        //console.log(this.userId_in_review);
         if (this.userData != null) {
           return this.userId_in_review === this.userData._id;
         }
@@ -85,7 +85,7 @@
       },
     },
     mounted() {
-      console.log("userData", this.userData);
+      //console.log("userData", this.userData);
     },
     methods: {
       postComment() {
@@ -95,7 +95,7 @@
           commentContent: this.commentContent,
         };
         axios
-          .post(`${process.env.BASE_API}/postcomment`, data, {
+          .post("/api/postcomment", data, {
             headers: { Authorization: jwt_token },
           })
           .then(() => {
@@ -116,10 +116,10 @@
     },
     watch: {
       userData() {
-        console.log("userData", this.userData);
+        //console.log("userData", this.userData);
       },
       comments() {
-        console.log("!!!!", this.comments);
+        //console.log("!!!!", this.comments);
       },
     },
   };

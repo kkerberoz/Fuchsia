@@ -2,7 +2,11 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/api": "https://fuchsia-server-skhuzjjwua-uc.a.run.app"
+  },
   "scripts": {
+    "start": "serve -p $PORT dist/",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode development",
@@ -39,6 +43,7 @@
     "node-sass": "^4.12.0",
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
+    "serve": "^11.3.2",
     "vue-template-compiler": "^2.6.11"
   }
 }

@@ -163,7 +163,7 @@
         this.errors = [];
         if (this.formInput.password.length < 6) {
           this.errors.push("password length < 6");
-          console.log("password length < 6 ");
+          //console.log("password length < 6 ");
           this.$swal
             .fire({
               icon: "error",
@@ -177,7 +177,7 @@
             });
         } else if (!isNaN(this.formInput.password)) {
           this.errors.push("password is a number only");
-          console.log("password is a number only");
+          //console.log("password is a number only");
           this.$swal
             .fire({
               icon: "error",
@@ -194,7 +194,7 @@
           this.formInput.password.toLowerCase() === this.formInput.password
         ) {
           this.errors.push("password is lowerCase");
-          console.log("password is lowerCase");
+          //console.log("password is lowerCase");
           this.$swal
             .fire({
               icon: "error",
@@ -211,7 +211,7 @@
           this.formInput.password.toUpperCase() === this.formInput.password
         ) {
           this.errors.push("password is UpperCase");
-          console.log("password is UpperCase");
+          //console.log("password is UpperCase");
           this.$swal
             .fire({
               icon: "error",
@@ -226,7 +226,7 @@
             });
         } else if (this.formInput.password !== this.formInput.conPassword) {
           this.errors.push("password doesn't match");
-          console.log("password doesn't match");
+          //console.log("password doesn't match");
           this.$swal
             .fire({
               icon: "error",
@@ -239,7 +239,7 @@
             });
         } else if (this.formInput.dob === null) {
           this.errors.push("please fill date of birth");
-          console.log("please fill date of birth");
+          //console.log("please fill date of birth");
           this.$swal
             .fire({
               icon: "error",
@@ -252,7 +252,7 @@
             });
         } else if (isNaN(this.formInput.tel)) {
           this.errors.push("tel must be a number");
-          console.log("tel must be a number");
+          //console.log("tel must be a number");
           this.$swal
             .fire({
               icon: "error",
@@ -275,7 +275,7 @@
             this.LowerCheck == 0 &&
             isNaN(this.formInput.password.charAt(i))
           ) {
-            console.log(this.formInput.password.charAt(i));
+            //console.log(this.formInput.password.charAt(i));
             this.count++;
             this.LowerCheck = 1;
           }
@@ -285,7 +285,7 @@
             this.UpperCheck == 0 &&
             isNaN(this.formInput.password.charAt(i))
           ) {
-            console.log(this.formInput.password.charAt(i));
+            //console.log(this.formInput.password.charAt(i));
             this.count++;
             this.UpperCheck = 1;
           }
@@ -293,16 +293,16 @@
             !isNaN(this.formInput.password.charAt(i)) &&
             this.NumberCheck == 0
           ) {
-            console.log(this.formInput.password.charAt(i));
+            //console.log(this.formInput.password.charAt(i));
             this.count++;
             this.NumberCheck = 1;
           }
         }
 
-        // console.log(this.count)
-        // console.log("All char")
-        // console.log(this.formInput.password)
-        // console.log("--------")
+        // //console.log(this.count)
+        // //console.log("All char")
+        // //console.log(this.formInput.password)
+        // //console.log("--------")
         if (this.errors.length === 0 && this.count === 3) {
           let data = {
             username: this.formInput.username,
@@ -331,7 +331,7 @@
             })
             .catch((err) => {
               this.errMessage = err.message;
-              console.log("Error", this.errMessage);
+              //console.log("Error", this.errMessage);
               this.$swal
                 .fire({
                   icon: "error",
@@ -347,7 +347,7 @@
       },
     },
     mounted() {
-      console.log(this.$route.path);
+      //console.log(this.$route.path);
     },
   };
 </script>

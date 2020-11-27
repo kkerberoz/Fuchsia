@@ -11,7 +11,7 @@ class RegisterService {
     dob,
     tel
   ) {
-    const res = await axios.post(`${process.env.BASE_API}/register`, {
+    const res = await axios.post("api/register", {
       username,
       firstName,
       lastName,

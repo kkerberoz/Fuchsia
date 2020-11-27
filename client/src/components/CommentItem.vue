@@ -82,14 +82,14 @@
     },
     methods: {
       deleteComment() {
-        console.log("delete commment", this.comment._id);
+        //console.log("delete commment", this.comment._id);
         axios
-          .post(`${process.env.BASE_API}/deletecomment`, {
+          .post("/api/deletecomment", {
             commentId: this.comment._id,
           })
           .then((res) => {
             if (res.status === 200) {
-              console.log("status delete:", res);
+              //console.log("status delete:", res);
               this.$store.dispatch("review/setCommentList", this.reviewId);
               this.$buefy.toast.open({
                 message: "Comment was deleted.",
@@ -102,7 +102,7 @@
               message: "Something went wrong!",
               type: "is-danger",
             });
-            console.log(err);
+            //console.log(err);
           });
       },
     },
@@ -110,12 +110,12 @@
       const params = {
         userId: this.comment.userId,
       };
-      // console.log("@@",this.comment.userId)
-      const response = await axios.get(`${process.env.BASE_API}/getuserbyid`, {
+      // //console.log("@@",this.comment.userId)
+      const response = await axios.get("/api/getuserbyid", {
         params,
       });
       this.username = response.data.data.username;
-      console.log("this is comment data", this.comment);
+      //console.log("this is comment data", this.comment);
     },
   };
 </script>

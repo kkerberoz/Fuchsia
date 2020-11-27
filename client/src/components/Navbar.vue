@@ -143,14 +143,15 @@
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
       axios
-        .get(`${process.env.BASE_API}/getuser`, {
+        .get("/api/getuser", {
           headers: { Authorization: jwt_token },
         })
         .then((res) => {
           this.username = res.data.data.username;
         })
         .catch((err) => {
-          console.log(err);
+          throw err;
+          //console.log(err);
         });
     },
     methods: {
@@ -195,14 +196,15 @@
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
         axios
-          .get(`${process.env.BASE_API}/getuser`, {
+          .get("/api/getuser", {
             headers: { Authorization: jwt_token },
           })
           .then((res) => {
             this.username = res.data.data.username;
           })
           .catch((err) => {
-            console.log(err);
+            throw err;
+            //console.log(err);
           });
       },
     },

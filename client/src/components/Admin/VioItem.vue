@@ -107,7 +107,7 @@
           reviewId: this.VioItem.violentContent.reviewId,
           violentId: this.VioItem.violentContent._id,
         };
-        axios.post(`${process.env.BASE_API}/actionviolent`, data).then(() => {
+        axios.post("/api/actionviolent", data).then(() => {
           this.$store.dispatch("report/setViolenceList");
         });
       },

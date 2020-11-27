@@ -78,7 +78,7 @@ module.exports = {
   },
   getReviews: (req, res) => {
     const { filter, word, category, sortBy, direction, offset } = req.query;
-    //console.log(filter);
+    ////console.log(filter);
 
     //no category
     if (filter === "") {
@@ -179,7 +179,7 @@ module.exports = {
     const reviewId = req.query.reviewId;
     Review.findOne({ _id: reviewId })
       .then((reviews) => {
-        console.log(reviews.userId);
+        //console.log(reviews.userId);
         User.findOne({ _id: reviews.userId }, { _id: 0, username: 1 })
           .then((users) => {
             ResHelper.success(res, { reviewInfo: reviews, userInfo: users });
@@ -209,7 +209,7 @@ module.exports = {
     if (!commentContent) {
       return ResHelper.fail(res, "comment content is required!");
     }
-    console.log(req.user);
+    //console.log(req.user);
     const newComment = Comment({
       userId: req.user._id,
       reviewId,
@@ -226,7 +226,7 @@ module.exports = {
   },
   getComments: (req, res) => {
     const reviewId = req.query.reviewId;
-    // console.log("HERE", reviewId);
+    // //console.log("HERE", reviewId);
     Comment.find({ reviewId: reviewId })
       .then((comments) =>
         ResHelper.success(res, { comment: comments, count: comments.length })
@@ -236,7 +236,7 @@ module.exports = {
   // favorite
   postFavorite: (req, res) => {
     const { reviewId, score } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
@@ -284,7 +284,7 @@ module.exports = {
   },
   getFavoriteScore: (req, res) => {
     const { userId, reviewId } = req.query;
-    // console.log(req.query)
+    // //console.log(req.query)
     Favorite.findOne(
       { userId: userId, reviewId: reviewId },
       { _id: 0, score: 1 }
@@ -409,11 +409,11 @@ module.exports = {
     var allUser = User.find({
       firstName: { $regex: new RegExp("^" + name, "i") },
     });
-    console.log(allUser + res);
+    //console.log(allUser + res);
   },
   banUser: (req, res) => {
     const userId = req.body.userId;
-    console.log(userId);
+    //console.log(userId);
     User.updateOne({ _id: userId }, { $set: { status: "BAN" } })
       .then(() => {
         ResHelper.success(res, {
@@ -425,7 +425,7 @@ module.exports = {
   banReview: (req, res) => {
     const reviewId = req.body.reviewId;
     const reportId = req.body.reportId;
-    console.log("!!", reportId);
+    //console.log("!!", reportId);
     Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } })
       .then(() => {
         Report.deleteOne({ _id: reportId })

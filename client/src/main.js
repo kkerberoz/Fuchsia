@@ -5,6 +5,9 @@ import store from "./store";
 import Buefy from "buefy";
 import VueSweetalert2 from "vue-sweetalert2";
 import vueDebounce from "vue-debounce";
+import axios from "axios";
+
+axios.defaults.baseURL = "https://fuchsia-server-skhuzjjwua-uc.a.run.app";
 
 Vue.config.productionTip = false;
 
@@ -15,7 +18,7 @@ Vue.use(VueSweetalert2);
 
 Vue.use(vueDebounce, {
   listenTo: "input",
-  defaultTime: "700ms"
+  defaultTime: "700ms",
 });
 
 new Vue({

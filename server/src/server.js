@@ -16,7 +16,7 @@ mongoose.connect(mongoUri, {
   useUnifiedTopology: true,
 });
 mongoose.connection.once("open", () =>
-  console.log("MongoDB database connection established successfully!")
+  //console.log("MongoDB database connection established successfully!")
 );
 
 // Set up middleware
@@ -29,7 +29,7 @@ app.use(cookieParser());
 // API routes
 app.get("/", (req, res) => {
   res.send("hello");
-  console.log("Hello");
+  //console.log("Hello");
 });
 
 app.use("/api", require("../routes/authRoutes"));
@@ -40,7 +40,7 @@ app.use("/api", require("../routes/postRoutes"));
 // });
 
 app.listen(port, () => {
-  console.log(
+  //console.log(
     `Server started in ${NODE_ENV} mode. Server started on port ${port}`
   );
 });

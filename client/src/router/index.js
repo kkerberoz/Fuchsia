@@ -45,10 +45,10 @@ function checkLogin(to, from, next) {
       next("/login");
     } else {
       axios
-        .get(`${process.env.BASE_API}/checklogin`, { params })
+        .get("/api/checklogin", { params })
         .then((token) => {
           const exp = token.data.data.decode.exp;
-          console.log(exp);
+          //console.log(exp);
           if (Date.now() >= exp * 1000) {
             this.$store.dispatch("auth/logout").then(() => {
               next("/login");
@@ -59,7 +59,7 @@ function checkLogin(to, from, next) {
         })
         .catch((err) => {
           next("/login");
-          console.log("error", err);
+          //console.log("error", err);
         });
     }
   } else {

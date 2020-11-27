@@ -397,9 +397,9 @@
             imageLink: this.imageLink,
             view: 0,
           };
-          if(this.reviewTitle.trim() !== "" && this.content.trim() !== ""){
+          if (this.reviewTitle.trim() !== "" && this.content.trim() !== "") {
             this.$store.dispatch("review/postReview", data).then((reviewId) => {
-              console.log("reviewID", reviewId);
+              //console.log("reviewID", reviewId);
               if (reviewId) {
                 this.$swal({
                   title: "POST CREATED!",
@@ -411,14 +411,15 @@
                 );
               }
             });
-          }
-          else {
+          } else {
             this.$swal({
-                title: "Please fill the Title and Content!",
-                text: "Click the button to continue.",
-                icon: "warning",
-                confirmButtonColor: " #c6007e",
-              }).then(() => {this.tabStage = 2});
+              title: "Please fill the Title and Content!",
+              text: "Click the button to continue.",
+              icon: "warning",
+              confirmButtonColor: " #c6007e",
+            }).then(() => {
+              this.tabStage = 2;
+            });
           }
         } else {
           this.tabStage += 1;
@@ -430,7 +431,7 @@
       },
     },
     mounted() {
-      console.log(this.reviewId);
+      //console.log(this.reviewId);
     },
     watch: {
       Camera() {
