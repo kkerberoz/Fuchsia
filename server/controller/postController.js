@@ -363,6 +363,14 @@ module.exports = {
   },
   // ------- //
   // for dasdboard // จำนวนโพสทั้งหมด, จำนวนโพสที่โดน vio จำนวน user, ที่สมัครใหม่ 1 เดือน role ที่เป็น user
+  getViolentPendingCount: (req, res) => {
+    Violent.countDocuments()
+    .then((violents) => {
+      ResHelper.success(res, violents)
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
+  
   
 };
 
