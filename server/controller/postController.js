@@ -289,7 +289,6 @@ module.exports = {
   },
   postReport: (req, res) => {
     const { reviewId, reportReason } = req.body;
-    console.log(reportReason);
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
@@ -298,6 +297,7 @@ module.exports = {
     }
     const newReport = Report({
       reviewId,
+      userId: req.user._id,
       reportReason,
     });
     newReport
@@ -311,14 +311,19 @@ module.exports = {
   },
   // for manager
   getReport: (req, res) => {
-    //const allReports = [];
+    const allReports = [];
     Report.find()
       .sort({ reportDatetime: -1 })
       .then((reports) => {
-        // reports.forEach(element => {
-          
-        // });
-        ResHelper.success(res, { report: reports })   
+        reports.forEach(async (element) => {
+          try {
+            const user = await User.findOne({ _id: element.userId }, {username: 1});
+            allReports.push({ reportInfo: element, userInfo: user[0]})
+          } catch (err) {
+            ResHelper.error(res, err);
+          }
+        });
+        ResHelper.success(res, allReports)   
       })
       .catch((err) => ResHelper.error(res, err));
   },
