@@ -24,8 +24,10 @@ router.get("/getreport", PostController.getReport);
 router.get("/getviolentregconition", PostController.getViolentRegconition);
 router.post("/actionviolent", PostController.actionViolent);
 
-// for user
+    // for user
 router.get("/getreviewer", PostController.getReviwer);
+    // for dashboard
+
 // ------- //
 
 module.exports = router;

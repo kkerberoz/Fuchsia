@@ -1,7 +1,10 @@
+// this is example profanity word //
 {
     "Thai": {
         "word": [
-            "เหี้ย"
+            "เหี้ย",
+            "ควย",
+            "หี"
             
     
     
@@ -10,8 +13,10 @@
     "English": {
         "word": [
             "fuck",
-            "shit"
-
+            "shit",
+            "damn",
+            "bitch",
+            "crap"
         ]
     }
 

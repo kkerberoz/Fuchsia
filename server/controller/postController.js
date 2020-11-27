@@ -362,6 +362,8 @@ module.exports = {
     console.log(allUser + res);
   },
   // ------- //
+  // for dasdboard // จำนวนโพสทั้งหมด, จำนวนโพสที่โดน vio จำนวน user, ที่สมัครใหม่ 1 เดือน role ที่เป็น user
+  
 };
 
 function violentRegconition(reviewTitle, reviewDescription, reviewContent){
