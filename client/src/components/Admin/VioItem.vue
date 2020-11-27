@@ -4,7 +4,7 @@
       <div class="card-content">
         <p>
           <label class="title is-4">
-            Helloooo
+            {{VioItem.reviewDetails.reviewTitle}}
           </label>
           <label class="has-text-secondary" style="margin-left:80px">
             View Post >>
@@ -15,11 +15,11 @@
         <div class="content ">
           <p>
             <label class="has-text-grey">Category: </label>
-            Food
+            {{VioItem.reviewDetails.category}}
           </p>
           <p>
             <label class="has-text-grey">Title: </label>
-            Padthai
+            {{VioItem.reviewDetails.reviewTitle}}
           </p>
           <p>
             <label class="has-text-grey">Violence Text: </label>
@@ -27,18 +27,18 @@
           </p>
           <p>
             <label class="has-text-grey">Date: </label>
-            3030
+              {{date}}
             <label class="has-text-grey">Time: </label>
-            20202
+              {{time}}
           </p>
           <hr />
 
           <div class="columns bottom-card" style="margin-top: -20px">
             <div class="column">
-              Accept
+              <p style="cursor: pointer;">Accept</p>
             </div>
             <div class="column">
-              Decline
+              <p style="cursor: pointer;">Decline</p> 
             </div>
           </div>
         </div>
@@ -56,6 +56,20 @@
       },
     },
     computed: {
+      date() {
+        const date = new Date(this.VioItem.reviewDetails.reviewDatetime);
+        const day = date.getDate();
+        const month = date.getMonth() +1;
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`; 
+      },
+      time() {
+        const date = new Date(this.VioItem.reviewDetails.reviewDatetime);
+        const hour = date.getHours();
+        const minute = date.getMinutes();
+        const second = date.getSeconds();
+        return `${hour}:${minute}:${second}`;
+      },
       hasData() {
         return this.VioItem != null;
       }
