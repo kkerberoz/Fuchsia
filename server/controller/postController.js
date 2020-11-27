@@ -175,7 +175,7 @@ module.exports = {
       .catch((err) => ResHelper.error(res, err));
   },
   deleteReview: (req, res) => {
-    const reviewId = req.query.reviewId;
+    const reviewId = req.body.reviewId;
     Review.deleteOne({ _id: reviewId })
       .then((reviews) => ResHelper.success(res, { review: reviews }))
       .catch((err) => ResHelper.error(res, err));

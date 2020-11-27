@@ -3,14 +3,16 @@
     <vio-list></vio-list>
   </section>
 </template>
+
 <script>
-  import Violist from "../../components/Admin/VioList";
+  import VioList from "../../components/Admin/VioList";
   export default {
     components: {
-      "vio-list": Violist,
+      VioList,
     },
   };
 </script>
+
 <style scoped>
   .error-style-page {
     color: black;
