@@ -232,7 +232,7 @@ module.exports = {
     Favorite.findOne({ "userId": req.user._id, "reviewId": reviewId})
     .then((favorites) => {
       if(favorites.length){
-        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": Date.now()}})
+        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": new Date()}})
         .then(() => {
           ResHelper.success(res, {
                   message: "Update successful!",
@@ -324,7 +324,7 @@ module.exports = {
           ResHelper.error(res, err)
         }
       }
-      ResHelper.success(res, { violent: violentDetails })
+      ResHelper.success(res, violentDetails)
     })
     .catch((err) => ResHelper.error(res, err));
   },
@@ -370,8 +370,15 @@ module.exports = {
     })
     .catch((err) => ResHelper.error(res, err));
   },
-  
-  
+  getUsersCountLastMonth: (req, res) => {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    User.countDocuments({ createdAt: { $gte: lastMonth} })
+    .then((users) => {
+      ResHelper.success(res, users)
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
 };
 
 function violentRegconition(reviewTitle, reviewDescription, reviewContent){

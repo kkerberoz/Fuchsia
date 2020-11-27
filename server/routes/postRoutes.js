@@ -28,6 +28,7 @@ router.post("/actionviolent", PostController.actionViolent);
 router.get("/getreviewer", PostController.getReviwer);
     // for dashboard
 router.get("/getviolentpendingcount", PostController.getViolentPendingCount);
+router.get("/getuserscountlastmonth", PostController.getUsersCountLastMonth);
 // ------- //
 
 module.exports = router;
