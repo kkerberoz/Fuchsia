@@ -380,7 +380,7 @@ module.exports = {
   },
   banReview: (req, res) => {
     const reviewId = req.body.reviewId;
-    User.updateOne( { _id: reviewId }, { "$set": {status: "BAN"} } )
+    Review.updateOne( { _id: reviewId }, { "$set": {status: "BAN"} } )
     .then()
     .catch((err) => ResHelper.error(res, err));
   },
