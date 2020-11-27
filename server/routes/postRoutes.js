@@ -23,6 +23,8 @@ router.post("/postreport", PostController.postReport);
 router.get("/getreport", PostController.getReport);
 router.get("/getviolentregconition", PostController.getViolentRegconition);
 router.post("/actionviolent", PostController.actionViolent);
+router.post("/banuser", PostController.banUser);
+router.post("/banreview", PostController.banReview);
 
     // for user
 router.get("/getreviewer", PostController.getReviwer);
