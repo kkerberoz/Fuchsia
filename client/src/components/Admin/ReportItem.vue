@@ -75,7 +75,6 @@
 </template>
 
 <script>
-  const API = "http://localhost:5000/api";
   import axios from "axios";
   export default {
     props: {
@@ -115,7 +114,7 @@
       },
       banUser() {
         axios
-          .post(`${API}/banuser`, {
+          .post(`${process.env.BASE_API}/banuser`, {
             userId: this.ReportItem.reportInfo.userId,
           })
           .then(() => {
@@ -128,7 +127,7 @@
       },
       banPost() {
         axios
-          .post(`${API}/banreview`, {
+          .post(`${process.env.BASE_API}/banreview`, {
             reviewId: this.ReportItem.reportInfo.reviewId,
             reportId: this.ReportItem.reportInfo._id,
           })

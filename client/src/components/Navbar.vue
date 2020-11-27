@@ -143,7 +143,7 @@
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
       axios
-        .get("http://localhost:5000/api/getuser", {
+        .get(`${process.env.BASE_API}/getuser`, {
           headers: { Authorization: jwt_token },
         })
         .then((res) => {
@@ -195,7 +195,7 @@
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
         axios
-          .get("http://localhost:5000/api/getuser", {
+          .get(`${process.env.BASE_API}/getuser`, {
             headers: { Authorization: jwt_token },
           })
           .then((res) => {

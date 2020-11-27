@@ -69,7 +69,6 @@
 </template>
 
 <script>
-  const API = "http://localhost:5000/api";
   import axios from "axios";
 
   export default {
@@ -108,7 +107,7 @@
           reviewId: this.VioItem.violentContent.reviewId,
           violentId: this.VioItem.violentContent._id,
         };
-        axios.post(`${API}/actionviolent`, data).then(() => {
+        axios.post(`${process.env.BASE_API}/actionviolent`, data).then(() => {
           this.$store.dispatch("report/setViolenceList");
         });
       },

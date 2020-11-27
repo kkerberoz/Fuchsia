@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const url = "http://localhost:5000/api/register";
-
 class RegisterService {
   // Creates the user, gets token and stores it in local storage
   static async register(
@@ -13,7 +11,7 @@ class RegisterService {
     dob,
     tel
   ) {
-    const res = await axios.post(url, {
+    const res = await axios.post(`${process.env.BASE_API}/register`, {
       username,
       firstName,
       lastName,

@@ -84,7 +84,7 @@
       deleteComment() {
         console.log("delete commment", this.comment._id);
         axios
-          .post("http://localhost:5000/api/deletecomment", {
+          .post(`${process.env.BASE_API}/deletecomment`, {
             commentId: this.comment._id,
           })
           .then((res) => {
@@ -111,10 +111,9 @@
         userId: this.comment.userId,
       };
       // console.log("@@",this.comment.userId)
-      const response = await axios.get(
-        "http://localhost:5000/api/getuserbyid",
-        { params }
-      );
+      const response = await axios.get(`${process.env.BASE_API}/getuserbyid`, {
+        params,
+      });
       this.username = response.data.data.username;
       console.log("this is comment data", this.comment);
     },

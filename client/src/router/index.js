@@ -6,7 +6,7 @@ import DefaultLayout from "../Layouts/DefaultLayout";
 import AdminLayout from "../Layouts/AdminLayout";
 import axios from "axios";
 import multiguard from "vue-router-multiguard";
-const BASE_API_URL = "http://localhost:5000/api";
+
 Vue.use(VueRouter);
 
 //guard router
@@ -45,7 +45,7 @@ function checkLogin(to, from, next) {
       next("/login");
     } else {
       axios
-        .get(`${BASE_API_URL}/checklogin`, { params })
+        .get(`${process.env.BASE_API}/checklogin`, { params })
         .then((token) => {
           const exp = token.data.data.decode.exp;
           console.log(exp);

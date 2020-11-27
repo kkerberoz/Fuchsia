@@ -95,7 +95,7 @@
           commentContent: this.commentContent,
         };
         axios
-          .post("http://localhost:5000/api/postcomment", data, {
+          .post(`${process.env.BASE_API}/postcomment`, data, {
             headers: { Authorization: jwt_token },
           })
           .then(() => {

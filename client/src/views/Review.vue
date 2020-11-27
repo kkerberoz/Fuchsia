@@ -86,7 +86,11 @@
     },
     computed: {
       hasData() {
-        return this.reviewInfo != null && this.usernameOwner != null && this.hasUserData;
+        return (
+          this.reviewInfo != null &&
+          this.usernameOwner != null &&
+          this.hasUserData
+        );
       },
       datetime() {
         const datetimeObj = new Date(this.reviewInfo.reviewDatetime);
@@ -125,7 +129,9 @@
             };
             const jwt_token = JSON.parse(localStorage.getItem("jwt"));
             axios
-              .post("http://localhost:5000/api/postreport", params,{headers: {Authorization: jwt_token}})
+              .post(`${process.env.BASE_API}/postreport`, params, {
+                headers: { Authorization: jwt_token },
+              })
               .then(() => {
                 this.$swal({
                   title: "Reported to Admin.",
@@ -157,7 +163,7 @@
         }).then((result) => {
           if (result.isConfirmed) {
             axios
-              .post("http://localhost:5000/api/deletereview", {
+              .post(`${process.env.BASE_API}/deletereview`, {
                 reviewId: this.reviewId,
               })
               .then((response) => {
@@ -181,20 +187,22 @@
       this.$store.dispatch("review/getReviewInfo", this.reviewId);
       this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      const response = await axios.get("http://localhost:5000/api/getuser", {
+      const response = await axios.get(`${process.env.BASE_API}/getuser`, {
         headers: { Authorization: jwt_token },
       });
       console.log("this is res", response.data);
       this.userData = response.data.data;
-      this.isOwner = await this.reviewInfo.userId === response.data.data._id ? true : false;
+      this.isOwner =
+        (await this.reviewInfo.userId) === response.data.data._id
+          ? true
+          : false;
       const params = {
         userId: this.userData._id,
         reviewId: this.reviewId,
       };
-      const res = await axios.get(
-        "http://localhost:5000/api/getfavoritescore",
-        { params }
-      );
+      const res = await axios.get(`${process.env.BASE_API}/getfavoritescore`, {
+        params,
+      });
       if (res.data.data.favoriteScore != null) {
         console.log("!", res.data.data.favoriteScore.score);
         this.score = res.data.data.favoriteScore.score;
@@ -209,7 +217,7 @@
           score: this.score,
         };
         axios
-          .post("http://localhost:5000/api/postfavorite", data, {
+          .post(`${process.env.BASE_API}/postfavorite`, data, {
             headers: { Authorization: jwt_token },
           })
           .then((res) => {
