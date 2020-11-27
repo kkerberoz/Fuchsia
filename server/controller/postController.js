@@ -233,7 +233,7 @@ module.exports = {
     Favorite.findOne({ "userId": req.user._id, "reviewId": reviewId})
     .then((favorites) => {
       if(favorites.length){
-        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": Date.now()}})
+        Favorite.update_one({_id: favorites._id}, { "$set": { "score": score, "favoriteDatetime": new Date()}})
         .then(() => {
           ResHelper.success(res, {
                   message: "Update successful!",
@@ -325,7 +325,7 @@ module.exports = {
           ResHelper.error(res, err)
         }
       }
-      ResHelper.success(res, { violent: violentDetails })
+      ResHelper.success(res, violentDetails)
     })
     .catch((err) => ResHelper.error(res, err));
   },
@@ -363,6 +363,23 @@ module.exports = {
     console.log(allUser + res);
   },
   // ------- //
+  // for dasdboard // จำนวนโพสทั้งหมด, จำนวนโพสที่โดน vio จำนวน user, ที่สมัครใหม่ 1 เดือน role ที่เป็น user
+  getViolentPendingCount: (req, res) => {
+    Violent.countDocuments()
+    .then((violents) => {
+      ResHelper.success(res, violents)
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
+  getUsersCountLastMonth: (req, res) => {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    User.countDocuments({ createdAt: { $gte: lastMonth} })
+    .then((users) => {
+      ResHelper.success(res, users)
+    })
+    .catch((err) => ResHelper.error(res, err));
+  },
 };
 
 function violentRegconition(reviewTitle, reviewDescription, reviewContent){
