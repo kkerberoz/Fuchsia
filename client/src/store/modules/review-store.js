@@ -113,9 +113,9 @@ const review = {
             const params = { reviewId: reviewId }
             const response = await axios.get(`${BASE_API_URL}/getreviewinfo`, {params});
             // console.log("test:", response.data)
-            context.commit("SET_REVIEW_INFO", response.data.data.reviewInfo);
+            context.commit("SET_REVIEW_INFO", response.data.data);
             console.log("get Review Info:", response.status);
-            console.log("data info",response.data.data.reviewInfo);
+            console.log("data info",response.data.data);
         }
     },
     getters: {
