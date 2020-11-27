@@ -166,11 +166,14 @@ module.exports = {
   },
   getReviewInfo: (req, res) => {
     const reviewId = req.query.reviewId;
-    // console.log(reviewId);
     Review.findOne({ _id: reviewId })
       .then((reviews) => {
-        // console.log(reviews);
-        ResHelper.success(res, { reviewInfo: reviews });
+        console.log(reviews.userId);
+        User.findOne({ _id: reviews.userId }, {_id: 0, username: 1})
+        .then((users) => {
+          ResHelper.success(res, { reviewInfo: reviews, userInfo: users });
+        })
+        .catch((err) => ResHelper.error(res, err));
       })
       .catch((err) => ResHelper.error(res, err));
   },
@@ -319,8 +322,9 @@ module.exports = {
     .then( async (violents) => {
       for(var i = 0; i < violents.length; ++i){
         try {
-          const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1 })
-          violentDetails.push( { "reviewDetails": reviews, "violentContent": violents[i]});
+          const reviews = await Review.find({ _id: violents[i].reviewId }, { _id: 0, reviewTitle: 1, category: 1, reviewDatetime: 1, userId: 1 })
+          const users = await User.find({ _id: reviews[0].userId }, { _id: 0, username: 1 })
+          violentDetails.push( { "userDetails": users[0], "reviewDetails": reviews[0], "violentContent": violents[i]});
         } catch (err) {
           ResHelper.error(res, err)
         }
@@ -374,7 +378,7 @@ module.exports = {
   getUsersCountLastMonth: (req, res) => {
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
-    User.countDocuments({ createdAt: { $gte: lastMonth} })
+    User.countDocuments({ createdAt: { $gte: lastMonth}, role: "USER" })
     .then((users) => {
       ResHelper.success(res, users)
     })

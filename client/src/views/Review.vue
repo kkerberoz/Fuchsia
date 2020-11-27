@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="hasData">
     <div id="postBlog" class="container">
       <div class="columns">
         <div id="reviewContent" class="column">
@@ -42,7 +42,7 @@
       <div class="columns">
         <div class="column">
           <h1 v-if="hasUserData" style="margin-left: 7%; color: #c6007e;">
-            Post By: {{ userData.username }} {{ datetime }}
+            Post By: {{ usernameOwner }} {{ datetime }}
           </h1>
         </div>
         <div class="column" style="margin-right: 5%; cursor:pointer;">
@@ -85,6 +85,9 @@
       };
     },
     computed: {
+      hasData() {
+        return this.reviewInfo != null && this.usernameOwner != null && this.hasUserData;
+      },
       datetime() {
         const datetimeObj = new Date(this.reviewInfo.reviewDatetime);
         const date = datetimeObj.getDate();
@@ -92,8 +95,11 @@
         const year = datetimeObj.getFullYear();
         return `${date}-${month}-${year}`;
       },
+      usernameOwner() {
+        return this.$store.getters["review/getReviewInfo"].userInfo.username;
+      },
       reviewInfo() {
-        return this.$store.getters["review/getReviewInfo"];
+        return this.$store.getters["review/getReviewInfo"].reviewInfo;
       },
       hasUserData() {
         return this.userData != null;
@@ -179,8 +185,7 @@
       });
       console.log("this is res", response.data);
       this.userData = response.data.data;
-      this.isOwner =
-        this.reviewInfo.userId === response.data.data._id ? true : false;
+      this.isOwner = await this.reviewInfo.userId === response.data.data._id ? true : false;
       const params = {
         userId: this.userData._id,
         reviewId: this.reviewId,
