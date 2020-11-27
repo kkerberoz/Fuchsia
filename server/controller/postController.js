@@ -380,24 +380,16 @@ module.exports = {
     const { action, reviewId, violentId } = req.body;
     if (!action.toLowerCase().localeCompare("accept")) {
       try {
-<<<<<<< HEAD
-        await Review.updateOne({ _id: reviewId}, {"$set": {status: "NORMAL"}})
-=======
         await Review.updateOne(
           { _id: reviewId },
           { $set: { status: "NORMAL" } }
         );
->>>>>>> 756a5873e9f3b007918187bafecfe127a477dd2c
       } catch (err) {
         ResHelper.error(res, err);
       }
     } else if (!action.toLowerCase().localeCompare("decline")) {
       try {
-<<<<<<< HEAD
-        await Review.updateOne({ _id: reviewId}, {"$set": {status: "BAN"}})
-=======
         await Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } });
->>>>>>> 756a5873e9f3b007918187bafecfe127a477dd2c
       } catch (err) {
         ResHelper.error(res, err);
       }
@@ -421,15 +413,24 @@ module.exports = {
   },
   banUser: (req, res) => {
     const userId = req.body.userId;
+    console.log(userId);
     User.updateOne({ _id: userId }, { $set: { status: "BAN" } })
       .then()
       .catch((err) => ResHelper.error(res, err));
   },
   banReview: (req, res) => {
     const reviewId = req.body.reviewId;
+    const reportId = req.body.reportId;
+    console.log("!!", reportId);
     Review.updateOne({ _id: reviewId }, { $set: { status: "BAN" } })
-      .then()
+      .then(() => {
+        Report.deleteOne({ _id: reportId })
+        .then((reports) => ResHelper.success(res, { report: reports }))
+        .catch((err) => ResHelper.error(res, err));
+      })
       .catch((err) => ResHelper.error(res, err));
+
+    
   },
   // ------- //
   // for dasdboard //
