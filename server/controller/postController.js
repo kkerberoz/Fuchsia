@@ -409,7 +409,10 @@ module.exports = {
     var allUser = User.find({
       firstName: { $regex: new RegExp("^" + name, "i") },
     });
-    //console.log(allUser + res);
+    ResHelper.success(res, {
+      message: "successful!",
+      allUser,
+    });
   },
   banUser: (req, res) => {
     const userId = req.body.userId;
