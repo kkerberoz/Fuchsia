@@ -220,7 +220,7 @@
           .post("/api/postfavorite", data, {
             headers: { Authorization: jwt_token },
           })
-          .then((res) => {
+          .then(() => {
             //console.log("POST status rate: ", res.status);
             this.$buefy.toast.open({
               message: "Thanks for you Rate!",
@@ -228,6 +228,7 @@
             });
           })
           .catch((err) => {
+            throw err;
             //console.log(err);
           });
       },

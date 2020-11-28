@@ -58,6 +58,7 @@
         this.$router.push({ name: "Review", params: { reviewId } });
       },
       goToCategory(category) {
+        return category;
         //console.log(category);
       },
     },

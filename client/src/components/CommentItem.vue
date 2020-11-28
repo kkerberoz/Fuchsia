@@ -102,6 +102,7 @@
               message: "Something went wrong!",
               type: "is-danger",
             });
+            throw err;
             //console.log(err);
           });
       },

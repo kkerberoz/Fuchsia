@@ -59,6 +59,7 @@ function checkLogin(to, from, next) {
         })
         .catch((err) => {
           next("/login");
+          throw err;
           //console.log("error", err);
         });
     }
