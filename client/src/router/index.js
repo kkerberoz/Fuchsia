@@ -34,6 +34,18 @@ function guardMyadmin(to, from, next) {
   }
 }
 
+function checkAdmin(to, from, next) {
+  var isAdmin = false;
+  const role = JSON.parse(localStorage.getItem("role"));
+  if (role === "ADMIN") isAdmin = true;
+  else isAdmin = false;
+  if (isAdmin) {
+    next("/admin/content");
+  } else {
+    next();
+  }
+}
+
 function checkLogin(to, from, next) {
   var isAuthenticated = false;
   const jwt_token = JSON.parse(localStorage.getItem("jwt"));
@@ -73,7 +85,7 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    beforeEnter: checkLogin,
+    beforeEnter: multiguard([checkAdmin, checkLogin]),
     meta: { layout: DefaultLayout },
   },
   {
@@ -95,7 +107,7 @@ const routes = [
     path: "/review/:reviewId",
     name: "Review",
     props: true,
-    beforeEnter: checkLogin,
+    beforeEnter: multiguard([checkAdmin, checkLogin]),
     component: () => import("../views/Review.vue"),
     meta: { layout: DefaultLayout },
   },
