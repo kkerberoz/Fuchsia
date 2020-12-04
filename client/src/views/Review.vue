@@ -82,6 +82,8 @@
         showScore: true,
         score: 0,
         userData: null,
+        scoreFlag: false,
+        isLoadedCount: 0
       };
     },
     computed: {
@@ -186,13 +188,13 @@
       },
     },
     async mounted() {
+      this.scoreFlag = false;
       await this.$store.dispatch("review/getReviewInfo", this.reviewId);
       await this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
       if(!jwt_token) {
         return;
       }
-      console.log("@#@@#@#@")
       const response = await axios.get("http://localhost:5000/api/getuser", {
         headers: { Authorization: jwt_token },
       });
@@ -214,8 +216,11 @@
       if (res.data.data.favoriteScore != null) {
         //console.log("!", res.data.data.favoriteScore.score);
         this.score = res.data.data.favoriteScore.score;
-        
       }
+      else {
+        this.isLoadedCount ++;
+      }
+      this.scoreFlag = true;
       console.log(res.data.data.favoriteScore,"!!")
     },
     watch: {
@@ -228,9 +233,8 @@
         }
       },
       score() {
-       if(this.score > 0) {
-
-       
+       if(this.scoreFlag && this.isLoadedCount > 0 ) {
+        console.log("True")
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
         if(!jwt_token) {
           return;
@@ -252,15 +256,11 @@
             });
           })
           .catch((err) => {
-<<<<<<< HEAD
-            throw err;
-            
-=======
             throw new err();
             //console.log(err);
->>>>>>> 04a2ff432458a636f6c3486ea4c02b56f9ca92d2
           });
        }
+       this.isLoadedCount++;
       },
     },
   };

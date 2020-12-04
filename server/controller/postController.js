@@ -249,34 +249,46 @@ module.exports = {
     }
     Favorite.findOne({ userId: req.user._id, reviewId: reviewId }).then(
       (favorites) => {
-        console.log(favorites)
+        console.log("favorite", favorites)
         if (favorites != null) {
-          Favorite.updateOne(
+          Favorite.findOneAndUpdate(
             { _id: favorites._id },
             { $set: { score: score, favoriteDatetime: new Date() } }
-          )
+            )
             .then((res) => {
-              ResHelper.success(res, {
-                message: "Update successful!",
+              res.json({
+                status: 200,
+                data: res,
               });
             })
-            // .catch((err) => {
-            //   ResHelper.error(res, err)
-            // });
+            .catch((err) => {
+              res.json({
+                status: 404,
+                err: err,
+              });
+            });
         } else {
+          
           const newFavorite = Favorite({
             userId: req.user._id,
             reviewId,
             score,
           });
+          // console.log(newFavorite)
           newFavorite
             .save()
             .then((res) => {
-              ResHelper.success(res, {
-                message: "Post successful!",
+              res.json({
+                status: 200,
+                data: res,
               });
             })
-            .catch((err) => ResHelper.error(res, err));
+            .catch((err) => {
+              res.json({
+                status: 404,
+                err: err,
+              });
+            });
         }
       }
     );
