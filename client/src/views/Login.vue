@@ -33,8 +33,16 @@
             <button
               class="button is-primary is-fullwidth is-medium my-5 has-text-white"
               type="submit"
+              v-show="!disable"
             >
               <strong> Sign in </strong>
+            </button>
+            <button
+              class="button is-primary is-fullwidth is-medium my-5 has-text-white is-loading"
+              disabled
+              v-show="disable"
+            >
+              <strong> Loading.... </strong>
             </button>
           </div>
           <div class="field has-text-centered">
@@ -59,6 +67,7 @@
         },
         errMessage: "",
         dialog: false,
+        disable: false,
       };
     },
     watch: {
@@ -74,6 +83,7 @@
     methods: {
       //Need to add validation !!!!!!!
       loginSubmit() {
+        this.disable = true;
         if (this.formInput.email && this.formInput.password) {
           const { email, password } = this.formInput;
           this.$store
@@ -86,6 +96,7 @@
                   icon: "success",
                   confirmButtonColor: " #c6007e",
                 }).then(() => {
+                  this.disable = false;
                   this.dialog = true;
                   this.$router.push({ name: "ContentVio" });
                 });
@@ -96,6 +107,7 @@
                   icon: "success",
                   confirmButtonColor: " #c6007e",
                 }).then(() => {
+                  this.disable = false;
                   this.dialog = true;
                   this.$router.push({ name: "Home" });
                 });
@@ -110,6 +122,7 @@
                   confirmButtonColor: " #c6007e",
                 })
                 .then(() => {
+                  this.disable = false;
                   this.dialog = true;
                 });
             });

@@ -107,7 +107,7 @@
               <strong> Sign up </strong>
             </button>
             <button
-              class="button is-primary is-fullwidth is-medium my-5 has-text-white"
+              class="button is-primary is-fullwidth is-medium my-5 has-text-white is-loading"
               disabled
               v-show="disable"
             >
