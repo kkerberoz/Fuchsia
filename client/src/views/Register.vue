@@ -102,7 +102,6 @@
           <div class="field">
             <button
               class="button is-primary is-fullwidth is-medium my-5 has-text-white"
-              @click="registerSubmit"
             >
               <strong> Sign up </strong>
             </button>
@@ -159,6 +158,7 @@
 
     methods: {
       registerSubmit() {
+        console.log("!!!! ))")
         //Need to add validation !!!!!!!
         this.errors = [];
         if (this.formInput.password.length < 6) {
