@@ -181,6 +181,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.password = "";
               this.formInput.conPassword = "";
             });
@@ -196,6 +197,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.password = "";
               this.formInput.conPassword = "";
             });
@@ -213,6 +215,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.password = "";
               this.formInput.conPassword = "";
             });
@@ -230,6 +233,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.password = "";
               this.formInput.conPassword = "";
             });
@@ -244,6 +248,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.conPassword = "";
             });
         } else if (this.formInput.dob === null) {
@@ -257,6 +262,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.dob = null;
             });
         } else if (isNaN(this.formInput.tel)) {
@@ -270,6 +276,7 @@
               confirmButtonColor: " #c6007e",
             })
             .then(() => {
+              this.disable = false;
               this.formInput.tel = "";
             });
         }
@@ -325,7 +332,6 @@
           this.$store
             .dispatch("auth/register", data)
             .then(() => {
-              this.disable = false;
               this.dialog = true;
               this.$swal
                 .fire({
@@ -335,6 +341,7 @@
                   confirmButtonColor: " #c6007e",
                 })
                 .then(() => {
+                  this.disable = false;
                   this.dialog = true;
                   this.$router.push({ name: "Home" });
                 });
@@ -351,6 +358,7 @@
                   confirmButtonColor: " #c6007e",
                 })
                 .then(() => {
+                  this.disable = false;
                   this.dialog = true;
                 });
             });

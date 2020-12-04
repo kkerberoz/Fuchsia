@@ -29,15 +29,15 @@
           >
             <!-- content -->
           </div>
-          <div v-if="hasUserData" > 
+          <div v-if="hasUserData">
             <b-rate
-            v-model="score"
-            :show-score="showScore"
-            size="default"
-          ></b-rate>
+              v-model="score"
+              :show-score="showScore"
+              size="default"
+            ></b-rate>
           </div>
-          
-          <hr class="pink-line" style="margin-top: 5%;"/>
+
+          <hr class="pink-line" style="margin-top: 5%;" />
         </div>
       </div>
       <div class="columns">
@@ -46,7 +46,11 @@
             Post By: {{ usernameOwner }} {{ datetime }}
           </h1>
         </div>
-        <div  v-if="hasUserData" class="column" style="margin-right: 5%; cursor:pointer;">
+        <div
+          v-if="hasUserData"
+          class="column"
+          style="margin-right: 5%; cursor:pointer;"
+        >
           <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
             <i class="fas fa-flag"></i>
             Report
@@ -198,9 +202,6 @@
       });
       //console.log("this is res", response.data);
       this.userData = response.data.data;
-      // console.log(this.reviewInfo);
-      this.isOwner =
-        this.reviewInfo.userId === response.data.data._id ? true : false;
 
       const params = {
         userId: this.userData._id,
@@ -216,11 +217,17 @@
         this.isLoadedCount++;
       }
       this.scoreFlag = true;
-      console.log(res.data.data.favoriteScore, "!!");
+      if (this.reviewInfo != null && this.userData != null) {
+        // console.log("EEERER")
+        this.isOwner =
+          this.reviewInfo.userId === this.userData._id ? true : false;
+      }
+      // console.log(res.data.data.favoriteScore,"!!")
     },
     watch: {
       reviewInfo() {
         if (this.reviewInfo != null && this.userData != null) {
+          console.log("EEERER");
           this.isOwner =
             this.reviewInfo.userId === this.userData._id ? true : false;
         }

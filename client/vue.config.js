@@ -1,7 +1,5 @@
-"use strict";
-const path = require("path");
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "./" : "./",
+  publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
   css: {
     loaderOptions: {
       sass: {
@@ -10,6 +8,13 @@ module.exports = {
     },
   },
   devServer: {
+    proxy: {
+      "^/api": {
+        target: "https://fuchsia-server-skhuzjjwua-uc.a.run.app",
+        ws: true,
+        changeOrigin: true,
+      },
+    },
     disableHostCheck: true,
     open: process.platform === "darwin",
     host: "0.0.0.0",
