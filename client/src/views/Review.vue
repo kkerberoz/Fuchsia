@@ -201,12 +201,7 @@
       });
       //console.log("this is res", response.data);
       this.userData = response.data.data;
-      console.log(this.reviewInfo)
-      // this.isOwner =
-      //   (this.reviewInfo.userId) === response.data.data._id
-      //     ? true
-      //     : false;
-      
+
       const params = {
         userId: this.userData._id,
         reviewId: this.reviewId,
@@ -222,13 +217,19 @@
         this.isLoadedCount ++;
       }
       this.scoreFlag = true;
-      console.log(res.data.data.favoriteScore,"!!")
+      if(this.reviewInfo != null && this.userData != null){ 
+        console.log("EEERER")
+        this.isOwner = (this.reviewInfo.userId === this.userData._id) ? true : false;
+      }
+      // console.log(res.data.data.favoriteScore,"!!")
     },
     watch: {
       reviewInfo() {
+        
         if(this.reviewInfo != null && this.userData != null){ 
+          console.log("EEERER")
           this.isOwner =
-          (this.reviewInfo.userId) === this.userData._id
+          (this.reviewInfo.userId === this.userData._id)
             ? true
             : false;
         }
