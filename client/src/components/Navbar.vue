@@ -156,19 +156,19 @@
     },
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      if (jwt_token) {
-        axios
-          .get("/api/getuser", {
-            headers: { Authorization: jwt_token },
-          })
-          .then((res) => {
-            this.username = res.data.data.username;
-          })
-          .catch((err) => {
-            throw new err();
-            //console.log(err);
-          });
+      if (!jwt_token) {
+        return;
       }
+      axios
+        .get("http://localhost:5000/api/getuser", {
+          headers: { Authorization: jwt_token },
+        })
+        .then((res) => {
+          this.username = res.data.data.username;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     methods: {
       createReview() {
@@ -211,6 +211,9 @@
     watch: {
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        if (!jwt_token) {
+          return;
+        }
         axios
           .get("/api/getuser", {
             headers: { Authorization: jwt_token },

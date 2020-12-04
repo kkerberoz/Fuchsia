@@ -68,6 +68,7 @@ const review = {
     async setReviewCount(context) {
       const response = await axios.get("/api/getreviewscount");
       context.commit("SET_REVIEW_COUNT", response.data.data);
+      console.log(response.data.data," This is count");
       //console.log("GET reviews count:", response.status);
     },
     async setPendingCount(context) {
