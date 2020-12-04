@@ -1,3 +1,5 @@
+"use strict";
+const path = require("path");
 module.exports = {
   css: {
     loaderOptions: {
@@ -7,15 +9,6 @@ module.exports = {
     },
   },
   devServer: {
-    proxy: {
-      "/api/*": {
-        target: "https://fuchsia-server-skhuzjjwua-uc.a.run.app",
-        // target: "http://localhost:5000",
-        ws: true,
-        pathRewrite: { "^/api": "" },
-        changeOrigin: true,
-      },
-    },
     disableHostCheck: true,
     open: process.platform === "darwin",
     host: "0.0.0.0",

@@ -34,13 +34,12 @@ module.exports = {
     User.find({ email })
       .then((users) => {
         // Check if email is taken
-        if (users.length) {
+        if (users != null) {
           return ResHelper.fail(
             res,
             "An account with this email already exists"
           );
         }
-
         // Save user
         const newUser = User({
           username,

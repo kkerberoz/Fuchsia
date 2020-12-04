@@ -95,14 +95,14 @@
           <div class="navbar-item">
             <div class="buttons" v-if="!loggedIn">
               <router-link
-                to="/Register"
+                to="/register"
                 class="navbar-item button is-primary"
                 @click="showNav = !showNav"
               >
                 Register
               </router-link>
               <router-link
-                to="/Login"
+                to="/login"
                 class="navbar-item button is-light"
                 @click="showNav = !showNav"
               >
@@ -156,7 +156,7 @@
     },
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      if(!jwt_token) {
+      if (!jwt_token) {
         return;
       }
       axios
@@ -211,7 +211,7 @@
     watch: {
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-        if(!jwt_token){
+        if (!jwt_token) {
           return;
         }
         axios
@@ -222,7 +222,7 @@
             this.username = res.data.data.username;
           })
           .catch((err) => {
-            throw err;
+            throw new err();
             //console.log(err);
           });
       },

@@ -252,8 +252,13 @@
             });
           })
           .catch((err) => {
+<<<<<<< HEAD
             throw err;
             
+=======
+            throw new err();
+            //console.log(err);
+>>>>>>> 04a2ff432458a636f6c3486ea4c02b56f9ca92d2
           });
        }
       },
