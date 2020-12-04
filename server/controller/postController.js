@@ -71,10 +71,17 @@ module.exports = {
       })
       .catch((err) => ResHelper.error(res, err));
   },
-  getReviewsCount: async (req, res) => {
+  getReviewsCount: (req, res) => {
+    console.log("HERE");
     Review.countDocuments({ $or: [{ status: "NORMAL" }, { status: "ALERT" }]})
-      .then((reviews) => ResHelper.success(res, reviews))
-      .catch((err) => ResHelper.error(res, err));
+      .then((reviews) => {
+        ResHelper.success(res, reviews)
+        console.log("!!!",reviews);
+      })
+      .catch((err) => {
+        ResHelper.error(res, err);
+        console.log("!!!",err);
+      });
   },
   getReviews: (req, res) => {
     const { filter, word, category, sortBy, direction, offset } = req.query;
