@@ -102,9 +102,16 @@
           <div class="field">
             <button
               class="button is-primary is-fullwidth is-medium my-5 has-text-white"
-              @click="registerSubmit"
+              v-show="!disable"
             >
               <strong> Sign up </strong>
+            </button>
+            <button
+              class="button is-primary is-fullwidth is-medium my-5 has-text-white"
+              disabled
+              v-show="disable"
+            >
+              <strong> Loading.... </strong>
             </button>
           </div>
           <div></div>
@@ -134,6 +141,7 @@
         },
         dialog: false,
         errors: [],
+        disable: false,
       };
     },
     watch: {
@@ -159,6 +167,7 @@
 
     methods: {
       registerSubmit() {
+        this.disable = true;
         //Need to add validation !!!!!!!
         this.errors = [];
         if (this.formInput.password.length < 6) {
@@ -316,6 +325,7 @@
           this.$store
             .dispatch("auth/register", data)
             .then(() => {
+              this.disable = false;
               this.dialog = true;
               this.$swal
                 .fire({
@@ -330,6 +340,7 @@
                 });
             })
             .catch((err) => {
+              this.disable = false;
               this.errMessage = err.message;
               //console.log("Error", this.errMessage);
               this.$swal
@@ -345,9 +356,6 @@
             });
         }
       },
-    },
-    mounted() {
-      //console.log(this.$route.path);
     },
   };
 </script>
