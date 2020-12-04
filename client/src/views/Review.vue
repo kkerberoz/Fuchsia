@@ -189,17 +189,15 @@
       if (!jwt_token) {
         return;
       }
-      console.log("@#@@#@#@");
-      const response = await axios.get("http://localhost:5000/api/getuser", {
+      // console.log("@#@@#@#@");
+      const response = await axios.get("/api/getuser", {
         headers: { Authorization: jwt_token },
       });
       //console.log("this is res", response.data);
       this.userData = response.data.data;
-      console.log(this.reviewInfo);
-      // this.isOwner =
-      //   (this.reviewInfo.userId) === response.data.data._id
-      //     ? true
-      //     : false;
+      // console.log(this.reviewInfo);
+      this.isOwner =
+        this.reviewInfo.userId === response.data.data._id ? true : false;
 
       const params = {
         userId: this.userData._id,

@@ -160,14 +160,14 @@
         return;
       }
       axios
-        .get("http://localhost:5000/api/getuser", {
+        .get("/api/getuser", {
           headers: { Authorization: jwt_token },
         })
         .then((res) => {
           this.username = res.data.data.username;
         })
         .catch((err) => {
-          console.log(err);
+          throw new err();
         });
     },
     methods: {
