@@ -72,7 +72,7 @@ module.exports = {
       .catch((err) => ResHelper.error(res, err));
   },
   getReviewsCount: async (req, res) => {
-    Review.countDocuments()
+    Review.countDocuments({ $or: [{ status: "NORMAL" }, { status: "ALERT" }]})
       .then((reviews) => ResHelper.success(res, reviews))
       .catch((err) => ResHelper.error(res, err));
   },

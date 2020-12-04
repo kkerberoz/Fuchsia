@@ -95,7 +95,7 @@
       datetime() {
         const datetimeObj = new Date(this.reviewInfo.reviewDatetime);
         const date = datetimeObj.getDate();
-        const month = datetimeObj.getMonth();
+        const month = datetimeObj.getMonth() + 1;
         const year = datetimeObj.getFullYear();
         return `${date}-${month}-${year}`;
       },
