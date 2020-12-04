@@ -195,7 +195,11 @@ module.exports = {
   deleteReview: (req, res) => {
     const reviewId = req.body.reviewId;
     Review.deleteOne({ _id: reviewId })
-      .then((reviews) => ResHelper.success(res, { review: reviews }))
+      .then((reviews) => {
+        Comment.deleteMany({ reviewId: reviewId })
+          .then((comments) => ResHelper.success(res, { review: reviews, comment: comments }))
+          .catch((err) => ResHelper.error(res, err));
+      })
       .catch((err) => ResHelper.error(res, err));
   },
   deleteComment: (req, res) => {
