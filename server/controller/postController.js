@@ -240,7 +240,7 @@ module.exports = {
   // favorite
   postFavorite: (req, res) => {
     const { reviewId, score } = req.body;
-    //console.log(req.body);
+    // console.log(req.body);
     if (!reviewId) {
       return ResHelper.fail(res, "review ID is required!");
     }
@@ -249,17 +249,20 @@ module.exports = {
     }
     Favorite.findOne({ userId: req.user._id, reviewId: reviewId }).then(
       (favorites) => {
-        if (favorites.length) {
-          Favorite.update_one(
+        console.log(favorites)
+        if (favorites != null) {
+          Favorite.updateOne(
             { _id: favorites._id },
             { $set: { score: score, favoriteDatetime: new Date() } }
           )
-            .then(() => {
+            .then((res) => {
               ResHelper.success(res, {
                 message: "Update successful!",
               });
             })
-            .catch((err) => ResHelper.error(res, err));
+            // .catch((err) => {
+            //   ResHelper.error(res, err)
+            // });
         } else {
           const newFavorite = Favorite({
             userId: req.user._id,
@@ -268,7 +271,7 @@ module.exports = {
           });
           newFavorite
             .save()
-            .then(() => {
+            .then((res) => {
               ResHelper.success(res, {
                 message: "Post successful!",
               });

@@ -86,10 +86,7 @@
     },
     computed: {
       hasData() {
-        return (
-          this.reviewInfo != null &&
-          this.usernameOwner != null
-        );
+        return this.reviewInfo != null && this.usernameOwner != null;
       },
       datetime() {
         const datetimeObj = new Date(this.reviewInfo.reviewDatetime);
@@ -127,7 +124,7 @@
               reviewId: this.reviewId,
             };
             const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-            if(!jwt_token) {
+            if (!jwt_token) {
               return;
             }
             axios
@@ -186,24 +183,24 @@
       },
     },
     async mounted() {
-      this.$store.dispatch("review/getReviewInfo", this.reviewId);
-      this.$store.dispatch("review/setCommentList", this.reviewId);
+      await this.$store.dispatch("review/getReviewInfo", this.reviewId);
+      await this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      if(!jwt_token) {
+      if (!jwt_token) {
         return;
       }
-      console.log("@#@@#@#@")
+      console.log("@#@@#@#@");
       const response = await axios.get("http://localhost:5000/api/getuser", {
         headers: { Authorization: jwt_token },
       });
       //console.log("this is res", response.data);
       this.userData = response.data.data;
-      
-      this.isOwner =
-        (await this.reviewInfo.userId) === response.data.data._id
-          ? true
-          : false;
-      
+      console.log(this.reviewInfo);
+      // this.isOwner =
+      //   (this.reviewInfo.userId) === response.data.data._id
+      //     ? true
+      //     : false;
+
       const params = {
         userId: this.userData._id,
         reviewId: this.reviewId,
@@ -215,33 +212,42 @@
         //console.log("!", res.data.data.favoriteScore.score);
         this.score = res.data.data.favoriteScore.score;
       }
+      console.log(res.data.data.favoriteScore, "!!");
     },
     watch: {
-      score() {
-        //console.log(this.score);
-        const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-        if(!jwt_token) {
-          return;
+      reviewInfo() {
+        if (this.reviewInfo != null && this.userData != null) {
+          this.isOwner =
+            this.reviewInfo.userId === this.userData._id ? true : false;
         }
-        let data = {
-          reviewId: this.reviewId,
-          score: this.score,
-        };
-        axios
-          .post("/api/postfavorite", data, {
-            headers: { Authorization: jwt_token },
-          })
-          .then(() => {
-            //console.log("POST status rate: ", res.status);
-            this.$buefy.toast.open({
-              message: "Thanks for you Rate!",
-              type: "is-success",
+      },
+      score() {
+        if (this.score > 0) {
+          const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+          if (!jwt_token) {
+            return;
+          }
+
+          let data = {
+            reviewId: this.reviewId,
+            score: this.score,
+          };
+          console.log(data);
+          axios
+            .post("/api/postfavorite", data, {
+              headers: { Authorization: jwt_token },
+            })
+            .then(() => {
+              this.$buefy.toast.open({
+                message: "Thanks for you Rate!",
+                type: "is-success",
+              });
+            })
+            .catch((err) => {
+              throw new err();
+              //console.log(err);
             });
-          })
-          .catch((err) => {
-            throw new err();
-            //console.log(err);
-          });
+        }
       },
     },
   };
