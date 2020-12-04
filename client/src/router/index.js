@@ -59,7 +59,7 @@ function checkLogin(to, from, next) {
         })
         .catch((err) => {
           next("/login");
-          throw err;
+          throw new err();
           //console.log("error", err);
         });
     }
@@ -148,7 +148,7 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes,
+  routes: routes,
 });
 
 export default router;

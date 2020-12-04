@@ -95,14 +95,14 @@
           <div class="navbar-item">
             <div class="buttons" v-if="!loggedIn">
               <router-link
-                to="/Register"
+                to="/register"
                 class="navbar-item button is-primary"
                 @click="showNav = !showNav"
               >
                 Register
               </router-link>
               <router-link
-                to="/Login"
+                to="/login"
                 class="navbar-item button is-light"
                 @click="showNav = !showNav"
               >
@@ -165,7 +165,7 @@
             this.username = res.data.data.username;
           })
           .catch((err) => {
-            throw err;
+            throw new err();
             //console.log(err);
           });
       }
@@ -219,7 +219,7 @@
             this.username = res.data.data.username;
           })
           .catch((err) => {
-            throw err;
+            throw new err();
             //console.log(err);
           });
       },

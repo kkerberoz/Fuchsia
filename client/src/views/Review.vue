@@ -228,7 +228,7 @@
             });
           })
           .catch((err) => {
-            throw err;
+            throw new err();
             //console.log(err);
           });
       },
