@@ -29,14 +29,15 @@
           >
             <!-- content -->
           </div>
-
-          <b-rate
+          <div v-if="hasUserData" > 
+            <b-rate
             v-model="score"
             :show-score="showScore"
             size="default"
-            style="margin-top: 5%;"
           ></b-rate>
-          <hr class="pink-line" />
+          </div>
+          
+          <hr class="pink-line" style="margin-top: 5%;"/>
         </div>
       </div>
       <div class="columns">
@@ -45,7 +46,7 @@
             Post By: {{ usernameOwner }} {{ datetime }}
           </h1>
         </div>
-        <div class="column" style="margin-right: 5%; cursor:pointer;">
+        <div  v-if="hasUserData" class="column" style="margin-right: 5%; cursor:pointer;">
           <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
             <i class="fas fa-flag"></i>
             Report
