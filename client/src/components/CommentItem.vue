@@ -61,7 +61,7 @@
       },
       userData: {
         type: Object,
-        required: true,
+        required: false,
       },
     },
     data() {

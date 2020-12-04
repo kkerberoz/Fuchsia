@@ -10,6 +10,7 @@ module.exports = {
     proxy: {
       "/api/*": {
         target: "https://fuchsia-server-skhuzjjwua-uc.a.run.app",
+        // target: "http://localhost:5000",
         ws: true,
         pathRewrite: { "^/api": "" },
         changeOrigin: true,

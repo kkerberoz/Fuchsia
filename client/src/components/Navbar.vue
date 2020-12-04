@@ -211,6 +211,9 @@
     watch: {
       routeChange() {
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        if(!jwt_token){
+          return;
+        }
         axios
           .get("/api/getuser", {
             headers: { Authorization: jwt_token },

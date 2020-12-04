@@ -88,8 +88,7 @@
       hasData() {
         return (
           this.reviewInfo != null &&
-          this.usernameOwner != null &&
-          this.hasUserData
+          this.usernameOwner != null
         );
       },
       datetime() {
@@ -193,15 +192,18 @@
       if(!jwt_token) {
         return;
       }
+      console.log("@#@@#@#@")
       const response = await axios.get("http://localhost:5000/api/getuser", {
         headers: { Authorization: jwt_token },
       });
       //console.log("this is res", response.data);
       this.userData = response.data.data;
+      
       this.isOwner =
         (await this.reviewInfo.userId) === response.data.data._id
           ? true
           : false;
+      
       const params = {
         userId: this.userData._id,
         reviewId: this.reviewId,
