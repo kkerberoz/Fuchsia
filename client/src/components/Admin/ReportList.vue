@@ -20,7 +20,7 @@
 
     computed: {
       reportList() {
-        console.log(this.$store.getters["report/getReportList"]);
+        //console.log(this.$store.getters["report/getReportList"]);
         return this.$store.getters["report/getReportList"];
       },
       hasData() {
@@ -30,7 +30,7 @@
 
     async mounted() {
       this.$store.dispatch("report/setReportList");
-      console.log(this.$store.getters["report/getReportList"]);
+      //console.log(this.$store.getters["report/getReportList"]);
     },
   };
 </script>

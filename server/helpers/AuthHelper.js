@@ -7,7 +7,7 @@ const createToken = (user) => {
 
 const verifyToken = (token, cb) => {
   return JWT.verify(token, JWT_SECRET, function (err, decode) {
-    // console.log(decode);
+    // //console.log(decode);
     if (err) {
       cb(err);
     } else {

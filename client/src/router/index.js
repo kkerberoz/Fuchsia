@@ -6,7 +6,7 @@ import DefaultLayout from "../Layouts/DefaultLayout";
 import AdminLayout from "../Layouts/AdminLayout";
 import axios from "axios";
 import multiguard from "vue-router-multiguard";
-const BASE_API_URL = "http://localhost:5000/api";
+
 Vue.use(VueRouter);
 
 //guard router
@@ -45,10 +45,10 @@ function checkLogin(to, from, next) {
       next("/login");
     } else {
       axios
-        .get(`${BASE_API_URL}/checklogin`, { params })
+        .get("/api/checklogin", { params })
         .then((token) => {
           const exp = token.data.data.decode.exp;
-          console.log(exp);
+          //console.log(exp);
           if (Date.now() >= exp * 1000) {
             this.$store.dispatch("auth/logout").then(() => {
               next("/login");
@@ -59,7 +59,8 @@ function checkLogin(to, from, next) {
         })
         .catch((err) => {
           next("/login");
-          console.log("error", err);
+          throw err;
+          //console.log("error", err);
         });
     }
   } else {

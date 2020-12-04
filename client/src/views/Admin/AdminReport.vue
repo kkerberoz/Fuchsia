@@ -25,7 +25,7 @@
     },
     async mounted() {
       this.$store.dispatch("report/setReportList");
-      console.log(this.$store.getters["report/getReportList"]);
+      //console.log(this.$store.getters["report/getReportList"]);
     },
   };
 </script>

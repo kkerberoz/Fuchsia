@@ -64,7 +64,7 @@
     watch: {
       dialog(val) {
         if (val) {
-          console.log("testtttsetst");
+          //console.log("testtttsetst");
           this.formInput.email = "";
           this.formInput.password = "";
           this.errMessage = "";

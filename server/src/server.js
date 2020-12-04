@@ -29,7 +29,7 @@ app.use(cookieParser());
 // API routes
 app.get("/", (req, res) => {
   res.send("hello");
-  console.log("Hello");
+  //console.log("Hello");
 });
 
 app.use("/api", require("../routes/authRoutes"));
