@@ -142,6 +142,9 @@
     },
     mounted() {
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+      if(!jwt_token) {
+        return;
+      }
       axios
         .get("http://localhost:5000/api/getuser", {
           headers: { Authorization: jwt_token },

@@ -91,7 +91,7 @@
       datetime() {
         const datetimeObj = new Date(this.reviewInfo.reviewDatetime);
         const date = datetimeObj.getDate();
-        const month = datetimeObj.getMonth();
+        const month = datetimeObj.getMonth() + 1;
         const year = datetimeObj.getFullYear();
         return `${date}-${month}-${year}`;
       },
@@ -124,6 +124,9 @@
               reviewId: this.reviewId,
             };
             const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+            if(!jwt_token) {
+              return;
+            }
             axios
               .post("http://localhost:5000/api/postreport", params,{headers: {Authorization: jwt_token}})
               .then(() => {
@@ -181,6 +184,9 @@
       this.$store.dispatch("review/getReviewInfo", this.reviewId);
       this.$store.dispatch("review/setCommentList", this.reviewId);
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+      if(!jwt_token) {
+        return;
+      }
       const response = await axios.get("http://localhost:5000/api/getuser", {
         headers: { Authorization: jwt_token },
       });
@@ -204,6 +210,9 @@
       score() {
         console.log(this.score);
         const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        if(!jwt_token) {
+          return;
+        }
         let data = {
           reviewId: this.reviewId,
           score: this.score,
