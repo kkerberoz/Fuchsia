@@ -19,11 +19,11 @@
         <vio-item :VioItem="violence"></vio-item>
       </div>
       <vio-item></vio-item>
-      <div class="container" v-if="!hasData">
-        <h1 class="title has-text-primary">
-          Don't have Violence Content yet !
-        </h1>
-      </div>
+    </div>
+    <div class="container is-mobile is-multiline is-centered " v-if="!hasData">
+      <h1 class="title has-text-primary">
+        Don't have Violence Content yet !
+      </h1>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@
         return this.$store.getters["report/getViolenceList"];
       },
       hasData() {
-        return this.violenceList != null;
+        return this.violenceList.length != 0;
       },
     },
     async mounted() {

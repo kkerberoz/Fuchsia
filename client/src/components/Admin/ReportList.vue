@@ -19,11 +19,11 @@
         <report-item :ReportItem="Report"></report-item>
       </div>
       <report-item></report-item>
-      <div class="container" v-if="!hasData">
-        <h1 class="title has-text-primary">
-          Don't have Report Review yet !
-        </h1>
-      </div>
+    </div>
+    <div class="container" v-if="!hasData">
+      <h1 class="title has-text-primary">
+        Don't have Violence Content yet !
+      </h1>
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@
         return this.$store.getters["report/getReportList"];
       },
       hasData() {
-        return this.reportList != null;
+        return this.reportList.length != 0;
       },
     },
 
