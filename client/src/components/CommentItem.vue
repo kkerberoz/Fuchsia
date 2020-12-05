@@ -1,42 +1,44 @@
 <template>
-  <div class="comment">
-    <div v-if="isOwner || isOwner2" style="margin:2% 3% 2% 3%;">
-      <b-dropdown
-        aria-role="list"
-        class="is-pulled-right"
-        position="is-bottom-left"
-      >
-        <b-icon
-          style="transform: rotate(90deg); cursor: pointer;"
-          icon="dots-vertical"
-          slot="trigger"
-        ></b-icon>
-        <b-dropdown-item aria-role="listitem" @click="deleteComment"
-          >Delete comment</b-dropdown-item
+  <div class="container">
+    <div class="comment">
+      <div v-if="isOwner || isOwner2" style="margin:2% 3% 2% 3%;">
+        <b-dropdown
+          aria-role="list"
+          class="is-pulled-right"
+          position="is-bottom-left"
         >
-      </b-dropdown>
-    </div>
-    <div class="columns">
-      <div class="column is-2" style="margin: 5% 0 0 4%">
-        <div style="width: 17vh; height: 17vh;">
-          <div class="profile"></div>
-        </div>
+          <b-icon
+            style="transform: rotate(90deg); cursor: pointer;"
+            icon="dots-vertical"
+            slot="trigger"
+          ></b-icon>
+          <b-dropdown-item aria-role="listitem" @click="deleteComment"
+            >Delete comment</b-dropdown-item
+          >
+        </b-dropdown>
       </div>
-      <div class="column is-9" style="position: relative;">
-        <div style="font-size: 3vh; color: #c6007e;">{{ username }}</div>
-        <div
-          style="margin: 0;
+      <div class="columns">
+        <div class="column is-2" style="margin: 5% 0 0 4%">
+          <div style="width: 17vh; height: 17vh;">
+            <div class="profile"></div>
+          </div>
+        </div>
+        <div class="column is-9" style="position: relative;">
+          <div style="font-size: 3vh; color: #c6007e;">{{ username }}</div>
+          <div
+            style="margin: 0;
                     position: absolute;
                     top: 50%;
                     -ms-transform: translateY(-50%);
                     transform: translateY(-50%);"
-        >
-          {{ comment.commentContent }}
-        </div>
-        <div
-          style="color: #c6007e; display: flex; width: 100%; justify-content: flex-end; margin: 0; position: absolute; top: 85%;"
-        >
-          {{ date }}
+          >
+            {{ comment.commentContent }}
+          </div>
+          <div
+            style="color: #c6007e; display: flex; width: 100%; justify-content: flex-end; margin: 0; position: absolute; top: 85%;"
+          >
+            {{ date }}
+          </div>
         </div>
       </div>
     </div>
@@ -123,13 +125,23 @@
 
 <style lang="scss">
   .comment {
-    padding: 40px;
+    padding: 50px;
     background-image: url("../assets/svg/commentBox.svg#svgView(preserveAspectRatio(none))");
     background-size: cover;
     width: 100%;
-    height: auto;
+    height: 100%;
     margin-top: 2%;
     border-radius: 20px;
+  }
+  @media screen and (max-width: 1024px) {
+    .comment {
+      padding: 50px;
+      border-radius: 30px;
+      width: 100%;
+      height: 100%;
+      background-image: none;
+      background-color: white;
+    }
   }
 
   .profile {

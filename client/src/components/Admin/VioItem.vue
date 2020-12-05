@@ -60,11 +60,6 @@
         </div>
       </div>
     </div>
-    <div class="container" v-else>
-      <h1 class="title has-text-primary">
-        Don't have Violence Content yet !
-      </h1>
-    </div>
   </div>
 </template>
 

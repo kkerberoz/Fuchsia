@@ -1,69 +1,81 @@
 <template>
-  <div class="container" v-if="hasData">
-    <div id="postBlog" class="container">
-      <div class="columns">
-        <div id="reviewContent" class="column">
-          <div v-if="isOwner" style="margin:2% 3% 2% 3%;">
-            <b-dropdown
-              aria-role="list"
-              class="is-pulled-right"
-              position="is-bottom-left"
-            >
-              <b-icon
-                style="transform: rotate(90deg); cursor: pointer;"
-                icon="dots-vertical"
-                slot="trigger"
-              ></b-icon>
-              <b-dropdown-item aria-role="listitem" @click="deleteReview"
-                >Delete review</b-dropdown-item
+  <div>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :opacity="0.9"
+      :lock-scroll="true"
+      :blur="'40px'"
+    >
+      <spring-spinner :animation-duration="2500" :size="60" color="#ff1d5e"
+    /></loading>
+    <div class="container" v-if="hasData">
+      <div class="postBlog">
+        <div class="columns">
+          <div id="reviewContent" class="column">
+            <div v-if="isOwner" style="margin:2% 3% 2% 3%;">
+              <b-dropdown
+                aria-role="list"
+                class="is-pulled-right"
+                position="is-bottom-left"
               >
-            </b-dropdown>
-          </div>
-          <h1 style="font-size: 5vh;">{{ reviewInfo.reviewTitle }}</h1>
-          <hr class="pink-line" />
+                <b-icon
+                  style="transform: rotate(90deg); cursor: pointer;"
+                  icon="dots-vertical"
+                  slot="trigger"
+                ></b-icon>
+                <b-dropdown-item aria-role="listitem" @click="deleteReview"
+                  >Delete review</b-dropdown-item
+                >
+              </b-dropdown>
+            </div>
+            <h1 style="font-size: 5vh;">{{ reviewInfo.reviewTitle }}</h1>
+            <hr class="pink-line" />
 
+            <div
+              style="margin-top: 5%;"
+              v-html="reviewInfo.reviewContent"
+              class="contentReview"
+            >
+              <!-- content -->
+            </div>
+            <div v-if="hasUserData">
+              <b-rate
+                v-model="score"
+                :show-score="showScore"
+                size="default"
+              ></b-rate>
+            </div>
+
+            <hr class="pink-line" style="margin-top: 5%;" />
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <h1 v-if="hasUserData" style="margin-left: 7%; color: #c6007e;">
+              Post By: {{ usernameOwner }} {{ datetime }}
+            </h1>
+          </div>
           <div
-            style="margin-top: 5%;"
-            v-html="reviewInfo.reviewContent"
-            class="contentReview"
+            v-if="hasUserData"
+            class="column"
+            style="margin-right: 5%; cursor:pointer;"
           >
-            <!-- content -->
+            <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
+              <i class="fas fa-flag"></i>
+              Report
+            </h1>
           </div>
-          <div v-if="hasUserData">
-            <b-rate
-              v-model="score"
-              :show-score="showScore"
-              size="default"
-            ></b-rate>
-          </div>
-
-          <hr class="pink-line" style="margin-top: 5%;" />
         </div>
       </div>
-      <div class="columns">
-        <div class="column">
-          <h1 v-if="hasUserData" style="margin-left: 7%; color: #c6007e;">
-            Post By: {{ usernameOwner }} {{ datetime }}
-          </h1>
-        </div>
-        <div
-          v-if="hasUserData"
-          class="column"
-          style="margin-right: 5%; cursor:pointer;"
-        >
-          <h1 @click="report" style="color: #c6007e;" class="is-pulled-right">
-            <i class="fas fa-flag"></i>
-            Report
-          </h1>
-        </div>
+      <div class="comment-group">
+        <comment-list
+          :userData="userData"
+          :reviewId="reviewId"
+          :userId_in_review="reviewInfo.userId"
+        ></comment-list>
       </div>
-    </div>
-    <div class="comment-group">
-      <comment-list
-        :userData="userData"
-        :reviewId="reviewId"
-        :userId_in_review="reviewInfo.userId"
-      ></comment-list>
     </div>
   </div>
 </template>
@@ -71,9 +83,13 @@
 <script>
   import axios from "axios";
   import CommentList from "../components/CommentList";
+  import Loading from "vue-loading-overlay";
+  import { SpringSpinner } from "epic-spinners";
   export default {
     components: {
       CommentList,
+      Loading,
+      SpringSpinner,
     },
     props: {
       reviewId: {
@@ -89,6 +105,7 @@
         userData: null,
         scoreFlag: false,
         isLoadedCount: 0,
+        isLoading: false,
       };
     },
     computed: {
@@ -191,10 +208,14 @@
     },
     async mounted() {
       this.scoreFlag = false;
+      this.isLoading = true;
       await this.$store.dispatch("review/getReviewInfo", this.reviewId);
+
       await this.$store.dispatch("review/setCommentList", this.reviewId);
+
       const jwt_token = JSON.parse(localStorage.getItem("jwt"));
       if (!jwt_token) {
+        this.isLoading = false;
         return;
       }
       const response = await axios.get("api/getuser", {
@@ -213,28 +234,33 @@
       if (res.data.data.favoriteScore != null) {
         //console.log("!", res.data.data.favoriteScore.score);
         this.score = res.data.data.favoriteScore.score;
+        this.isLoading = false;
       } else {
         this.isLoadedCount++;
+        this.isLoading = false;
       }
       this.scoreFlag = true;
+      this.isLoading = false;
+
       if (this.reviewInfo != null && this.userData != null) {
         // console.log("EEERER")
         this.isOwner =
           this.reviewInfo.userId === this.userData._id ? true : false;
+        this.isLoading = false;
       }
       // console.log(res.data.data.favoriteScore,"!!")
     },
     watch: {
       reviewInfo() {
         if (this.reviewInfo != null && this.userData != null) {
-          console.log("EEERER");
+          //console.log("EEERER");
           this.isOwner =
             this.reviewInfo.userId === this.userData._id ? true : false;
         }
       },
       score() {
         if (this.scoreFlag && this.isLoadedCount > 0) {
-          console.log("True");
+          //console.log("True");
           const jwt_token = JSON.parse(localStorage.getItem("jwt"));
           if (!jwt_token) {
             return;
@@ -244,7 +270,8 @@
             reviewId: this.reviewId,
             score: this.score,
           };
-          console.log(data);
+          //console.log(data);
+
           axios
             .post("/api/postfavorite", data, {
               headers: { Authorization: jwt_token },
@@ -278,9 +305,8 @@
 
   .comment-group {
     margin-top: 4%;
-    padding: 0 40px 40px 0;
     width: 100%;
-    height: auto;
+    height: 100%;
   }
 
   .pink-line {
@@ -311,23 +337,21 @@
     height: 100px;
   }
 
-  #postBlog {
+  .postBlog {
     margin-top: 5%;
     padding: 40px;
     background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
     background-size: cover;
     width: 100%;
-    height: auto;
+    height: 100%;
   }
 
   @media screen and (max-width: 1024px) {
-    #postBlog {
-      margin-top: 5%;
-      padding: 20px;
-      margin: 5px;
-      border-radius: 50px;
+    .postBlog {
+      padding: 40px;
+      border-radius: 40px;
       width: 100%;
-      height: auto;
+      height: 100%;
       background-image: none;
       background-color: white;
     }

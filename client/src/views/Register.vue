@@ -164,7 +164,6 @@
         return moment(this.formInput.dob).format("YYYY-MM-DD");
       },
     },
-
     methods: {
       registerSubmit() {
         this.disable = true;

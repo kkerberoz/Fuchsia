@@ -46,7 +46,7 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
-          @click="showNav = !showNav"
+          @click="isShow"
         >
           <span></span>
           <span></span>
@@ -93,19 +93,11 @@
 
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons" v-if="!loggedIn">
-              <router-link
-                to="/register"
-                class="navbar-item button is-primary"
-                @click="showNav = !showNav"
-              >
+            <div class="buttons" v-if="!loggedIn" @click="isShow">
+              <router-link to="/register" class="navbar-item button is-primary">
                 Register
               </router-link>
-              <router-link
-                to="/login"
-                class="navbar-item button is-light"
-                @click="showNav = !showNav"
-              >
+              <router-link to="/login" class="navbar-item button is-light">
                 Login
               </router-link>
             </div>
@@ -171,8 +163,13 @@
         });
     },
     methods: {
+      isShow() {
+        this.showNav = !this.showNav;
+      },
       createReview() {
-        this.$router.push({ name: "CreateReview" });
+        this.$router
+          .push({ name: "CreateReview" })
+          .then(() => (this.showNav = false));
       },
       logout() {
         this.$store.dispatch("auth/logout").then(() => {
@@ -189,9 +186,13 @@
       Home() {
         if (this.$route.name !== "Home") {
           if (this.role === "ADMIN") {
-            this.$router.push({ name: "ContentVio" });
+            this.$router
+              .push({ name: "ContentVio" })
+              .then(() => (this.showNav = false));
           } else {
-            this.$router.push({ name: "Home" });
+            this.$router
+              .push({ name: "Home" })
+              .then(() => (this.showNav = false));
           }
         }
       },

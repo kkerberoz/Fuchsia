@@ -59,6 +59,7 @@
 
 <script>
   export default {
+    components: {},
     data() {
       return {
         formInput: {
@@ -80,10 +81,12 @@
         }
       },
     },
+
     methods: {
       //Need to add validation !!!!!!!
       loginSubmit() {
         this.disable = true;
+
         if (this.formInput.email && this.formInput.password) {
           const { email, password } = this.formInput;
           this.$store

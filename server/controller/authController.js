@@ -31,10 +31,10 @@ module.exports = {
       return ResHelper.fail(res, "Telephone is required");
     }
 
-    User.find({ email })
+    User.findOne({ email })
       .then((users) => {
         // Check if email is taken
-        if (users != null) {
+        if (users) {
           return ResHelper.fail(
             res,
             "An account with this email already exists"
