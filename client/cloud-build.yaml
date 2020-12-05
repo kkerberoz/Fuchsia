@@ -1,0 +1,23 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker pull asia.gcr.io/fuchsia-296906/fuchsia-client:latest || exit 0
+  - name: gcr.io/cloud-builders/docker
+    timeout: 1200s
+    args:
+      [
+        "build",
+        "-f",
+        "Dockerfile",
+        "-t",
+        "asia.gcr.io/fuchsia-296906/fuchsia-client",
+        "--cache-from",
+        "asia.gcr.io/fuchsia-296906/fuchsia-client:latest",
+        ".",
+      ]
+timeout: 1200s
+images:
+  - asia.gcr.io/fuchsia-296906/fuchsia-client

@@ -33,8 +33,16 @@
             <button
               class="button is-primary is-fullwidth is-medium my-5 has-text-white"
               type="submit"
+              v-show="!disable"
             >
               <strong> Sign in </strong>
+            </button>
+            <button
+              class="button is-primary is-fullwidth is-medium my-5 has-text-white is-loading"
+              disabled
+              v-show="disable"
+            >
+              <strong> Loading.... </strong>
             </button>
           </div>
           <div class="field has-text-centered">
@@ -51,6 +59,7 @@
 
 <script>
   export default {
+    components: {},
     data() {
       return {
         formInput: {
@@ -59,31 +68,66 @@
         },
         errMessage: "",
         dialog: false,
+        disable: false,
       };
     },
     watch: {
       dialog(val) {
-        if (!val) {
+        if (val) {
+          //console.log("testtttsetst");
           this.formInput.email = "";
           this.formInput.password = "";
           this.errMessage = "";
         }
       },
     },
+
     methods: {
       //Need to add validation !!!!!!!
       loginSubmit() {
+        this.disable = true;
+
         if (this.formInput.email && this.formInput.password) {
           const { email, password } = this.formInput;
           this.$store
             .dispatch("auth/login", { email, password })
             .then(() => {
-              this.dialog = true;
-              this.$router.push({name: "Home"});
+              if (this.$store.state.auth.role === "ADMIN") {
+                this.$swal({
+                  title: "Login Success!",
+                  text: "Click the button to continue.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                }).then(() => {
+                  this.disable = false;
+                  this.dialog = true;
+                  this.$router.push({ name: "ContentVio" });
+                });
+              } else {
+                this.$swal({
+                  title: "Login Success!",
+                  text: "Click the button to continue.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                }).then(() => {
+                  this.disable = false;
+                  this.dialog = true;
+                  this.$router.push({ name: "Home" });
+                });
+              }
             })
             .catch((err) => {
-              this.errMessage = err.message;
-              console.log("Error", this.errMessage);
+              this.$swal
+                .fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: err.message,
+                  confirmButtonColor: " #c6007e",
+                })
+                .then(() => {
+                  this.disable = false;
+                  this.dialog = true;
+                });
             });
         }
       },

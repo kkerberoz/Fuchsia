@@ -4,10 +4,14 @@ const AuthHelper = require("../helpers/AuthHelper");
 
 module.exports = {
   register: (req, res) => {
-    const { firstName, lastName, password, dob, tel } = req.body;
+    // //console.log(req.body.email);
+    const { username, firstName, lastName, password, dob, tel } = req.body;
     const email = req.body.email ? req.body.email.toLowerCase() : undefined;
 
     // Validation
+    if (!username) {
+      return ResHelper.fail(res, "Username is required");
+    }
     if (!firstName) {
       return ResHelper.fail(res, "First Name is required");
     }
@@ -27,18 +31,18 @@ module.exports = {
       return ResHelper.fail(res, "Telephone is required");
     }
 
-    User.find({ email })
+    User.findOne({ email })
       .then((users) => {
         // Check if email is taken
-        if (users.length) {
+        if (users) {
           return ResHelper.fail(
             res,
             "An account with this email already exists"
           );
         }
-
         // Save user
         const newUser = User({
+          username,
           firstName,
           lastName,
           email,
@@ -64,20 +68,108 @@ module.exports = {
     const email = req.body.email ? req.body.email.toLowerCase() : undefined;
 
     if (!email || !AuthHelper.validEmail(email)) {
-      return ResHelper.fail(res, "Please enter a valid email address");
+      return ResHelper.fail(
+        res,
+        "You have entered an invalid email or password"
+      );
     }
 
     User.findOne({ email })
       .then((user) => {
         if (!user) {
-          return ResHelper.fail(res, "No user found with that email");
+          return ResHelper.fail(
+            res,
+            "You have entered an invalid email or password"
+          );
+        } else if (user.status === "BAN") {
+          return ResHelper.fail(res, "You have banned from Fuchsia !!!!!!!");
         }
 
         if (user.isValidPassword(password)) {
           const token = AuthHelper.createToken(user);
-          ResHelper.success(res, { message: "Login successful!", token });
+          const role = user.role;
+          ResHelper.success(res, { message: "Login successful!", token, role });
         } else {
-          ResHelper.fail(res, "Wrong password");
+          ResHelper.fail(res, "You have entered an invalid email or password");
+        }
+      })
+      .catch((err) => ResHelper.error(res, err));
+  },
+  checkLogin: (req, res, next) => {
+    const token = req.query.token;
+    if (!token) {
+      ResHelper.fail(res, "Invalid token");
+    }
+    AuthHelper.verifyToken(token, (err, decode) => {
+      if (err) {
+        ResHelper.error(res, err);
+      } else {
+        if (!decode) {
+          return ResHelper.unauth(res, "You need to logged in");
+        } else {
+          User.findOne({ _id: decode.userId }).then((user) => {
+            if (!user) {
+              return ResHelper.fail(
+                res,
+                "You have entered an invalid email or password"
+              );
+            } else if (user.status === "BAN") {
+              const userInfo = {
+                token: decode,
+                status: user.status,
+              };
+              return res.json({
+                status: 400,
+                data: userInfo,
+              });
+            } else {
+              ResHelper.success(res, { decode });
+              next();
+            }
+          });
+        }
+      }
+    });
+  },
+  getUser: (req, res) => {
+    const id_user = req.user._id;
+    User.findOne({ _id: id_user })
+      .then((user) => {
+        if (!user) {
+          return ResHelper.fail(res, "No user found with that email");
+        } else {
+          const data = {
+            _id: user._id,
+            username: user.username,
+            firstName: user.firstName,
+            lastname: user.lastName,
+            email: user.email,
+            dob: user.dob,
+            tel: user.tel,
+          };
+          return ResHelper.success(res, data);
+        }
+      })
+      .catch((err) => ResHelper.error(res, err));
+  },
+  getUserById: (req, res) => {
+    // //console.log("HEHE",req.query)
+    const userId = req.query.userId;
+    User.findOne({ _id: userId })
+      .then((user) => {
+        if (!user) {
+          return ResHelper.fail(res, "No user found with that email");
+        } else {
+          const data = {
+            _id: user._id,
+            username: user.username,
+            firstName: user.firstName,
+            lastname: user.lastName,
+            email: user.email,
+            dob: user.dob,
+            tel: user.tel,
+          };
+          return ResHelper.success(res, data);
         }
       })
       .catch((err) => ResHelper.error(res, err));

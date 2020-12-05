@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar is-black" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item">
+        <a @click="Home" class="navbar-item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="125"
@@ -46,7 +46,7 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
-          @click="showNav = !showNav"
+          @click="isShow"
         >
           <span></span>
           <span></span>
@@ -60,23 +60,19 @@
         :class="{ 'is-active': showNav }"
       >
         <div class="navbar-start">
-          <router-link
-            :to="{ name: 'Home' }"
-            class="navbar-item"
-            @click="showNav = !showNav"
-          >
+          <a @click="Home" class="navbar-item">
             Home
-          </router-link>
+          </a>
 
-          <router-link
+          <!-- <router-link
             to="/About"
             class="navbar-item"
             @click="showNav = !showNav"
           >
             About
-          </router-link>
+          </router-link> -->
 
-          <div class="navbar-item has-dropdown is-hoverable">
+          <!-- <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
               More
             </a>
@@ -92,26 +88,46 @@
                 Report an issue
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons" v-if="!loggedIn">
-              <router-link to="/Register" class="navbar-item button is-primary">
+            <div class="buttons" v-if="!loggedIn" @click="isShow">
+              <router-link to="/register" class="navbar-item button is-primary">
                 Register
               </router-link>
-              <router-link to="/Login" class="navbar-item button is-light">
+              <router-link to="/login" class="navbar-item button is-light">
                 Login
               </router-link>
             </div>
             <div class="buttons" v-if="loggedIn">
-              <a class="navbar-item button is-primary" @click="createReview">
-                Create review
-              </a>
-              <a class="navbar-item button is-primary" @click="logout">
-                Logout
-              </a>
+              <div v-show="this.role != 'ADMIN'">
+                <a
+                  class="navbar-item button is-primary"
+                  @click="createReview"
+                  style="border-radius:20px;
+                padding-right:20px;padding-left:20px"
+                  ><i class="fas fa-plus" style="margin-right:5px"></i>New post
+                </a>
+              </div>
+
+              <div class="navbar-item">
+                <div class="name-image">
+                  <a class="button is-primary" id="userImage"></a>
+                  <a class="button is-primary" id="userBanner">
+                    {{ username }}
+                  </a>
+                </div>
+
+                <a
+                  class="button is-white has-text-primary"
+                  id="logout"
+                  @click="logout"
+                >
+                  Logout
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -121,27 +137,130 @@
 </template>
 
 <script>
+  import axios from "axios";
   export default {
     data() {
       return {
         showNav: false,
+        username: "",
+        isRole: "",
       };
     },
+    mounted() {
+      const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+      if (!jwt_token) {
+        return;
+      }
+      axios
+        .get("/api/getuser", {
+          headers: { Authorization: jwt_token },
+        })
+        .then((res) => {
+          this.username = res.data.data.username;
+        })
+        .catch((err) => {
+          throw err;
+        });
+    },
     methods: {
+      isShow() {
+        this.showNav = !this.showNav;
+      },
       createReview() {
-        this.$router.push({name: "CreateReview"});
+        this.$router
+          .push({ name: "CreateReview" })
+          .then(() => (this.showNav = false));
       },
       logout() {
-        this.$store.dispatch("auth/logout");
-        this.$router.push({name: "Login"});
+        this.$store.dispatch("auth/logout").then(() => {
+          this.$swal({
+            title: "Logout Success!",
+            text: "Click the button to continue.",
+            icon: "success",
+            confirmButtonColor: " #c6007e",
+          }).then(() => {
+            this.$router.push({ name: "Login" });
+          });
+        });
+      },
+      Home() {
+        if (this.$route.name !== "Home") {
+          if (this.role === "ADMIN") {
+            this.$router
+              .push({ name: "ContentVio" })
+              .then(() => (this.showNav = false));
+          } else {
+            this.$router
+              .push({ name: "Home" })
+              .then(() => (this.showNav = false));
+          }
+        }
       },
     },
     computed: {
+      routeChange() {
+        return this.$route.name;
+      },
       loggedIn() {
         return this.$store.state.auth.status.loggedIn;
+      },
+      role() {
+        const role = JSON.parse(localStorage.getItem("role"));
+        return role;
+      },
+    },
+    watch: {
+      routeChange() {
+        const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+        if (!jwt_token) {
+          return;
+        }
+        axios
+          .get("/api/getuser", {
+            headers: { Authorization: jwt_token },
+          })
+          .then((res) => {
+            this.username = res.data.data.username;
+          })
+          .catch((err) => {
+            throw err;
+            //console.log(err);
+          });
       },
     },
   };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .navbar {
+    height: 100px;
+  }
+  .name-image {
+    z-index: 1;
+  }
+  #userImage {
+    border-width: 5px;
+    position: relative;
+    z-index: 1;
+    border-radius: 40px;
+    background-image: url("https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg");
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+    margin-right: -20px;
+    border-color: $primary;
+  }
+  #userBanner {
+    margin-top: 10px;
+    position: relative;
+    z-index: 0;
+    margin-right: -30px;
+    border-radius: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  #logout {
+    padding-left: 40px;
+    border-radius: 20px;
+  }
+</style>

@@ -78,11 +78,30 @@
           </div>
           <div v-if="isCreateReviewState">
             <div>
-              <label>Title:</label>
-              <input v-model="reviewTitle" type="text" class="title-input">
+              <label class="title">Title:</label>
+              <input
+                v-model="reviewTitle"
+                type="text"
+                class="input"
+                style="margin-top:10px"
+              />
+            </div>
+            <div>
+              <label class="title">Description:</label>
+              <input
+                v-model="reviewDescription"
+                type="text"
+                class="input"
+                style="margin-top:10px"
+              />
             </div>
             <div class="editor">
-              <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+              <label class="title" style="margin-top:10px"> Content: </label>
+              <editor-menu-bar
+                :editor="editor"
+                v-slot="{ commands, isActive }"
+                style="margin-top:10px"
+              >
                 <div class="menubar">
                   <button
                     class="menubar__button"
@@ -209,18 +228,19 @@
                   >
                     <icon name="image" />
                   </button>
-
                 </div>
               </editor-menu-bar>
-
               <editor-content
-                class="editor__content editor-area"
+                class="editor__content"
                 :editor="editor"
+                style="margin-top:20px"
               />
             </div>
           </div>
           <div v-if="isPreviewState">
-            <div style="color: #c6007e; font-size: 20 px;">Title: {{reviewTitle}}</div>
+            <!-- <div style="color: #c6007e; font-size: 20 px;">Title: <p style="color: black;">{{reviewTitle}}</p></div>
+            <div style="margin-top:2%; color: #c6007e; font-size: 20 px;">Description:  <p style="color: black;">{{reviewDescription}}</p></div>
+            <div style="margin-top:2%; color: #c6007e; font-size: 20 px;">Content:  <p style="color: black;">{{reviewDescription}}</p></div> -->
             <div v-html="html"></div>
             <!-- Content preview is here -->
           </div>
@@ -246,281 +266,307 @@
 </template>
 
 <script>
-// import ReviewContent from "../components/ReviewContent";
-import Icon from "../components/Icon";
-import { Editor, EditorContent, EditorMenuBar } from "tiptap";
-import {
-  Blockquote,
-  CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  TodoList,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline,
-  History,
-} from "tiptap-extensions";
+  // import ReviewContent from "../components/ReviewContent";
+  import Icon from "../components/Icon";
+  import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+  import {
+    Blockquote,
+    CodeBlock,
+    HardBreak,
+    Heading,
+    HorizontalRule,
+    OrderedList,
+    BulletList,
+    ListItem,
+    TodoItem,
+    TodoList,
+    Bold,
+    Code,
+    Italic,
+    Link,
+    Strike,
+    Underline,
+    History,
+    Image,
+  } from "tiptap-extensions";
 
-export default {
-  name: "CreateReview",
-  components: {
-    // ReviewContent,
-    EditorContent,
-    EditorMenuBar,
-    Icon,
-  },
-  data() {
-    return {
-      tabStage: 1,
-      category: [],
-      Camera: false,
-      Natural: false,
-      Shopping: false,
-      Food: false,
-      Drink: false,
-      Restaurant: false,
-      Sports: false,
-      html: "",
-      content: "",
-      reviewTitle: "",
+  export default {
+    name: "CreateReview",
+    components: {
+      // ReviewContent,
+      EditorContent,
+      EditorMenuBar,
+      Icon,
+    },
+    data() {
+      return {
+        tabStage: 1,
+        category: [],
+        Camera: false,
+        Natural: false,
+        Shopping: false,
+        Food: false,
+        Drink: false,
+        Restaurant: false,
+        Sports: false,
+        html: "",
+        content: "",
+        reviewTitle: "",
+        reviewDescription: "",
+        imageLink: "",
 
-      editor: new Editor({
-        extensions: [
-          new Blockquote(),
-          new BulletList(),
-          new CodeBlock(),
-          new HardBreak(),
-          new Heading({ levels: [1, 2, 3] }),
-          new HorizontalRule(),
-          new ListItem(),
-          new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History(),
-        ],
-        onUpdate: ({ getHTML }) => {
-          this.html = getHTML();
-          if (this.html === "<p></p>") this.content = "";
-          else this.content = this.html;
-        },
-      }),
-    };
-  },
-  computed: {
-    isSelectCategoryState() {
-      return this.tabStage === 1;
+        editor: new Editor({
+          extensions: [
+            new Blockquote(),
+            new BulletList(),
+            new CodeBlock(),
+            new HardBreak(),
+            new Heading({ levels: [1, 2, 3] }),
+            new HorizontalRule(),
+            new ListItem(),
+            new OrderedList(),
+            new TodoItem(),
+            new TodoList(),
+            new Link(),
+            new Bold(),
+            new Code(),
+            new Italic(),
+            new Strike(),
+            new Underline(),
+            new History(),
+            new Image(),
+          ],
+          content: `<p></p>
+          <p></p>
+          <p></p>
+          <p></p>`,
+          onUpdate: ({ getHTML }) => {
+            this.html = getHTML();
+            if (this.html === "<p></p>") this.content = "";
+            else this.content = this.html;
+          },
+        }),
+      };
     },
-    isCreateReviewState() {
-      return this.tabStage === 2;
+    computed: {
+      isSelectCategoryState() {
+        return this.tabStage === 1;
+      },
+      isCreateReviewState() {
+        return this.tabStage === 2;
+      },
+      isPreviewState() {
+        return this.tabStage === 3;
+      },
+      goButton() {
+        return this.tabStage === 3 ? "Submit" : "Next";
+      },
+      isFirstStep() {
+        return this.tabStage === 1;
+      },
     },
-    isPreviewState() {
-      return this.tabStage === 3;
-    },
-    goButton() {
-      return this.tabStage === 3 ? "Submit" : "Next";
-    },
-    isFirstStep() {
-      return this.tabStage === 1;
-    },
-  },
 
-  beforeDestroy() {
-    this.editor.destroy();
-  },
-  methods: {
-    showImagePrompt(command) {
-      const src = prompt("https://bulma.io/images/placeholders/1280x960.png");
-      if (src !== null) {
-        command({ src });
-      }
+    beforeDestroy() {
+      this.editor.destroy();
     },
-    selectCategory() {
-      this.tabStage = 1;
+    methods: {
+      showImagePrompt(command) {
+        const src = prompt("Enter the url of your image here");
+        if (src !== null) {
+          command({ src });
+          this.imageLink = src;
+        }
+      },
+      selectCategory() {
+        this.tabStage = 1;
+      },
+      createReview() {
+        this.tabStage = 2;
+      },
+      preview() {
+        this.tabStage = 3;
+      },
+      next() {
+        if (this.tabStage === 3) {
+          //Go post
+          const data = {
+            reviewTitle: this.reviewTitle,
+            reviewContent: `${this.html}`,
+            reviewDescription: this.reviewDescription,
+            category: this.category,
+            imageLink: this.imageLink,
+            view: 0,
+          };
+          if (this.reviewTitle.trim() !== "" && this.content.trim() !== "") {
+            this.$store.dispatch("review/postReview", data).then((reviewId) => {
+              //console.log("reviewID", reviewId);
+              if (reviewId) {
+                this.$swal({
+                  title: "POST CREATED!",
+                  text: "Click the button to continue.",
+                  icon: "success",
+                  confirmButtonColor: " #c6007e",
+                }).then(() =>
+                  this.$router.push({ name: "Review", params: { reviewId } })
+                );
+              }
+            });
+          } else {
+            this.$swal({
+              title: "Please fill the Title and Content!",
+              text: "Click the button to continue.",
+              icon: "warning",
+              confirmButtonColor: " #c6007e",
+            }).then(() => {
+              this.tabStage = 2;
+            });
+          }
+        } else {
+          this.tabStage += 1;
+          //next step
+        }
+      },
+      back() {
+        this.tabStage -= 1;
+      },
     },
-    createReview() {
-      this.tabStage = 2;
+    mounted() {
+      //console.log(this.reviewId);
     },
-    preview() {
-      this.tabStage = 3;
+    watch: {
+      Camera() {
+        this.Camera
+          ? this.category.push("Camera")
+          : this.category.splice(this.category.indexOf("Camera"), 1);
+      },
+      Natural() {
+        this.Natural
+          ? this.category.push("Natural")
+          : this.category.splice(this.category.indexOf("Natural"), 1);
+      },
+      Shopping() {
+        this.Shopping
+          ? this.category.push("Shopping")
+          : this.category.splice(this.category.indexOf("Shopping"), 1);
+      },
+      Food() {
+        this.Food
+          ? this.category.push("Food")
+          : this.category.splice(this.category.indexOf("Food"), 1);
+      },
+      Drink() {
+        this.Drink
+          ? this.category.push("Drink")
+          : this.category.splice(this.category.indexOf("Drink"), 1);
+      },
+      Restaurant() {
+        this.Restaurant
+          ? this.category.push("Restaurant")
+          : this.category.splice(this.category.indexOf("Restaurant"), 1);
+      },
+      Sports() {
+        this.Sports
+          ? this.category.push("Sports")
+          : this.category.splice(this.category.indexOf("Sports"), 1);
+      },
+      tabStage() {
+        if (this.tabStage === 1) {
+          document.getElementById("categoryTab").style.backgroundColor =
+            "#c6007e";
+          document.getElementById("createReviewTab").style.backgroundColor =
+            "#f277c6";
+          document.getElementById("previewTab").style.backgroundColor =
+            "#f277c6";
+        } else if (this.tabStage === 2) {
+          document.getElementById("categoryTab").style.backgroundColor =
+            "#f277c6";
+          document.getElementById("createReviewTab").style.backgroundColor =
+            "#c6007e";
+          document.getElementById("previewTab").style.backgroundColor =
+            "#f277c6";
+        } else {
+          document.getElementById("categoryTab").style.backgroundColor =
+            "#f277c6";
+          document.getElementById("createReviewTab").style.backgroundColor =
+            "#f277c6";
+          document.getElementById("previewTab").style.backgroundColor =
+            "#c6007e";
+        }
+      },
     },
-    next() {
-      if (this.tabStage === 3) {
-        //Go post
-        const data = {
-          reviewTitle: this.reviewTitle,
-          reviewContent: `${this.html}`,
-          category: this.category,
-          imageLink: "https://bulma.io/images/placeholders/1280x960.png",
-          view: 0,
-        };
-        this.$store.dispatch("review/postReview", data);
-      } else {
-        this.tabStage += 1;
-        //next step
-      }
-    },
-    back() {
-      this.tabStage -= 1;
-    },
-  },
-  mounted() {
-    console.log(this.reviewId);
-  },
-  watch: {
-    Camera() {
-      this.Camera
-        ? this.category.push("Camera")
-        : this.category.splice(this.category.indexOf("Camera"), 1);
-    },
-    Natural() {
-      this.Natural
-        ? this.category.push("Natural")
-        : this.category.splice(this.category.indexOf("Natural"), 1);
-    },
-    Shopping() {
-      this.Shopping
-        ? this.category.push("Shopping")
-        : this.category.splice(this.category.indexOf("Shopping"), 1);
-    },
-    Food() {
-      this.Food
-        ? this.category.push("Food")
-        : this.category.splice(this.category.indexOf("Food"), 1);
-    },
-    Drink() {
-      this.Drink
-        ? this.category.push("Drink")
-        : this.category.splice(this.category.indexOf("Drink"), 1);
-    },
-    Restaurant() {
-      this.Restaurant
-        ? this.category.push("Restaurant")
-        : this.category.splice(this.category.indexOf("Restaurant"), 1);
-    },
-    Sports() {
-      this.Sports
-        ? this.category.push("Sports")
-        : this.category.splice(this.category.indexOf("Sports"), 1);
-    },
-    tabStage() {
-      if (this.tabStage === 1) {
-        document.getElementById("categoryTab").style.backgroundColor =
-          "#c6007e";
-        document.getElementById("createReviewTab").style.backgroundColor =
-          "#f277c6";
-        document.getElementById("previewTab").style.backgroundColor = "#f277c6";
-      } else if (this.tabStage === 2) {
-        document.getElementById("categoryTab").style.backgroundColor =
-          "#f277c6";
-        document.getElementById("createReviewTab").style.backgroundColor =
-          "#c6007e";
-        document.getElementById("previewTab").style.backgroundColor = "#f277c6";
-      } else {
-        document.getElementById("categoryTab").style.backgroundColor =
-          "#f277c6";
-        document.getElementById("createReviewTab").style.backgroundColor =
-          "#f277c6";
-        document.getElementById("previewTab").style.backgroundColor = "#c6007e";
-      }
-    },
-  },
-};
+  };
 </script>
 
 <style lang="scss" scoped>
+  .ProseMirror {
+    min-height: 20vh;
+  }
+  .editor__content {
+    border: 1px solid $black;
+  }
 
-.title-input {
-  width:100%; 
-  margin-top: 1%;
-  border: 2px solid $primary;
-  margin-bottom: 1%;
-}
+  .buttonGroup {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
 
-.editor-area {
-  margin-top: 1%;
-  border: 2px solid $primary;
-}
-
-.buttonGroup {
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-}
-
-.buttonControl {
-  text-align: center;
-  background-color: $primary;
-  border-radius: 50px;
-  color: white;
-  cursor: pointer;
-  margin-right: 1%;
-}
-
-#reviewContent {
-  margin: 3%;
-}
-
-#tabGroup {
-  margin-bottom: 0;
-  margin-left: 5%;
-}
-
-#categoryTab {
-  background-color: $primary;
-}
-
-// .ProseMirror [contenteditable="false"] {
-//   white-space: normal;
-// }
-
-p {
-  white-space: pre-wrap;
-}
-
-.tabStage {
-  text-align: center;
-  color: white;
-  margin-top: 5%;
-  border-color: white;
-  height: 6vh;
-  margin-left: -5%;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 30px;
-  background-color: $secondary;
-  cursor: pointer;
-}
-
-#postBlog {
-  padding: 40px;
-  background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
-  background-size: cover;
-  width: 100%;
-  height: auto;
-}
-
-@media screen and (max-width: 1024px) {
-  #postBlog {
-    padding: 20px;
-    margin: 5px;
+  .buttonControl {
+    text-align: center;
+    background-color: $primary;
     border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    margin-right: 1%;
+  }
+
+  #reviewContent {
+    margin: 3%;
+  }
+
+  #tabGroup {
+    margin-bottom: 0;
+    margin-left: 5%;
+  }
+
+  #categoryTab {
+    background-color: $primary;
+  }
+
+  .tabStage {
+    text-align: center;
+    color: white;
+    margin-top: 5%;
+    border-color: white;
+    height: 6vh;
+    margin-left: -5%;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 30px;
+    background-color: $secondary;
+    cursor: pointer;
+  }
+
+  #postBlog {
+    padding: 40px;
+    background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
+    background-size: cover;
     width: 100%;
     height: auto;
-    background-image: none;
-    background-color: white;
   }
-}
+
+  @media screen and (max-width: 1024px) {
+    #postBlog {
+      padding: 20px;
+      margin: 5px;
+      border-radius: 50px;
+      width: 100%;
+      height: auto;
+      background-image: none;
+      background-color: white;
+    }
+  }
+  .menubar__button {
+    background: none;
+    border: none;
+  }
 </style>
