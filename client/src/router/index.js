@@ -39,7 +39,7 @@ function checkAdmin(to, from, next) {
   const role = JSON.parse(localStorage.getItem("role"));
   if (role === "ADMIN") isAdmin = true;
   else isAdmin = false;
-  if (isAdmin) {
+  if (to.name !== "Review" && isAdmin) {
     next("/admin/content");
   } else {
     next();

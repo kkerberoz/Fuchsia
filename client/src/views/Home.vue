@@ -20,7 +20,6 @@
           placeholder="Search here . . ."
           v-debounce:400ms="searchBySearchBar"
           icon="magnify"
-          clearable
         >
         </b-autocomplete>
         <b-select v-model="category" placeholder="Select a category" rounded>
