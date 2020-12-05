@@ -18,9 +18,10 @@ const report = {
   actions: {
     async setViolenceList(context) {
       const response = await axios.get("/api/getviolentregconition");
+
       context.commit("SET_VIOLENCE_LIST", response.data.data);
-      //console.log("violenceList: ", response.data.data);
-      //console.log("GET violenceList: ", response.status);
+      console.log("violenceList: ", response.data.data);
+      console.log("GET violenceList: ", response.status);
     },
     async setReportList(context) {
       const response = await axios.get("/api/getreport");

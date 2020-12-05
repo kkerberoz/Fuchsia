@@ -166,9 +166,27 @@
     watch: {
       currentPage() {
         this.isLoading = true;
-        this.$store
-          .dispatch("review/getReviewList", this.currentPage)
-          .then(() => (this.isLoading = false));
+        if (this.category !== "") {
+          let keyObject = {
+            filter: "category",
+            category: this.category,
+            page: this.currentPage,
+          };
+          // //console.log("category",this.category)
+          this.$store
+            .dispatch("review/getReviewList", keyObject)
+            .then(() => (this.isLoading = false));
+        } else {
+          let keyObject = {
+            filter: "",
+            category: this.category,
+            page: this.currentPage,
+          };
+          // //console.log("other")
+          this.$store
+            .dispatch("review/getReviewList", keyObject)
+            .then(() => (this.isLoading = false));
+        }
       },
       searchKeyWord() {
         this.isLoading = true;
@@ -231,7 +249,8 @@
 
 <style lang="scss">
   .pagination-link {
-    color: #fff;
+    color: $secondary;
+    background-color: #fff;
   }
   .pagination-link:hover {
     color: #fff;

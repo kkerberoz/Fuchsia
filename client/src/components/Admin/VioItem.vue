@@ -1,5 +1,15 @@
 <template>
   <div>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :opacity="0.9"
+      :lock-scroll="true"
+      :blur="'40px'"
+    >
+      <spring-spinner :animation-duration="2500" :size="60" color="#ff1d5e"
+    /></loading>
     <div class="card-container" v-if="hasData">
       <div class="card" style="border-radius:20px">
         <div class="card-content">
@@ -65,13 +75,23 @@
 
 <script>
   import axios from "axios";
-
+  import Loading from "vue-loading-overlay";
+  import { SpringSpinner } from "epic-spinners";
   export default {
     props: {
       VioItem: {
         type: Object,
         required: false,
       },
+    },
+    data() {
+      return {
+        isLoading: false,
+      };
+    },
+    components: {
+      Loading,
+      SpringSpinner,
     },
     computed: {
       date() {
@@ -94,16 +114,22 @@
     },
     methods: {
       gotoPost(reviewId) {
-        this.$router.push({ name: "Review", params: { reviewId } });
+        this.isLoading = true;
+        this.$router
+          .push({ name: "Review", params: { reviewId } })
+          .then(() => (this.isLoading = false));
       },
       violentAction(action) {
+        this.isLoading = true;
         let data = {
           action,
           reviewId: this.VioItem.violentContent.reviewId,
           violentId: this.VioItem.violentContent._id,
         };
         axios.post("/api/actionviolent", data).then(() => {
-          this.$store.dispatch("report/setViolenceList");
+          this.$store
+            .dispatch("report/setViolenceList")
+            .then(() => (this.isLoading = false));
         });
       },
     },

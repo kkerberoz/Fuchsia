@@ -46,6 +46,17 @@ function checkAdmin(to, from, next) {
   }
 }
 
+function checkUser(to, from, next) {
+  var isUser = false;
+  if (store.state.auth.status.loggedIn === true) isUser = true;
+  else isUser = false;
+  if (isUser) {
+    next("/");
+  } else {
+    next();
+  }
+}
+
 function checkLogin(to, from, next) {
   var isAuthenticated = false;
   const jwt_token = JSON.parse(localStorage.getItem("jwt"));
@@ -101,12 +112,14 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
+    beforeEnter: checkUser,
     component: () => import("../views/Login.vue"),
     meta: { layout: DefaultLayout },
   },
   {
     path: "/register",
     name: "Register",
+    beforeEnter: checkUser,
     component: () => import("../views/Register.vue"),
     meta: { layout: DefaultLayout },
   },

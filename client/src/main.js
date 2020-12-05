@@ -8,7 +8,7 @@ import vueDebounce from "vue-debounce";
 import axios from "axios";
 
 axios.defaults.baseURL = "https://fuchsia-server-skhuzjjwua-uc.a.run.app";
-// axios.defaults.baseURL = "http://localhost:5000";
+//axios.defaults.baseURL = "http://localhost:5000";
 
 Vue.config.productionTip = false;
 

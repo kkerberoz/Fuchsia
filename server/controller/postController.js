@@ -72,9 +72,9 @@ module.exports = {
       .catch((err) => ResHelper.error(res, err));
   },
   getReviewsCount: (req, res) => {
-    Review.countDocuments({ $or: [{ status: "NORMAL" }, { status: "ALERT" }]})
+    Review.countDocuments({ $or: [{ status: "NORMAL" }, { status: "ALERT" }] })
       .then((reviews) => {
-        ResHelper.success(res, reviews)
+        ResHelper.success(res, reviews);
       })
       .catch((err) => {
         ResHelper.error(res, err);
@@ -89,7 +89,7 @@ module.exports = {
       // All review
       if (word === "") {
         Review.find({ $or: [{ status: "NORMAL" }, { status: "ALERT" }] })
-          .sort({ reviewDatetime: 1 })
+          .sort({ reviewDatetime: -1 })
           .limit(20)
           .skip(20 * (offset - 1))
           .then((reviews) => {
@@ -197,7 +197,15 @@ module.exports = {
     Review.deleteOne({ _id: reviewId })
       .then((reviews) => {
         Comment.deleteMany({ reviewId: reviewId })
-          .then((comments) => ResHelper.success(res, { review: reviews, comment: comments }))
+          .then((comments) =>
+            ResHelper.success(res, { review: reviews, comment: comments })
+          )
+          .catch((err) => ResHelper.error(res, err));
+
+        Violent.deleteOne({ reviewId: reviewId })
+          .then((violent) =>
+            ResHelper.success(res, { review: reviews, comment: violent })
+          )
           .catch((err) => ResHelper.error(res, err));
       })
       .catch((err) => ResHelper.error(res, err));
@@ -253,12 +261,12 @@ module.exports = {
     }
     Favorite.findOne({ userId: req.user._id, reviewId: reviewId }).then(
       (favorites) => {
-        console.log("favorite", favorites)
+        console.log("favorite", favorites);
         if (favorites != null) {
           Favorite.findOneAndUpdate(
             { _id: favorites._id },
             { $set: { score: score, favoriteDatetime: new Date() } }
-            )
+          )
             .then((res) => {
               res.json({
                 status: 200,
@@ -272,7 +280,6 @@ module.exports = {
               });
             });
         } else {
-          
           const newFavorite = Favorite({
             userId: req.user._id,
             reviewId,
@@ -382,15 +389,17 @@ module.exports = {
                 userId: 1,
               }
             );
-            const users = await User.find(
-              { _id: reviews[0].userId },
-              { _id: 0, username: 1 }
-            );
-            violentDetails.push({
-              userDetails: users[0],
-              reviewDetails: reviews[0],
-              violentContent: violents[i],
-            });
+            if (reviews.length != 0) {
+              const users = await User.find(
+                { _id: reviews[0].userId },
+                { _id: 0, username: 1 }
+              );
+              violentDetails.push({
+                userDetails: users,
+                reviewDetails: reviews[0],
+                violentContent: violents[i],
+              });
+            }
           } catch (err) {
             ResHelper.error(res, err);
           }

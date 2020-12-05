@@ -347,7 +347,7 @@
     padding: 40px;
     background-image: url("../assets/svg/postBlog.svg#svgView(preserveAspectRatio(none))");
     background-size: cover;
-    width: 100%;
+    width: 1350px;
     height: 100%;
   }
 
