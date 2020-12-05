@@ -59,10 +59,17 @@ function checkLogin(to, from, next) {
       axios
         .get("/api/checklogin", { params })
         .then((token) => {
-          const exp = token.data.data.decode.exp;
-          //console.log(exp);
-          if (Date.now() >= exp * 1000) {
-            this.$store.dispatch("auth/logout").then(() => {
+          if (!token.data.data.status) {
+            const exp = token.data.data.decode.exp;
+            if (Date.now() >= exp * 1000) {
+              store.dispatch("auth/logout").then(() => {
+                next("/login");
+              });
+            } else {
+              next();
+            }
+          } else if (token.data.data.status === "BAN") {
+            store.dispatch("auth/logout").then(() => {
               next("/login");
             });
           } else {
@@ -71,7 +78,7 @@ function checkLogin(to, from, next) {
         })
         .catch((err) => {
           next("/login");
-          throw new err();
+          throw err;
           //console.log("error", err);
         });
     }
@@ -161,6 +168,10 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes: routes,
+  // eslint-disable-next-line
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  },
 });
 
 export default router;

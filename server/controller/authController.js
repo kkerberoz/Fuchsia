@@ -107,8 +107,26 @@ module.exports = {
         if (!decode) {
           return ResHelper.unauth(res, "You need to logged in");
         } else {
-          ResHelper.success(res, { decode });
-          next();
+          User.findOne({ _id: decode.userId }).then((user) => {
+            if (!user) {
+              return ResHelper.fail(
+                res,
+                "You have entered an invalid email or password"
+              );
+            } else if (user.status === "BAN") {
+              const userInfo = {
+                token: decode,
+                status: user.status,
+              };
+              return res.json({
+                status: 400,
+                data: userInfo,
+              });
+            } else {
+              ResHelper.success(res, { decode });
+              next();
+            }
+          });
         }
       }
     });

@@ -32,15 +32,14 @@
             </div>
             <h1 style="font-size: 5vh;">{{ reviewInfo.reviewTitle }}</h1>
             <hr class="pink-line" />
-
-            <div
-              style="margin-top: 5%;"
-              v-html="reviewInfo.reviewContent"
-              class="contentReview"
-            >
+            <div class="contentReview">
+              <div
+                style="margin-top: 3%;"
+                v-html="reviewInfo.reviewContent"
+              ></div>
               <!-- content -->
             </div>
-            <div v-if="hasUserData">
+            <div v-if="hasUserData" style="margin-top: 3%;">
               <b-rate
                 v-model="score"
                 :show-score="showScore"
@@ -48,7 +47,7 @@
               ></b-rate>
             </div>
 
-            <hr class="pink-line" style="margin-top: 5%;" />
+            <hr class="pink-line" style="margin-top: 1%;" />
           </div>
         </div>
         <div class="columns">
@@ -283,7 +282,7 @@
               });
             })
             .catch((err) => {
-              throw new err();
+              throw err;
               //console.log(err);
             });
         }
@@ -294,9 +293,20 @@
 </script>
 
 <style lang="scss" scoped>
-  .contentReview p > img {
-    width: 100%;
-    height: 100px;
+  .contentReview {
+    /deep/ p > img {
+      height: 400px;
+      max-width: 100%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 3%;
+    }
+    /deep/ p {
+      font-size: 20px;
+      text-indent: 40px;
+      text-align: justify;
+    }
   }
 
   hr {
@@ -330,11 +340,6 @@
 
   #reviewContent {
     margin: 3% 3% 0 3%;
-  }
-
-  #reviewContent p > img {
-    width: 100%;
-    height: 100px;
   }
 
   .postBlog {

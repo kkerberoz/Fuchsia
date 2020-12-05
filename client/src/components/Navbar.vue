@@ -159,7 +159,7 @@
           this.username = res.data.data.username;
         })
         .catch((err) => {
-          throw new err();
+          throw err;
         });
     },
     methods: {
@@ -223,7 +223,7 @@
             this.username = res.data.data.username;
           })
           .catch((err) => {
-            throw new err();
+            throw err;
             //console.log(err);
           });
       },
