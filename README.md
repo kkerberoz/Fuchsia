@@ -1,6 +1,6 @@
 # Fuchsia
 
-CPE326 Final Project
+CPE327 Final Project
 > completed at main branch!
 
 ### Development with Docker
