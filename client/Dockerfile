@@ -1,23 +1,12 @@
-# FROM node:14-slim
-
-# ENV PORT=8080
-
-
-# # set directory of our app and copy  over package.json and package-lock.json
-# RUN mkdir -p /app/client
-
-# WORKDIR /app/client
-
-# COPY package.json /app/client/
-
-# RUN npm install 
-
-# # Bundle app source
-# COPY . /app/client/
-
-# RUN npm run build
-
-# CMD [ "npm", "run", "start" ]
+#run on local stage
+FROM node:14-slim as dev-stage
+ENV PORT=8080
+RUN mkdir -p /app/client
+WORKDIR /app/client
+COPY package.json /app/client/
+RUN npm install 
+COPY . /app/client/
+RUN npm run build
 
 # build stage
 FROM node:14-slim as build-stage

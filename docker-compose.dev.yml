@@ -22,14 +22,15 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      target: dev-stage
     environment:
       - NODE_ENV=development
     expose:
       - 8080
     ports:
-      - 3000:3000
+      - 8080:8080
     volumes:
       - ./client/src:/app/client/src
       - ./client/public:/app/client/public
-    command: npm run serve
+    command: npm run start
     restart: always
