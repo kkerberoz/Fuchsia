@@ -1,6 +1,7 @@
 # Fuchsia
 
 CPE326 Final Project
+> completed at main branch!
 
 ### Development with Docker
 
@@ -9,7 +10,7 @@ CPE326 Final Project
 2. Run
 
 ```bash
-docker-compose docker-compose build
+docker-compose build
 ```
 
 This will create images for our client and server.
@@ -17,7 +18,7 @@ This will create images for our client and server.
 3. Run
 
 ```bash
-docker-compose docker-compose up -d
+docker-compose up -d
 ```
 
 This will host our images inside a docker container. After this step you should be able to access the client development server on http://localhost:8080/ and nodemon server for service side development on http://localhost:5000/.
