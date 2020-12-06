@@ -11,6 +11,10 @@ const FavoriteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    score: {
+      type: Number,
+      require: true,
+    },
     favoriteDatetime: {
       type: Date,
       default: Date.now(),

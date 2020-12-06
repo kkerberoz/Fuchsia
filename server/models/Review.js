@@ -11,6 +11,10 @@ const ReviewSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    reviewDescription:{
+      type: String,
+      required: false,
+    },
     reviewContent: {
       type: String,
       required: true,
@@ -25,7 +29,7 @@ const ReviewSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["NORMAL", "BAN"],
+      enum: ["NORMAL", "BAN", "ALERT"],
       default: "NORMAL",
     },
     view: {

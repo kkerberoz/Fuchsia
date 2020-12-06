@@ -6,6 +6,32 @@ const PostController = require("../controller/postController");
 
 //Routes
 router.post("/postreview", auth, PostController.postReview);
-router.post("/getreview", PostController.getReviews);
+router.get("/getreview", PostController.getReviews);
+router.post("/deletereview", PostController.deleteReview);
+router.post("/deletecomment", PostController.deleteComment);
+router.get("/getreviewscount", PostController.getReviewsCount);
+router.get("/getreviewinfo", PostController.getReviewInfo);
+router.post("/postcomment", auth, PostController.postComment);
+router.get("/getcomments", PostController.getComments);
+// router.get("/getfollowed", PostController.getFolloweds);
+router.post("/postfavorite", auth, PostController.postFavorite);
+router.get("/getfavorite", PostController.getFavorite);
+router.get("/getfavoritescore", PostController.getFavoriteScore);
+
+router.post("/postreport",auth, PostController.postReport);
+    // routes for manager
+router.get("/getreport", PostController.getReport);
+router.get("/getviolentregconition", PostController.getViolentRegconition);
+router.post("/actionviolent", PostController.actionViolent);
+router.post("/banuser", PostController.banUser);
+router.post("/banreview", PostController.banReview);
+
+    // for user
+router.get("/getreviewer", PostController.getReviwer);
+    // for dashboard
+router.get("/getviolentpendingcount", PostController.getViolentPendingCount);
+router.get("/getuserscountlastmonth", PostController.getUsersCountLastMonth);
+// ------- //
 
 module.exports = router;
+

@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const bodyparser = require("body-parser");
 require("dotenv").config();
 
 const { NODE_ENV, PORT, ATLAS_URI } = process.env;
@@ -19,22 +21,23 @@ mongoose.connection.once("open", () =>
 
 // Set up middleware
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
 app.use(cors());
+app.use(cookieParser());
 
 // API routes
 app.get("/", (req, res) => {
   res.send("hello");
-  console.log("Hello");
+  //console.log("Hello");
 });
 
 app.use("/api", require("../routes/authRoutes"));
 app.use("/api", require("../routes/postRoutes"));
 
-app.use(function (req, res) {
-  res.send({ error: "Route is not found" }, 404);
-});
+// app.use(function (req, res) {
+//   res.send({ error: "Route is not found" }, 404);
+// });
 
 app.listen(port, () => {
   console.log(
