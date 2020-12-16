@@ -16,7 +16,7 @@ steps:
         "gcr.io/$PROJECT_ID/fuchsia-server",
         "--cache-from",
         "gcr.io/$PROJECT_ID/fuchsia-server:latest",
-        "<DIR_CONTAINING_DOCKERFILE>",
+        ".",
       ]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/fuchsia-server"]
