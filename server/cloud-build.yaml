@@ -4,7 +4,7 @@ steps:
     args:
       - "-c"
       - |
-        docker pull gcr.io/fuchsia-296906/fuchsia-client:latest || exit 0
+        docker pull gcr.io/$PROJECT_ID/fuchsia-server:latest || exit 0
   - name: gcr.io/cloud-builders/docker
     timeout: 1200s
     args:
@@ -13,11 +13,27 @@ steps:
         "-f",
         "Dockerfile",
         "-t",
-        "gcr.io/fuchsia-296906/fuchsia-server",
+        "gcr.io/$PROJECT_ID/fuchsia-server",
         "--cache-from",
-        "gcr.io/fuchsia-296906/fuchsia-server:latest",
+        "gcr.io/$PROJECT_ID/fuchsia-server:latest",
         ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/fuchsia-server"]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "fuchsia-server",
+        "--image",
+        "gcr.io/$PROJECT_ID/fuchsia-server",
+        "--region",
+        "us-central1",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated",
       ]
 timeout: 1200s
 images:
-  - gcr.io/fuchsia-296906/fuchsia-server
+  - gcr.io/$PROJECT_ID/fuchsia-server

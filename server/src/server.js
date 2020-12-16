@@ -28,7 +28,7 @@ app.use(cookieParser());
 
 // API routes
 app.get("/", (req, res) => {
-  res.send("hello");
+  res.send("Hello,World this is CI/CD");
   //console.log("Hello");
 });
 
