@@ -5,7 +5,7 @@ steps:
       - "-c"
       - |
         docker pull gcr.io/$PROJECT_ID/fuchsia-client:latest || exit 0
-  - name: gcr.io/cloud-builders/docker
+  - name: "gcr.io/cloud-builders/docker"
     timeout: 1200s
     args:
       [
