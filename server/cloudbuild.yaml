@@ -11,7 +11,7 @@ steps:
       [
         "build",
         "-f",
-        "server/docker-file",
+        "Dockerfile",
         "-t",
         "gcr.io/$PROJECT_ID/fuchsia-server",
         "--cache-from",
