@@ -10,6 +10,8 @@ steps:
     args:
       [
         "build",
+        "-f",
+        "docker-file",
         "-t",
         "gcr.io/$PROJECT_ID/fuchsia-client",
         "--cache-from",
