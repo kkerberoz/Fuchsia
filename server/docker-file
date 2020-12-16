@@ -4,7 +4,7 @@ RUN mkdir -p /app/server
 
 WORKDIR /app/server
 
-COPY /sever/package.json /app/server/
+COPY /server/package.json /app/server/
 
 RUN npm install --only=production
 

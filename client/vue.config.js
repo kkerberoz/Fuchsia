@@ -20,4 +20,7 @@ module.exports = {
     host: "0.0.0.0",
     port: process.env.PORT || 3000,
   },
+  entry: {
+    app: ["./src/main.js"],
+  },
 };
